@@ -28,6 +28,7 @@
             :headers="headers"
             :items="categoria.data"
             :loading="false"
+            :sort-by="sortBy"
             :items-per-page="0"
         >
           <template v-slot:item.data.data.rosso.value="{ item }">
@@ -86,8 +87,6 @@
 const runtimeConfig = useRuntimeConfig();
 const {regione, provincia} = useRoute().params
 
-const search = ref('')
-
 const headers = [
   {title: 'Pronto Soccorso', align: 'start', key: 'nome'},
   {title: 'Codice Rosso', align: 'end', key: 'data.data.rosso.value'},
@@ -98,42 +97,54 @@ const headers = [
 
 const sortBy = ref([{key: 'data.data.rosso.value', order: 'desc'}])
 
-const {data, error, pending} = await useAPIFetch<ResultsType>(`/${regione}/${provincia}`, {
-  method: "GET",
-})
+async function fetchData() {
+  const { data } = await useAPIFetch<ResultsType>(`/${regione}/${provincia}`, { method: 'GET' });
+  return data.value;
+}
 
-const presidi = data.value.data
-
-let ospedaliPediatrici = presidi.filter(obj => obj.type === "pediatrico");
-let ospedaliAdulti = presidi.filter(obj => obj.type === "adulti");
-
-let ospedali = [
+let ospedali = ref([
   {
     titolo: 'Pediatrici',
     icon: 'mdi-human-baby-changing-table',
-    data: ospedaliPediatrici,
+    data: [],
     search: ref('')
   },
   {
     titolo: 'Adulti',
     icon: 'mdi-account',
-    data: ospedaliAdulti,
+    data: [],
     search: ref('')
   }
-]
+]);
+
+async function updatePresidi() {
+  const presidi = await fetchData();
+  ospedali.value[0].data = presidi.data.filter(obj => obj.type === "pediatrico");
+  ospedali.value[1].data = presidi.data.filter(obj => obj.type === "adulti");
+}
 
 console.log(runtimeConfig.public.pusher.schema);
 
-window.pusher.subscribe(data.value.websocket.channel).bind(data.value.websocket.event, (data) => {
-  console.log('Evento ricevuto:', data);
-  for (const [key, value] of Object.entries(data.data)) {
-    for (const [k, presidio] of Object.entries(presidi)) {
-      if (presidio.key === key) {
-        presidi[k].data = value
+let channel;
+let event;
+const pusher = window.pusher; // Assuming pusher is globally accessible
+
+async function subscribeToChannel() {
+  const presidi = await fetchData();
+  channel = pusher.subscribe(presidi.websocket.channel);
+  event = presidi.websocket.event;
+
+  channel.bind(event, (data) => {
+    console.log('Evento ricevuto:', data);
+    for (const [key, value] of Object.entries(data.data)) {
+      for (const presidio of ospedali.value) {
+        if (presidio.key === key) {
+          presidio.data = value;
+        }
       }
     }
-  }
-});
+  });
+}
 
 function uppercaseFirstLetter(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
@@ -141,26 +152,13 @@ function uppercaseFirstLetter(value: string) {
 
 // Aggiorna i dati ogni minuto
 setInterval(async () => {
-  const newData = await fetchAndUpdateData();
-  updateData(newData);
-}, 5000);
+  await updatePresidi();
+}, 10000);
 
-async function fetchAndUpdateData() {
-  const {data, error, pending} = await useAPIFetch<ResultsType>(`/${regione}/${provincia}`, {
-    method: "GET",
-  })
-  return data.value.data;
-}
+// Esegui il fetch dei dati all'avvio
+updatePresidi();
 
-function updateData(newData) {
-  presidi.forEach((presidio, index) => {
-    for (const [key, value] of Object.entries(newData)) {
-      if (presidio.key === key) {
-        presidi[index].data = value;
-        break;
-      }
-    }
-  });
-}
+// Sottoscrivi al canale Pusher all'avvio
+subscribeToChannel();
 
 </script>
