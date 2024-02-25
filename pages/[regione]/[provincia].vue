@@ -31,6 +31,36 @@
             :sort-by="sortBy"
             :items-per-page="0"
         >
+
+          <template v-slot:item.nome="{ item }">
+            <v-dialog max-width="340">
+              <template v-slot:activator="{ props: activatorProps }">
+                <v-btn
+                    v-bind="activatorProps"
+                    width="204"
+                >
+                  {{ item.nome}}
+                </v-btn>
+              </template>
+
+              <template v-slot:default="{ isActive }">
+                <v-card
+                    :title="item.nome"
+                    :text="item.descrizione"
+                    prepend-icon="mdi-medical-bag"
+                >
+                  <template v-slot:actions>
+                    <v-btn
+                        class="ml-auto"
+                        text="Chiudi"
+                        @click="isActive.value = false"
+                    ></v-btn>
+                  </template>
+                </v-card>
+              </template>
+            </v-dialog>
+          </template>
+
           <template v-slot:item.data.data.rosso.value="{ item }">
             <div v-if="!item.data.data?.rosso?.value">
               <v-progress-circular
@@ -38,6 +68,34 @@
                   color="red"
               ></v-progress-circular>
             </div>
+            <template v-if="item.data.data?.rosso?.extra">
+              <v-dialog max-width="340">
+                <template v-slot:activator="{ props: activatorProps }">
+                  <v-btn
+                      v-bind="activatorProps"
+                      color="red"
+                  >
+                    {{ item.data.data?.rosso?.value }}
+                  </v-btn>
+                </template>
+
+                <template v-slot:default="{ isActive }">
+                  <v-card
+                      :title="item.nome"
+                      :text="item.descrizione"
+                      prepend-icon="mdi-medical-bag"
+                  >
+                    <template v-slot:actions>
+                      <v-btn
+                          class="ml-auto"
+                          text="Chiudi"
+                          @click="isActive.value = false"
+                      ></v-btn>
+                    </template>
+                  </v-card>
+                </template>
+              </v-dialog>
+            </template>
             <h2 v-else class="text-red">{{ item.data.data?.rosso?.value }}</h2>
           </template>
 
@@ -48,6 +106,34 @@
                   color="yellow"
               ></v-progress-circular>
             </div>
+            <template v-if="item.data.data?.giallo?.extra">
+              <v-dialog max-width="340">
+                <template v-slot:activator="{ props: activatorProps }">
+                  <v-btn
+                      v-bind="activatorProps"
+                      color="yellow"
+                  >
+                    {{ item.data.data?.giallo?.value }}
+                  </v-btn>
+                </template>
+
+                <template v-slot:default="{ isActive }">
+                  <v-card
+                      :title="item.nome"
+                      :text="item.descrizione"
+                      prepend-icon="mdi-medical-bag"
+                  >
+                    <template v-slot:actions>
+                      <v-btn
+                          class="ml-auto"
+                          text="Chiudi"
+                          @click="isActive.value = false"
+                      ></v-btn>
+                    </template>
+                  </v-card>
+                </template>
+              </v-dialog>
+            </template>
             <h2 v-else class="text-yellow">{{ item.data.data?.giallo?.value }}</h2>
           </template>
 
@@ -58,6 +144,34 @@
                   color="green"
               ></v-progress-circular>
             </div>
+            <template v-if="item.data.data?.verde?.extra">
+              <v-dialog max-width="340">
+                <template v-slot:activator="{ props: activatorProps }">
+                  <v-btn
+                      v-bind="activatorProps"
+                      color="green"
+                  >
+                    {{ item.data.data?.verde?.value }}
+                  </v-btn>
+                </template>
+
+                <template v-slot:default="{ isActive }">
+                  <v-card
+                      :title="item.nome"
+                      :text="item.descrizione"
+                      prepend-icon="mdi-medical-bag"
+                  >
+                    <template v-slot:actions>
+                      <v-btn
+                          class="ml-auto"
+                          text="Chiudi"
+                          @click="isActive.value = false"
+                      ></v-btn>
+                    </template>
+                  </v-card>
+                </template>
+              </v-dialog>
+            </template>
             <h2 v-else class="text-green">{{ item.data.data?.verde?.value }}</h2>
           </template>
 
@@ -68,6 +182,34 @@
                   color="white"
               ></v-progress-circular>
             </div>
+            <template v-if="item.data.data?.bianco?.extra">
+              <v-dialog max-width="340">
+                <template v-slot:activator="{ props: activatorProps }">
+                  <v-btn
+                      v-bind="activatorProps"
+                      color="white"
+                  >
+                    {{ item.data.data?.bianco?.value }}
+                  </v-btn>
+                </template>
+
+                <template v-slot:default="{ isActive }">
+                  <v-card
+                      :title="item.nome"
+                      :text="item.descrizione"
+                      prepend-icon="mdi-medical-bag"
+                  >
+                    <template v-slot:actions>
+                      <v-btn
+                          class="ml-auto"
+                          text="Chiudi"
+                          @click="isActive.value = false"
+                      ></v-btn>
+                    </template>
+                  </v-card>
+                </template>
+              </v-dialog>
+            </template>
             <h2 v-else>{{ item.data.data?.bianco?.value }}</h2>
           </template>
 
@@ -79,6 +221,17 @@
       <v-divider color="success" class="my-8"></v-divider>
 
     </template>
+
+    <v-dialog
+        max-width="500"
+        scrollable
+        v-model="dialogVisible">
+      <v-card>
+        <v-card-title>{{ selectedPresidio.nome }}</v-card-title>
+
+
+      </v-card>
+    </v-dialog>
 
   </v-container>
 </template>
@@ -117,34 +270,37 @@ let ospedali = ref([
   }
 ]);
 
+
+const presidi = await fetchData();
 async function updatePresidi() {
   const presidi = await fetchData();
   ospedali.value[0].data = presidi.data.filter(obj => obj.type === "pediatrico");
   ospedali.value[1].data = presidi.data.filter(obj => obj.type === "adulti");
+
 }
 
 console.log(runtimeConfig.public.pusher.schema);
 
 let channel;
 let event;
-const pusher = window.pusher; // Assuming pusher is globally accessible
+const pusher = window.pusher;
 
 async function subscribeToChannel() {
-  const presidi = await fetchData();
   channel = pusher.subscribe(presidi.websocket.channel);
   event = presidi.websocket.event;
-
   channel.bind(event, (data) => {
     console.log('Evento ricevuto:', data);
     for (const [key, value] of Object.entries(data.data)) {
-      for (const presidio of ospedali.value) {
-        if (presidio.key === key) {
+      for (const categoria of ospedali.value) {
+        const presidio = categoria.data.find(presidio => presidio.key === key);
+        if (presidio) {
           presidio.data = value;
         }
       }
     }
   });
 }
+
 
 function uppercaseFirstLetter(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
