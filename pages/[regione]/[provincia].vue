@@ -24,9 +24,11 @@
 
         <v-divider></v-divider>
         <v-data-table
-            v-model:search="categoria.search"
+            v-model:search="categoria.search.value"
             :headers="headers"
             :items="categoria.data"
+            :loading="false"
+            :items-per-page="0"
         >
           <template v-slot:item.data.data.rosso.value="{ item }">
             <div v-if="!item.data.data?.rosso?.value">
@@ -48,7 +50,6 @@
             <h2 v-else class="text-yellow">{{ item.data.data?.giallo?.value }}</h2>
           </template>
 
-
           <template v-slot:item.data.data.verde.value="{ item }">
             <div v-if="!item.data.data?.verde?.value">
               <v-progress-circular
@@ -68,6 +69,8 @@
             </div>
             <h2 v-else>{{ item.data.data?.bianco?.value }}</h2>
           </template>
+
+          <template v-slot:bottom> </template>
 
         </v-data-table>
       </v-card>
@@ -101,8 +104,6 @@ const {data, error, pending} = await useAPIFetch<ResultsType>(`/${regione}/${pro
 
 const presidi = data.value.data
 
-console.log(presidi);
-
 let ospedaliPediatrici = presidi.filter(obj => obj.type === "pediatrico");
 let ospedaliAdulti = presidi.filter(obj => obj.type === "adulti");
 
@@ -121,9 +122,6 @@ let ospedali = [
   }
 ]
 
-console.log(ospedaliAdulti);
-
-
 console.log(runtimeConfig.public.pusher.schema);
 
 window.pusher.subscribe(data.value.websocket.channel).bind(data.value.websocket.event, (data) => {
@@ -139,6 +137,30 @@ window.pusher.subscribe(data.value.websocket.channel).bind(data.value.websocket.
 
 function uppercaseFirstLetter(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+// Aggiorna i dati ogni minuto
+setInterval(async () => {
+  const newData = await fetchAndUpdateData();
+  updateData(newData);
+}, 5000);
+
+async function fetchAndUpdateData() {
+  const {data, error, pending} = await useAPIFetch<ResultsType>(`/${regione}/${provincia}`, {
+    method: "GET",
+  })
+  return data.value.data;
+}
+
+function updateData(newData) {
+  presidi.forEach((presidio, index) => {
+    for (const [key, value] of Object.entries(newData)) {
+      if (presidio.key === key) {
+        presidi[index].data = value;
+        break;
+      }
+    }
+  });
 }
 
 </script>
