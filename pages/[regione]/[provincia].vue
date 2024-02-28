@@ -11,7 +11,7 @@
           <v-spacer></v-spacer>
 
           <v-text-field
-              v-model="categoria.search.value"
+              v-model="categoria.search"
               prepend-inner-icon="mdi-magnify"
               density="compact"
               label="Cerca"
@@ -24,7 +24,7 @@
 
         <v-divider></v-divider>
         <v-data-table
-            v-model:search="categoria.search.value"
+            v-model:search="categoria.search"
             :headers="headers"
             :items="categoria.data"
             :loading="false"
@@ -33,112 +33,69 @@
         >
 
           <template v-slot:item.nome="{ item }">
-            <v-dialog max-width="540">
+            <v-dialog max-width="700">
               <template v-slot:activator="{ props: activatorProps }">
-                <v-btn
-                    v-bind="activatorProps"
-                    width="204"
-                >
+                <v-chip v-bind="activatorProps" label>
                   {{ item.nome }}
-                </v-btn>
+                </v-chip>
               </template>
 
               <template v-slot:default="{ isActive }">
+
                 <v-card
                     :title="item.nome"
                     :text="item.descrizione"
-                    prepend-icon="mdi-medical-bag"
-                >
-                  <template v-slot:actions>
-                    <v-btn
-                        class="ml-auto"
-                        text="Chiudi"
-                        @click="isActive.value = false"
-                    ></v-btn>
-                  </template>
+                    prepend-icon="mdi-medical-bag">
+                  <v-card-text>
+                    <p><strong>Tipo:</strong> {{ item.type }}</p>
+                    <p><strong>Indirizzo:</strong> {{ item.indirizzo }}</p>
+                    <p><strong>Telefono:</strong> {{ item.telefono }}</p>
+                    <p><strong>Email:</strong> {{ item.email }}</p>
+                    <p><strong>Web:</strong> <a :href="item.web" target="_blank">Link</a></p>
+                    <p><strong>Coordinate:</strong> Lat {{ item.coords.lat }}, Lng {{ item.coords.lng }}</p>
+                    <v-divider class="my-4"></v-divider>
+                    <template v-for="(value, key) in item.data.data" :key="key">
+                      <v-card-text v-show="key === 'extra'" >
+                        <p v-for="(extraValue, extraKey) in value" :key="extraKey">
+                          <strong>{{ extraValue.label }}: </strong> <v-chip color="success" size="small" label>{{ extraValue.value }}</v-chip>
+                        </p>
+                      </v-card-text>
+                    </template>
+                  </v-card-text>
+
+                      <template v-slot:actions>
+                        <v-btn
+                            class="ml-auto"
+                            text="Chiudi"
+                            @click="isActive.value = false"
+                        ></v-btn>
+                      </template>
                 </v-card>
               </template>
             </v-dialog>
           </template>
 
-          <template v-slot:item.data.data.rosso.value="{ item }">
-            <div v-if="!item.data.data?.rosso?.value">
+          <template v-for="codice in ['rosso', 'giallo', 'verde', 'bianco']" v-slot:[`item.data.data.${codice}.value`]="{ item }">
+            <div v-if="!item.data.data?.[codice]?.value">
               <v-progress-circular
                   indeterminate
-                  color="red"
+                  :color="codice === 'rosso' ? 'red' : (codice === 'giallo' ? 'yellow' : (codice === 'verde' ? 'green' : 'white'))"
               ></v-progress-circular>
             </div>
-            <template v-if="item.data.data?.rosso?.extra">
+            <template v-if="item.data.data?.[codice]?.extra">
               <v-dialog max-width="540">
                 <template v-slot:activator="{ props: activatorProps }">
                   <v-chip
                       v-bind="activatorProps"
-                      color="red"
+                      :color="codice === 'rosso' ? 'red' : (codice === 'giallo' ? 'yellow' : (codice === 'verde' ? 'green' : 'white'))"
                   >
-                    <h2>{{ item.data.data?.rosso?.value }}</h2>
+                    <h2>{{ item.data.data?.[codice]?.value }}</h2>
                   </v-chip>
                 </template>
 
                 <template v-slot:default="{ isActive }">
                   <v-card
-                      title="Situazione Codice Rosso"
-                      prepend-icon="mdi-medical-bag"
-                  >
-                    <template v-slot:text>
-                      <v-table>
-                        <thead>
-                        <tr>
-                          <th class="text-left" v-for="(item, key) in item.data.data?.rosso?.extra" :key="key">
-                            {{ item.label }}
-                          </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                          <td v-for="(item, key) in item.data.data?.rosso?.extra" :key="key">
-                            <v-chip color="red">
-                              <h2>{{ item.value }}</h2>
-                            </v-chip>
-                          </td>
-                        </tr>
-                        </tbody>
-                      </v-table>
-                    </template>
-                    <template v-slot:actions>
-                      <v-btn
-                          class="ml-auto"
-                          text="Chiudi"
-                          @click="isActive.value = false"
-                      ></v-btn>
-                    </template>
-                  </v-card>
-                </template>
-              </v-dialog>
-            </template>
-            <h2 v-else class="text-red mr-2">{{ item.data.data?.rosso?.value }}</h2>
-          </template>
-
-          <template v-slot:item.data.data.giallo.value="{ item }">
-            <div v-if="!item.data.data?.giallo?.value">
-              <v-progress-circular
-                  indeterminate
-                  color="yellow"
-              ></v-progress-circular>
-            </div>
-            <template v-if="item.data.data?.giallo?.extra">
-              <v-dialog max-width="540">
-                <template v-slot:activator="{ props: activatorProps }">
-                  <v-chip
-                      v-bind="activatorProps"
-                      color="yellow"
-                  >
-                    <h2>{{ item.data.data?.giallo?.value }}</h2>
-                  </v-chip>
-                </template>
-
-                <template v-slot:default="{ isActive }">
-                  <v-card
-                      title="Situazione Codice Giallo"
+                      :title="`Situazione Codice ${uppercaseFirstLetter(codice)}`"
                       prepend-icon="mdi-medical-bag"
                   >
 
@@ -146,74 +103,18 @@
                       <v-table>
                         <thead>
                         <tr>
-                          <th class="text-left" v-for="(item, key) in item.data.data?.giallo?.extra" :key="key">
-                            {{ item.label }}
+                          <th class="text-left" v-for="(extraItem, key) in item.data.data?.[codice]?.extra" :key="key">
+                            {{ extraItem.label }}
                           </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                          <td v-for="(item, key) in item.data.data?.giallo?.extra" :key="key">
-                            <v-chip color="yellow">
-                              <h2>{{ item.value }}</h2>
-                            </v-chip>
-                          </td>
-                        </tr>
-                        </tbody>
-                      </v-table>
-                    </template>
-                    <template v-slot:actions>
-                      <v-btn
-                          class="ml-auto"
-                          text="Chiudi"
-                          @click="isActive.value = false"
-                      ></v-btn>
-                    </template>
-                  </v-card>
-                </template>
-              </v-dialog>
-            </template>
-            <h2 v-else class="text-yellow mr-2">{{ item.data.data?.giallo?.value }}</h2>
-          </template>
-
-          <template v-slot:item.data.data.verde.value="{ item }">
-            <div v-if="!item.data.data?.verde?.value">
-              <v-progress-circular
-                  indeterminate
-                  color="green"
-              ></v-progress-circular>
-            </div>
-            <template v-if="item.data.data?.verde?.extra">
-              <v-dialog max-width="540">
-                <template v-slot:activator="{ props: activatorProps }">
-                  <v-chip
-                      v-bind="activatorProps"
-                      color="green"
-                  >
-                    <h2>{{ item.data.data?.verde?.value }}</h2>
-                  </v-chip>
-                </template>
-
-                <template v-slot:default="{ isActive }">
-                  <v-card
-                      title="Situazione Codice Verde"
-                      prepend-icon="mdi-medical-bag"
-                  >
-
-                    <template v-slot:text>
-                      <v-table>
-                        <thead>
-                        <tr>
-                          <th class="text-left" v-for="(item, key) in item.data.data?.verde?.extra" :key="key">
-                            {{ item.label }}
-                          </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                          <td v-for="(item, key) in item.data.data?.verde?.extra" :key="key">
-                            <v-chip color="green">
-                              <h2>{{ item.value }}</h2>
+                          <td v-for="(extraItem, key) in item.data.data?.[codice]?.extra" :key="key">
+                            <v-chip
+                                :color="codice === 'rosso' ? 'red' : (codice === 'giallo' ? 'yellow' : (codice === 'verde' ? 'green' : 'white'))"
+                            >
+                              <h2>{{ extraItem.value }}</h2>
                             </v-chip>
                           </td>
                         </tr>
@@ -232,76 +133,23 @@
                 </template>
               </v-dialog>
             </template>
-            <h2 v-else class="text-green mr-2">{{ item.data.data?.verde?.value }}</h2>
-          </template>
-
-          <template v-slot:item.data.data.bianco.value="{ item }">
-            <div v-if="!item.data.data?.bianco?.value">
-              <v-progress-circular
-                  indeterminate
-                  color="white"
-              ></v-progress-circular>
-            </div>
-            <template v-if="item.data.data?.bianco?.extra">
-              <v-dialog max-width="540">
-                <template v-slot:activator="{ props: activatorProps }">
-                  <v-chip
-                      v-bind="activatorProps"
-                      color="white"
-                  >
-                    <h2>{{ item.data.data?.bianco?.value }}</h2>
-                  </v-chip>
-                </template>
-
-                <template v-slot:default="{ isActive }">
-                  <v-card
-                      title="Situazione Codice Bianco"
-                      prepend-icon="mdi-medical-bag"
-                  >
-
-                    <template v-slot:text>
-                      <v-table>
-                        <thead>
-                        <tr>
-                          <th class="text-left" v-for="(item, key) in item.data.data?.bianco?.extra" :key="key">
-                            {{ item.label }}
-                          </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                          <td v-for="(item, key) in item.data.data?.bianco?.extra" :key="key">
-                            <v-chip color="white">
-                              <h2>{{ item.value }}</h2>
-                            </v-chip>
-                          </td>
-                        </tr>
-                        </tbody>
-                      </v-table>
-                    </template>
-
-                    <template v-slot:actions>
-                      <v-btn
-                          class="ml-auto"
-                          text="Chiudi"
-                          @click="isActive.value = false"
-                      ></v-btn>
-                    </template>
-                  </v-card>
-                </template>
-              </v-dialog>
-            </template>
-            <h2 v-else class="text-white mr-2">{{ item.data.data?.bianco?.value }}</h2>
+            <h2 v-else class="mr-2"
+                :class="codice === 'rosso' ? 'text-red' : (codice === 'giallo' ? 'text-yellow' : (codice === 'verde' ? 'text-green' : 'text-white'))"
+            >
+              {{ item.data.data?.[codice]?.value }}
+            </h2>
           </template>
 
           <template v-slot:bottom></template>
 
         </v-data-table>
+
       </v-card>
 
       <v-divider color="success" class="my-8"></v-divider>
 
     </template>
+
   </v-container>
 </template>
 
