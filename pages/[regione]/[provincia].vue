@@ -77,7 +77,7 @@
 
               <template v-for="codice in ['rosso', 'giallo', 'verde', 'bianco']"
                         v-slot:[`item.data.data.${codice}.value`]="{ item }">
-                <div v-if="!item.data.data?.[codice]?.value">
+                <div v-if="!item.data.data && !item.data.data?.[codice]?.value">
                   <v-progress-circular
                       indeterminate
                       :color="codice === 'rosso' ? 'red' : (codice === 'giallo' ? 'yellow' : (codice === 'verde' ? 'green' : 'white'))"
@@ -135,10 +135,10 @@
                     </template>
                   </v-dialog>
                 </template>
-                <h2 v-else class="mr-2"
+                <h2 v-else-if="item.data.data" class="mr-2"
                     :class="codice === 'rosso' ? 'text-red' : (codice === 'giallo' ? 'text-yellow' : (codice === 'verde' ? 'text-green' : 'text-white'))"
                 >
-                  {{ item.data.data?.[codice]?.value }}
+                  {{ item.data.data?.[codice]?.value ?? 0 }}
                 </h2>
               </template>
 
