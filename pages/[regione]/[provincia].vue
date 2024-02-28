@@ -30,6 +30,12 @@
                 :sort-by="sortBy"
                 :items-per-page="0"
             >
+              <template v-slot:item.data.data.extra.indice_sovraffollamento.value="{ item}">
+                <v-chip rounded>
+                  {{ replaceToInt(item.data.data.extra.indice_sovraffollamento.value) }}%
+                </v-chip>
+
+              </template>
 
               <template v-slot:item.nome="{ item }">
                 <v-dialog max-width="700">
@@ -75,7 +81,7 @@
                 </v-dialog>
               </template>
 
-              <template v-for="codice in ['rosso', 'giallo', 'verde', 'bianco']"
+              <template v-for="codice in ['totali', 'rosso', 'giallo', 'verde', 'bianco']"
                         v-slot:[`item.data.data.${codice}.value`]="{ item }">
                 <div v-if="!item.data.data && !item.data.data?.[codice]?.value">
                   <v-progress-circular
@@ -160,10 +166,12 @@ const {regione, provincia} = useRoute().params
 
 const headers = [
   {title: 'Pronto Soccorso', align: 'start', key: 'nome'},
+  {title: 'Indice Sovraffollamento: ', align: 'emd', key: 'data.data.extra.indice_sovraffollamento.value'},
   {title: 'Codice Rosso', align: 'end', key: 'data.data.rosso.value'},
   {title: 'Codice Giallo', align: 'end', key: 'data.data.giallo.value'},
   {title: 'Codice Verde', align: 'end', key: 'data.data.verde.value'},
   {title: 'Codice Bianco', align: 'end', key: 'data.data.bianco.value'},
+  {title: 'Totali', align: 'end', key: 'data.data.totali.value'},
 ];
 
 const sortBy = ref([{key: 'data.data.giallo.value', order: 'desc'}])
@@ -223,6 +231,10 @@ async function subscribeToChannel() {
 
 function uppercaseFirstLetter(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function replaceToInt(value: string) {
+  return parseInt(value.match(/\d+/)[0]);
 }
 
 // Aggiorna i dati ogni minuto
