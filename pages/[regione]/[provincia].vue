@@ -32,7 +32,7 @@
             >
               <template v-slot:item.data.data.extra.indice_sovraffollamento.value="{ item}">
                 <v-chip rounded>
-                  {{ replaceToInt(item.data.data.extra.indice_sovraffollamento.value) }}%
+                  {{ item.data.data.extra.indice_sovraffollamento.value }}%
                 </v-chip>
 
               </template>
@@ -63,7 +63,7 @@
                           <v-card-text v-show="key === 'extra'">
                             <p v-for="(extraValue, extraKey) in value" :key="extraKey">
                               <strong>{{ extraValue.label }}: </strong>
-                              <v-chip color="success" size="small" label>{{ extraValue.value }}</v-chip>
+                              <v-chip color="success" size="small" label>{{ extraValue.value }}<span v-if="extraValue.label === 'Indice di sovraffollamento'">%</span></v-chip>
                             </p>
                           </v-card-text>
                         </template>
@@ -103,7 +103,7 @@
                     <template v-slot:default="{ isActive }">
                       <v-card
                           :title="`Situazione Codice ${uppercaseFirstLetter(codice)}`"
-                          prepend-icon="mdi-medical-bag"
+                          prepend-icon="mdi-alarm-light"
                       >
 
                         <template v-slot:text>
@@ -215,7 +215,7 @@ const pusher = window.pusher;
 async function subscribeToChannel() {
   channel = pusher.subscribe(presidi.websocket.channel);
   event = presidi.websocket.event;
-  channel.bind(event, (data) => {
+  channel.bind(event, (data:any) => {
     console.log('Evento ricevuto:', data);
     for (const [key, value] of Object.entries(data.data)) {
       for (const categoria of ospedali.value) {
@@ -231,10 +231,6 @@ async function subscribeToChannel() {
 
 function uppercaseFirstLetter(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
-}
-
-function replaceToInt(value: string) {
-  return parseInt(value.match(/\d+/)[0]);
 }
 
 // Aggiorna i dati ogni minuto
