@@ -174,7 +174,7 @@ const headers = [
   {title: 'Totali', align: 'end', key: 'data.data.totali.value'},
 ];
 
-const sortBy = ref([{key: 'data.data.giallo.value', order: 'desc'}])
+const sortBy = ref([{key: 'data.data.extra.indice_sovraffollamento.value', order: 'asc'}])
 
 async function fetchData() {
   const {data} = await useAPIFetch<ResultsType>(`/${regione}/${provincia}`, {method: 'GET'});
@@ -203,7 +203,6 @@ async function updatePresidi() {
   const presidi = await fetchData();
   ospedali.value[0].data = presidi.data.filter(obj => obj.type === "pediatrico");
   ospedali.value[1].data = presidi.data.filter(obj => obj.type === "adulti");
-
 }
 
 console.log(runtimeConfig.public.pusher.schema);
