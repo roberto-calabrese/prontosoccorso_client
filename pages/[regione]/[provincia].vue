@@ -30,13 +30,6 @@
                 :sort-by="sortBy"
                 :items-per-page="0"
             >
-              <template v-slot:item.data.data.extra.indice_sovraffollamento.value="{ item}">
-                <v-chip rounded>
-                  {{ item.data.data.extra.indice_sovraffollamento.value }}%
-                </v-chip>
-
-              </template>
-
               <template v-slot:item.nome="{ item }">
                 <v-dialog max-width="700">
                   <template v-slot:activator="{ props: activatorProps }">
@@ -59,7 +52,13 @@
                         <p><strong>Web:</strong> <a :href="item.web" target="_blank">Link</a></p>
                         <p><strong>Coordinate:</strong> Lat {{ item.coords.lat }}, Lng {{ item.coords.lng }}</p>
                         <v-divider class="my-4"></v-divider>
-                        <template v-for="(value, key) in item.data.data" :key="key">
+                        <template v-if="!item.data?.data">
+                          <v-progress-linear
+                              color="teal"
+                              indeterminate
+                          ></v-progress-linear>
+                        </template>
+                        <template v-else v-for="(value, key) in item.data.data" :key="key">
                           <v-card-text v-show="key === 'extra'">
                             <p v-for="(extraValue, extraKey) in value" :key="extraKey">
                               <strong>{{ extraValue.label }}: </strong>
@@ -79,6 +78,12 @@
                     </v-card>
                   </template>
                 </v-dialog>
+              </template>
+
+              <template v-slot:item.data.data.extra.indice_sovraffollamento.value="{ item }">
+                <v-chip rounded>
+                  {{ item.data.data?.extra?.indice_sovraffollamento.value }}%
+                </v-chip>
               </template>
 
               <template v-for="codice in ['totali', 'rosso', 'giallo', 'verde', 'bianco']"
@@ -199,13 +204,12 @@ let ospedali = ref([
 
 const presidi = await fetchData();
 
+
 async function updatePresidi() {
   const presidi = await fetchData();
   ospedali.value[0].data = presidi.data.filter(obj => obj.type === "pediatrico");
   ospedali.value[1].data = presidi.data.filter(obj => obj.type === "adulti");
 }
-
-console.log(runtimeConfig.public.pusher.schema);
 
 let channel;
 let event;
