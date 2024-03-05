@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
+    "granim": "^2.0.0",
     "pusher-js": "^8.4.0-rc2"
   }
 }

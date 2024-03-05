@@ -6,14 +6,28 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   build: {
-    transpile: ['vuetify'],
+    transpile: ['vuetify' ],
   },
 
   plugins: [
     { src: '~/plugins/pusher', mode: 'client' },
+    // { src: '~/assets/js/background/noise.min.js', mode: 'client' },
+    // { src: '~/assets/js/background/util.js', mode: 'client' },
+    // { src: '~/assets/js/background/shift.js', mode: 'client' },
   ],
 
+  app: {
+    head: {
+      script: [
+        // {type: 'text/javascript', src: '/js/background/noise.min.js', body: true },
+        // {type: 'text/javascript', src: '/js/background/util.js', body: true},
+        // {type: 'text/javascript', src: '/js/background/shift.js', body: true},
+      ]
+    },
+  },
+
   modules: [
+
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
@@ -28,6 +42,7 @@ export default defineNuxtConfig({
         transformAssetUrls,
       },
     },
+
   },
 
 

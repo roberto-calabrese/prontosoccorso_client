@@ -1,64 +1,116 @@
 <template>
-  <v-layout>
-    <v-app-bar
-        color="teal-darken-4"
-        image="https://www.sicilia.info/wp-content/uploads/sites/91/palermo.jpg"
-    >
-      <template v-slot:image>
-        <v-img
-            gradient="to top right, rgba(19,84,122,.8), rgba(128,208,199,.8)"
-        ></v-img>
-      </template>
+    <v-app>
+      <v-app-bar class="background-bar">
 
-      <template v-slot:prepend>
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
-      </template>
+        <template v-slot:image>
+          <v-img
+              class="background-bar"
+          ></v-img>
+        </template>
 
-      <v-app-bar-title>PS</v-app-bar-title>
 
-      <v-spacer></v-spacer>
+        <template v-slot:prepend>
+          <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        </template>
 
-      <v-btn icon
-             v-model="darkMode"
-             @click="toggleTheme()"
+        <template v-slot:title>
+          <div class="logo">
+            <h2 class="text-uppercase">Pronto Soccorso</h2>
+            <h1 class="text-uppercase text-overline-">L i v e</h1>
+          </div>
+        </template>
+
+<!--        <v-spacer></v-spacer>-->
+<!--        <v-btn icon-->
+<!--               v-model="darkMode"-->
+<!--               @click="toggleTheme()"-->
+<!--        >-->
+<!--          <v-icon>mdi-theme-light-dark</v-icon>-->
+<!--        </v-btn>-->
+
+      </v-app-bar>
+
+      <v-main class="background-main">
+          <slot />
+      </v-main>
+
+      <v-footer
+          height="55"
+          style="max-height: 55px;"
+          :app="!xs"
+          class="d-flex flex-column"
+          elevation="10"
       >
-        <v-icon>mdi-theme-light-dark</v-icon>
-      </v-btn>
+        <div class="px-4 py-1 text-center w-100 text-overline">
+          <strong>PS</strong> {{ new Date().getFullYear() }} — <strong ><a class="text-white" href="https://github.com/roberto-calabrese" target="_blank" >Roberto Calabrese</a></strong> — <span class="font-weight-thin font-italic"> v.0.1 Beta</span>
+        </div>
+      </v-footer>
 
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main style="min-height: 300px;">
-      <slot />
-    </v-main>
-  </v-layout>
+    </v-app>
 </template>
 
 <script setup lang="ts">
-import { useTheme } from "vuetify";
+import { useTheme, useDisplay } from "vuetify";
 
 const theme = useTheme();
+const { xs  } = useDisplay()
+
 let darkMode = ref(false);
+const fab = ref(false);
 
 const toggleTheme = () => {
   darkMode.value = !darkMode.value
   theme.global.name.value = darkMode.value ? "light" : "customDarkTheme";
-  console.log(`Current theme is dark? ${theme.global.current.value.dark}`);
 };
 
-// import {VAppBar} from 'vuetify/components/VAppBar'
-// import {VApp} from 'vuetify/components/VApp'
-// import {VMain} from 'vuetify/components/VMain'
-// import {VSwitch} from 'vuetify/components/VSwitch'
-
 </script>
+
+<style>
+
+
+.background-bar {
+  background-image: linear-gradient(to bottom, #0a1412, #101817, #151b1b, #1a1f1f, #1e2323) !important;
+}
+
+.background-main {
+  background-image: linear-gradient(to right top, #393c3c, #3c4041, #3f4546, #434a4b, #464e51, #495256, #4d565a, #505a5f, #545e65, #59636b, #5e6770, #636b76);
+  background-size: 200% auto;
+  animation: gradientAnimation 10s linear infinite;
+}
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.logo {
+  line-height: normal;
+  h2 {
+    font-size: 10px;
+  }
+  h1 {
+    font-size: 18px;
+    animation: animationLogo 10s infinite;
+  }
+}
+
+@keyframes animationLogo {
+  0% {
+    color: red;
+  }
+  25% {
+    color: yellow;
+  }
+  50% {
+    color: green;
+  }
+  75% {
+    color: white;
+  }
+  100% {
+    color: red;
+  }
+}
+
+</style>
