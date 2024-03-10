@@ -20,14 +20,6 @@
           </div>
         </template>
 
-<!--        <v-spacer></v-spacer>-->
-<!--        <v-btn icon-->
-<!--               v-model="darkMode"-->
-<!--               @click="toggleTheme()"-->
-<!--        >-->
-<!--          <v-icon>mdi-theme-light-dark</v-icon>-->
-<!--        </v-btn>-->
-
       </v-app-bar>
 
       <v-main class="background-main">
@@ -37,7 +29,7 @@
       <v-footer
           height="55"
           style="max-height: 55px;"
-          :app="!xs"
+          :app="!mobile"
           class="d-flex flex-column"
           elevation="10"
       >
@@ -53,15 +45,9 @@
 import { useTheme, useDisplay } from "vuetify";
 
 const theme = useTheme();
-const { xs  } = useDisplay()
+const { mobile } = useDisplay()
 
-let darkMode = ref(false);
 const fab = ref(false);
-
-const toggleTheme = () => {
-  darkMode.value = !darkMode.value
-  theme.global.name.value = darkMode.value ? "light" : "customDarkTheme";
-};
 
 </script>
 

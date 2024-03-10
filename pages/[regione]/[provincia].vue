@@ -233,6 +233,19 @@ async function updatePresidi() {
   const presidi = await fetchData();
   ospedali.value[0].data = presidi.data.filter(obj => obj.type === "pediatrico");
   ospedali.value[1].data = presidi.data.filter(obj => obj.type === "adulti");
+
+  const adulti = [];
+  const bambini = [];
+
+  for (const obj of presidi.data) {
+    if (obj.adulti) {
+    } else {
+      bambini.push(obj);
+    }
+  }
+
+  ospedali.value[0].data = bambini;
+  ospedali.value[1].data = adulti;
 }
 
 let channel;
