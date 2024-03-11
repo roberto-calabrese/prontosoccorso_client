@@ -280,7 +280,7 @@ function uppercaseFirstLetter(value: string) {
 function startInterval() {
   interval.value = setInterval(async () => {
     await updatePresidi();
-  }, 5000);
+  }, 10000);
 }
 
 updatePresidi();
