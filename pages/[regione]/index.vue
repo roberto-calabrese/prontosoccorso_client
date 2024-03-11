@@ -46,6 +46,17 @@ const { data, error, pending } = await useAPIFetch<ResultsType>(`/${regione}`, {
   method: "GET",
 })
 
+if (!data.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Page Not Found'
+  })
+  showError({
+    statusCode: 404,
+    statusMessage: 'Page Not Found'
+  });
+}
+
 console.log(data.value);
 
 const currentRegione = data.value.regione;

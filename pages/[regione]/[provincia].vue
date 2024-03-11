@@ -207,6 +207,12 @@ const sortBy = ref([{key: 'data.data.extra.indice_sovraffollamento.value', order
 
 async function fetchData() {
   const {data} = await useAPIFetch<ResultsType>(`/${regione}/${provincia}`, {method: 'GET'});
+
+  if (!data.value) {
+    console.log('error');
+    showError('Page Not Found')
+  }
+
   return data.value;
 }
 
