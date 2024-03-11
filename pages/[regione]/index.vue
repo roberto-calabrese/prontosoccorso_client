@@ -25,7 +25,7 @@
 
                 <div>
                   <p class="text-uppercase text-caption font-weight-medium">
-                    numero ospedali: <strong class="text-amber-accent-4 text-sm-h6">{{ item.numero_ospedali}}</strong>
+                    numero ospedali: <strong class="text-amber-accent-4 text-sm-h6">{{ item.numero_ospedali }}</strong>
                   </p>
                 </div>
               </v-card-title>
@@ -40,28 +40,42 @@
 
 <script setup lang="ts">
 
-const { regione } = useRoute().params
+import {useCoreStore} from "~/store/core";
 
-const { data, error, pending } = await useAPIFetch<ResultsType>(`/${regione}`, {
-  method: "GET",
+const coreStore = useCoreStore()
+coreStore.setLoading(true)
+
+const {regione} = useRoute().params
+const province = ref();
+const currentRegione = ref();
+
+
+onMounted(async () => {
+
+  try {
+
+    const data = await fetch(`${regione}`)
+
+    if (!data) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Page Not Found'
+      })
+      showError({
+        statusCode: 404,
+        statusMessage: 'Page Not Found'
+      });
+    }
+
+    currentRegione.value = data.regione;
+    province.value = data.provincie;
+
+  } catch (error) {
+    console.error('Error fetching data:', error)
+  } finally {
+    coreStore.setLoading(false)
+  }
 })
 
-if (!data.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: 'Page Not Found'
-  })
-  showError({
-    statusCode: 404,
-    statusMessage: 'Page Not Found'
-  });
-}
-
-console.log(data.value);
-
-const currentRegione = data.value.regione;
-const province  = data.value.provincie;
-
-console.log(province);
 
 </script>

@@ -1,51 +1,63 @@
 <template>
-    <v-app>
-      <v-app-bar class="background-bar">
+  <v-app>
+    <v-app-bar class="background-bar">
 
-        <template v-slot:image>
-          <v-img
-              class="background-bar"
-          ></v-img>
-        </template>
+      <template v-slot:image>
+        <v-img
+            class="background-bar"
+        ></v-img>
+      </template>
 
 
-        <template v-slot:prepend>
-          <v-app-bar-nav-icon></v-app-bar-nav-icon>
-        </template>
+      <template v-slot:prepend>
+        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      </template>
 
-        <template v-slot:title>
-          <div class="logo">
-            <h2 class="text-uppercase">Pronto Soccorso</h2>
-            <h1 class="text-uppercase text-overline-">L i v e</h1>
-          </div>
-        </template>
-
-      </v-app-bar>
-
-      <v-main class="background-main">
-          <slot />
-      </v-main>
-
-      <v-footer
-          height="55"
-          style="max-height: 55px;"
-          :app="!mobile"
-          class="d-flex flex-column"
-          elevation="10"
-      >
-        <div class="px-4 py-1 text-center w-100 text-overline">
-          <strong>PS</strong> {{ new Date().getFullYear() }} — <strong ><a class="text-white" href="https://github.com/roberto-calabrese" target="_blank" >Roberto Calabrese</a></strong> — <span class="font-weight-thin font-italic"> v.0.1 Beta</span>
+      <template v-slot:title>
+        <div class="logo">
+          <h2 class="text-uppercase">Pronto Soccorso</h2>
+          <h1 class="text-uppercase text-overline-">L i v e</h1>
         </div>
-      </v-footer>
+      </template>
 
-    </v-app>
+    </v-app-bar>
+    <v-main class="background-main">
+      <v-progress-linear
+          v-if="coreStore.isLoading"
+          height="2"
+          color="primary"
+          indeterminate
+          class="mb-0"
+      ></v-progress-linear>
+      <slot/>
+    </v-main>
+
+    <v-footer
+        height="55"
+        style="max-height: 55px;"
+        :app="!mobile"
+        class="d-flex flex-column"
+        elevation="10"
+    >
+      <div class="px-4 py-1 text-center w-100 text-overline">
+        <strong>PS</strong> {{ new Date().getFullYear() }} — <strong><a class="text-white"
+                                                                        href="https://github.com/roberto-calabrese"
+                                                                        target="_blank">Roberto Calabrese</a></strong> —
+        <span class="font-weight-thin font-italic"> v.0.1 Beta</span>
+      </div>
+    </v-footer>
+
+  </v-app>
 </template>
 
 <script setup lang="ts">
-import { useTheme, useDisplay } from "vuetify";
+import {useTheme, useDisplay} from "vuetify";
+import {useCoreStore} from "~/store/core";
+
+const coreStore = useCoreStore();
 
 const theme = useTheme();
-const { mobile } = useDisplay()
+const {mobile} = useDisplay()
 
 const fab = ref(false);
 
@@ -65,16 +77,24 @@ const fab = ref(false);
 }
 
 @keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .logo {
   line-height: normal;
+
   h2 {
     font-size: 10px;
   }
+
   h1 {
     font-size: 18px;
     animation: animationLogo 10s infinite;

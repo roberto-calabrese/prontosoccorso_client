@@ -178,7 +178,7 @@
   </v-container>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 const runtimeConfig = useRuntimeConfig();
 const {regione, provincia} = useRoute().params
@@ -206,14 +206,14 @@ const headers = [
 const sortBy = ref([{key: 'data.data.extra.indice_sovraffollamento.value', order: 'asc'}])
 
 async function fetchData() {
-  const {data} = await useAPIFetch<ResultsType>(`/${regione}/${provincia}`, {method: 'GET'});
+  const data = await fetch(`${regione}/${provincia}`);
 
-  if (!data.value) {
+  if (!data) {
     console.log('error');
     showError('Page Not Found')
   }
 
-  return data.value;
+  return data;
 }
 
 let ospedali = ref([
@@ -231,8 +231,7 @@ let ospedali = ref([
   }
 ]);
 
-
-const presidi = await fetchData();
+const presidi = await updatePresidi();
 
 
 async function updatePresidi() {
@@ -251,6 +250,8 @@ async function updatePresidi() {
 
   ospedali.value[0].data = bambini;
   ospedali.value[1].data = adulti;
+
+  return presidi;
 }
 
 let channel;
@@ -260,7 +261,7 @@ const pusher = window.pusher;
 async function subscribeToChannel() {
   channel = pusher.subscribe(presidi.websocket.channel);
   event = presidi.websocket.event;
-  channel.bind(event, (data: any) => {
+  channel.bind(event, (data) => {
     console.log('Evento ricevuto:', data);
     for (const [key, value] of Object.entries(data.data)) {
       for (const categoria of ospedali.value) {
@@ -273,7 +274,7 @@ async function subscribeToChannel() {
   });
 }
 
-function uppercaseFirstLetter(value: string) {
+function uppercaseFirstLetter(value) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
@@ -282,8 +283,6 @@ function startInterval() {
     await updatePresidi();
   }, 10000);
 }
-
-updatePresidi();
 
 subscribeToChannel();
 
