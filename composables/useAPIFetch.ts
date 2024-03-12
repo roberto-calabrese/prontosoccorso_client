@@ -11,7 +11,7 @@ export const useAPIFetch: useFetchType = (path, options = {}) => {
     return useFetch(path, options)
 }
 
-export async function fetch(path) {
+export async function fetch(path:any) {
     const config = useRuntimeConfig()
     const baseURL = config.public.apiBaseUrl
     return await $fetch(`${baseURL}/${path}`);

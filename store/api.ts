@@ -2,11 +2,11 @@ import {defineStore} from 'pinia'
 
 export const useApiStore = defineStore('api', {
     state: () => ({
-        listRegion: null,
+        settings: null as any,
     }),
     actions: {
-        fetchInit: async function () {
-            this.listRegion = await fetch('init');
+        fetchSettings: async function () {
+            this.settings = await fetch('settings');
         },
     },
 })

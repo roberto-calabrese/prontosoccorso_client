@@ -3,7 +3,7 @@
     <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza a <span
         class="text-amber-accent-3">{{ uppercaseFirstLetter(provincia) }}</span></h2>
     <template v-for="categoria in ospedali">
-      <v-card flat v-if="categoria.data">
+      <v-card elevation="10" v-if="categoria.data">
         <v-card-title class="d-flex align-center pe-2">
           <v-icon :icon="categoria.icon"></v-icon> &nbsp;
           Pronto Soccorso &nbsp; <span class="text-amber-accent-1"> {{ categoria.titolo }}</span>

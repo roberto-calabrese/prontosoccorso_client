@@ -15,13 +15,10 @@
       </template>
 
       <template v-slot:title>
-        <nuxt-link to="/">
-          <div class="logo">
+          <div class="logo" @click="$router.push('/')">
             <h2 class="text-uppercase">Pronto Soccorso</h2>
             <h1 class="text-uppercase text-overline-">L i v e</h1>
           </div>
-        </nuxt-link>
-
       </template>
 
       <v-progress-linear
@@ -41,15 +38,12 @@
         :temporary="true"
     >
 
-      <v-list color="transparent">
-        <nuxt-link to="/">
-          <v-list-item prepend-icon="mdi-view-dashboard" title="Home"></v-list-item>
-        </nuxt-link>
-
+      <v-list>
+          <v-list-item exac prepend-icon="mdi-view-dashboard" to="/" title="Home"></v-list-item>
       </v-list>
 
-      <v-list v-if="apiStore.listRegion">
-        <v-list-group :value="regione.regione" v-for="regione in apiStore.listRegion['routes']" :key="regione.slug_regione">
+      <v-list v-if="apiStore.settings">
+        <v-list-group :value="regione.regione" v-for="regione in apiStore.settings.routes" :key="regione.slug_regione">
           <template v-slot:activator="{ props }">
             <v-list-item
                 v-bind="props"
@@ -64,10 +58,13 @@
           <v-list-item
               v-for="(provincia, provinciaKey) in regione.province"
               prepend-icon="mdi mdi-city"
-              :to="`${regione.slug_regione}/${provincia.meta.slug}`"
+              :to="`/${regione.slug_regione}/${provincia.meta.slug}`"
               :key="provinciaKey"
               :title="provincia.meta.Titolo"
               :value="provincia.meta.slug"
+              exac
+              link
+              active-class="info--text"
           >
             <template v-slot:subtitle>
               <span class="text-amber-accent-3">Nr ospedali: {{ provincia.n_ospedali }}</span>
@@ -76,13 +73,11 @@
         </v-list-group>
       </v-list>
 
-<!--      <template v-slot:append>-->
-<!--        <div class="pa-2">-->
-<!--          <v-btn block color="primary">-->
-<!--            Logout-->
-<!--          </v-btn>-->
-<!--        </div>-->
-<!--      </template>-->
+      <template v-slot:append>
+        <div class="pa-3 text-center">
+          <buy-me-coffe></buy-me-coffe>
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <v-main class="background-main">
@@ -106,20 +101,25 @@
 </template>
 
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
 import {useTheme, useDisplay} from "vuetify";
+const route = useRoute()
 
 import {useCoreStore} from "~/store/core";
 const coreStore = useCoreStore();
 
 import {useApiStore} from "~/store/api";
 const apiStore = useApiStore();
-apiStore.fetchInit();
-
+apiStore.fetchSettings();
 
 const theme = useTheme();
 const {mobile} = useDisplay()
 const drawer = ref(false);
 const fab = ref(false);
+
+const goToHome = () => {
+  route.push('/')
+}
 
 
 </script>
@@ -151,6 +151,7 @@ const fab = ref(false);
 
 .logo {
   line-height: normal;
+  cursor: pointer;
 
   h2 {
     font-size: 10px;
