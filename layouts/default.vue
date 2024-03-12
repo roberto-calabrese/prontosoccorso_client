@@ -8,16 +8,20 @@
         ></v-img>
       </template>
 
-
       <template v-slot:prepend>
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon
+            @click.stop="drawer = !drawer"
+        ></v-app-bar-nav-icon>
       </template>
 
       <template v-slot:title>
-        <div class="logo">
-          <h2 class="text-uppercase">Pronto Soccorso</h2>
-          <h1 class="text-uppercase text-overline-">L i v e</h1>
-        </div>
+        <nuxt-link to="/">
+          <div class="logo">
+            <h2 class="text-uppercase">Pronto Soccorso</h2>
+            <h1 class="text-uppercase text-overline-">L i v e</h1>
+          </div>
+        </nuxt-link>
+
       </template>
 
       <v-progress-linear
@@ -30,9 +34,59 @@
       ></v-progress-linear>
 
     </v-app-bar>
-    <v-main class="background-main">
 
-        <slot/>
+    <v-navigation-drawer
+        class=""
+        v-model="drawer"
+        :temporary="true"
+    >
+
+      <v-list color="transparent">
+        <nuxt-link to="/">
+          <v-list-item prepend-icon="mdi-view-dashboard" title="Home"></v-list-item>
+        </nuxt-link>
+
+      </v-list>
+
+      <v-list v-if="apiStore.listRegion">
+        <v-list-group :value="regione.regione" v-for="regione in apiStore.listRegion['routes']" :key="regione.slug_regione">
+          <template v-slot:activator="{ props }">
+            <v-list-item
+                v-bind="props"
+                prepend-icon="mdi mdi-medical-bag"
+                :title="regione.regione"
+            >
+              <template v-slot:subtitle>
+                <span class="text-amber-accent-3">Nr ospedali: {{ regione.n_ospedali }}</span>
+              </template>
+            </v-list-item>
+          </template>
+          <v-list-item
+              v-for="(provincia, provinciaKey) in regione.province"
+              prepend-icon="mdi mdi-city"
+              :to="`${regione.slug_regione}/${provincia.meta.slug}`"
+              :key="provinciaKey"
+              :title="provincia.meta.Titolo"
+              :value="provincia.meta.slug"
+          >
+            <template v-slot:subtitle>
+              <span class="text-amber-accent-3">Nr ospedali: {{ provincia.n_ospedali }}</span>
+            </template>
+          </v-list-item>
+        </v-list-group>
+      </v-list>
+
+<!--      <template v-slot:append>-->
+<!--        <div class="pa-2">-->
+<!--          <v-btn block color="primary">-->
+<!--            Logout-->
+<!--          </v-btn>-->
+<!--        </div>-->
+<!--      </template>-->
+    </v-navigation-drawer>
+
+    <v-main class="background-main">
+      <slot/>
     </v-main>
 
     <v-footer
@@ -43,9 +97,7 @@
         elevation="10"
     >
       <div class="px-4 py-1 text-center w-100 text-overline">
-        <strong>PS</strong> {{ new Date().getFullYear() }} — <strong><a class="text-white"
-                                                                        href="https://github.com/roberto-calabrese"
-                                                                        target="_blank">Roberto Calabrese</a></strong> —
+        <strong>PS</strong> {{ new Date().getFullYear() }} — <strong><a class="text-white" href="https://github.com/roberto-calabrese" target="_blank">Roberto Calabrese</a></strong> —
         <span class="font-weight-thin font-italic"> v.0.1 Beta</span>
       </div>
     </v-footer>
@@ -55,14 +107,20 @@
 
 <script setup lang="ts">
 import {useTheme, useDisplay} from "vuetify";
-import {useCoreStore} from "~/store/core";
 
+import {useCoreStore} from "~/store/core";
 const coreStore = useCoreStore();
+
+import {useApiStore} from "~/store/api";
+const apiStore = useApiStore();
+apiStore.fetchInit();
+
 
 const theme = useTheme();
 const {mobile} = useDisplay()
-
+const drawer = ref(false);
 const fab = ref(false);
+
 
 </script>
 
