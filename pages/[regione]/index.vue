@@ -39,9 +39,7 @@
 </template>
 
 <script setup lang="ts">
-
 import {useCoreStore} from "~/store/core";
-
 const coreStore = useCoreStore()
 coreStore.setLoading(true)
 
@@ -73,7 +71,7 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error fetching data:', error)
   } finally {
-    coreStore.setLoading(false)
+    setTimeout(() => {coreStore.setLoading(false)}, 1000)
   }
 })
 

@@ -7,6 +7,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "production": "npx nuxi build --dotenv .env.production && npx nuxi generate --dotenv .env.production && cp .htaccess dist/",
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {

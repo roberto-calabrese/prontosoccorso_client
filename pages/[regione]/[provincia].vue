@@ -1,6 +1,7 @@
 <template>
   <v-container fluid>
-    <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza a <span class="text-amber-accent-3">{{ uppercaseFirstLetter(provincia) }}</span></h2>
+    <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza a <span
+        class="text-amber-accent-3">{{ uppercaseFirstLetter(provincia) }}</span></h2>
     <template v-for="categoria in ospedali">
       <v-card flat v-if="categoria.data">
         <v-card-title class="d-flex align-center pe-2">
@@ -32,9 +33,10 @@
           <template v-slot:item.nome="{ item }">
             <v-dialog max-width="700">
               <template v-slot:activator="{ props: activatorProps }">
-                <v-chip prepend-icon="mdi-information" size="large" variant="elevated" v-bind="activatorProps" label color="teal-darken-4">
+                <v-chip prepend-icon="mdi-information" size="large" variant="elevated" v-bind="activatorProps" label
+                        color="teal-darken-4">
                   <template slot="prepend">
-                    <v-icon icon="mdi-information" />
+                    <v-icon icon="mdi-information"/>
                   </template>
                   <span class="text-white">{{ item.nome }}</span>
                 </v-chip>
@@ -179,19 +181,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-const runtimeConfig = useRuntimeConfig();
+import {useCoreStore} from "~/store/core";
+const coreStore = useCoreStore()
+
 const {regione, provincia} = useRoute().params
 
 const interval = ref(null)
-
-onMounted(() => {
-  startInterval()
-})
-
-onBeforeUnmount(() => {
-  clearInterval(interval.value)
-})
 
 const headers = [
   {title: 'Presidio', align: 'start', key: 'nome'},
@@ -205,18 +200,12 @@ const headers = [
 
 const sortBy = ref([{key: 'data.data.extra.indice_sovraffollamento.value', order: 'asc'}])
 
-async function fetchData() {
-  const data = await fetch(`${regione}/${provincia}`);
+let channel, event;
+const pusher = window.pusher;
 
-  if (!data) {
-    console.log('error');
-    showError('Page Not Found')
-  }
+const presidi = ref();
 
-  return data;
-}
-
-let ospedali = ref([
+const ospedali = ref([
   {
     titolo: 'Pediatrici',
     icon: 'mdi-human-baby-changing-table',
@@ -231,7 +220,36 @@ let ospedali = ref([
   }
 ]);
 
-const presidi = await updatePresidi();
+onMounted(async () => {
+  startInterval()
+  presidi.value = await updatePresidi();
+  await subscribeToChannel();
+})
+
+onBeforeUnmount(() => {
+  clearInterval(interval.value)
+})
+
+async function fetchData() {
+  try {
+
+    coreStore.setLoading(true)
+
+    const data = await fetch(`${regione}/${provincia}`);
+
+    if (!data) {
+      console.log('error');
+      showError('Page Not Found')
+    }
+
+    return data;
+
+  } catch (error) {
+    console.error('Error fetching data:', error)
+  } finally {
+    setTimeout(() => {coreStore.setLoading(false)}, 1000)
+  }
+}
 
 
 async function updatePresidi() {
@@ -254,13 +272,9 @@ async function updatePresidi() {
   return presidi;
 }
 
-let channel;
-let event;
-const pusher = window.pusher;
-
 async function subscribeToChannel() {
-  channel = pusher.subscribe(presidi.websocket.channel);
-  event = presidi.websocket.event;
+  channel = pusher.subscribe(presidi.value.websocket.channel);
+  event = presidi.value.websocket.event;
   channel.bind(event, (data) => {
     console.log('Evento ricevuto:', data);
     for (const [key, value] of Object.entries(data.data)) {
@@ -283,7 +297,5 @@ function startInterval() {
     await updatePresidi();
   }, 10000);
 }
-
-subscribeToChannel();
 
 </script>

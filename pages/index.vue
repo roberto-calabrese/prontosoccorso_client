@@ -65,7 +65,7 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error fetching data:', error)
   } finally {
-    coreStore.setLoading(false)
+    setTimeout(() => {coreStore.setLoading(false)}, 1000)
   }
 })
 

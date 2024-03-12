@@ -20,16 +20,19 @@
         </div>
       </template>
 
+      <v-progress-linear
+          :active="coreStore.isLoading"
+          :indeterminate="coreStore.isLoading"
+          :absolute="true"
+          location="bottom"
+          height="2"
+          color="light-blue-lighten-1"
+      ></v-progress-linear>
+
     </v-app-bar>
     <v-main class="background-main">
-      <v-progress-linear
-          v-if="coreStore.isLoading"
-          height="2"
-          color="primary"
-          indeterminate
-          class="mb-0"
-      ></v-progress-linear>
-      <slot/>
+
+        <slot/>
     </v-main>
 
     <v-footer
