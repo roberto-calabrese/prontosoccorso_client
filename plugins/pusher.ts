@@ -1,8 +1,14 @@
-// plugins/pusher.js
 import Pusher from 'pusher-js';
 
-export default defineNuxtPlugin((nuxtApp) => {
-    window.pusher = new Pusher('c1f2549429dae80f0d0c', {
+declare global {
+    interface Window {
+        pusher: any;
+    }
+}
+
+export default defineNuxtPlugin(() => {
+    const config = useRuntimeConfig()
+    window.pusher = new Pusher(config.public.pusher.appKey, {
         cluster: 'eu',
         // altre opzioni se necessario
     });

@@ -51,7 +51,7 @@
                 :title="regione.regione"
             >
               <template v-slot:subtitle>
-                <span class="text-amber-accent-3">Nr ospedali: {{ regione.n_ospedali }}</span>
+                <span class="text-amber-accent-3">Ospedali: {{ regione.n_ospedali }}</span>
               </template>
             </v-list-item>
           </template>
@@ -60,14 +60,12 @@
               prepend-icon="mdi mdi-city"
               :to="`/${regione.slug_regione}/${provincia.meta.slug}`"
               :key="provinciaKey"
-              :title="provincia.meta.Titolo"
               :value="provincia.meta.slug"
               exac
-              link
               active-class="info--text"
           >
-            <template v-slot:subtitle>
-              <span class="text-amber-accent-3">Nr ospedali: {{ provincia.n_ospedali }}</span>
+            <template v-slot:title>
+              {{ provincia.meta.Titolo }} <span class="text-amber-accent-3">{{ provincia.n_ospedali }}</span>
             </template>
           </v-list-item>
         </v-list-group>
@@ -97,6 +95,8 @@
       </div>
     </v-footer>
 
+    <core-snack-bar></core-snack-bar>
+
   </v-app>
 </template>
 
@@ -116,11 +116,6 @@ const theme = useTheme();
 const {mobile} = useDisplay()
 const drawer = ref(false);
 const fab = ref(false);
-
-const goToHome = () => {
-  route.push('/')
-}
-
 
 </script>
 

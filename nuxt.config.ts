@@ -4,23 +4,21 @@ import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 export default defineNuxtConfig({
   app: {
     head: {
-      script: []
+      title: "Pronto Soccorso Live",
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
     },
+    pageTransition: { name: 'page', mode: 'out-in' }
+
   },
   build: {
     transpile: ['vuetify'],
   },
 
-  components: [
-    {
-      path: '~/components',
-      extensions: ['.vue'],
-    }
-  ],
-
   devtools: {enabled: true},
 
   modules: [
+    '@vite-pwa/nuxt',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
@@ -32,6 +30,10 @@ export default defineNuxtConfig({
   plugins: [
     {src: '~/plugins/pusher', mode: 'client'},
   ],
+
+  pwa: {
+    /* PWA options */
+  },
 
   runtimeConfig: {
     // The private keys which are only available server-side

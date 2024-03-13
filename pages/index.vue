@@ -41,11 +41,6 @@
   </v-container>
 </template>
 <script setup lang="ts">
-
-import {useCoreStore} from "~/store/core";
-const coreStore = useCoreStore()
-coreStore.setLoading(true)
-
 const regioni = ref();
 
 onMounted(async () => {
@@ -64,8 +59,6 @@ onMounted(async () => {
 
   } catch (error) {
     console.error('Error fetching data:', error)
-  } finally {
-    setTimeout(() => {coreStore.setLoading(false)}, 1000)
   }
 })
 

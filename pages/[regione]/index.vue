@@ -39,11 +39,16 @@
 </template>
 
 <script setup lang="ts">
-import {useCoreStore} from "~/store/core";
-const coreStore = useCoreStore()
-coreStore.setLoading(true)
+import type {RouteParams} from "vue-router";
+import {uppercaseFirstLetter} from "~/utils/string-utils";
+const {regione}: RouteParams = useRoute().params
+useHead({
+  title: `Pronto Soccorso Live - ${uppercaseFirstLetter(regione)}`,
+  meta: [
+    { name: 'description', content: `Ospedali presenti in ${regione}` },
+  ],
+})
 
-const {regione} = useRoute().params
 const province = ref();
 const currentRegione = ref();
 
@@ -51,27 +56,20 @@ const currentRegione = ref();
 onMounted(async () => {
 
   try {
-
     const data = await fetch(`${regione}`)
 
-    if (!data) {
-      throw createError({
-        statusCode: 404,
-        statusMessage: 'Page Not Found'
-      })
-      showError({
-        statusCode: 404,
-        statusMessage: 'Page Not Found'
-      });
-    }
+    // if (!data) {
+    //   throw createError({
+    //     statusCode: 404,
+    //     statusMessage: 'Page Not Found'
+    //   })
+    // }
 
     currentRegione.value = data.regione;
     province.value = data.provincie;
 
   } catch (error) {
     console.error('Error fetching data:', error)
-  } finally {
-    setTimeout(() => {coreStore.setLoading(false)}, 1000)
   }
 })
 

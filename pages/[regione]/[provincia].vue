@@ -180,11 +180,18 @@
   </v-container>
 </template>
 
-<script setup>
-import {useCoreStore} from "~/store/core";
-const coreStore = useCoreStore()
+<script setup lang="ts">
+import type {RouteParams} from "vue-router";
+import {uppercaseFirstLetter} from "~/utils/string-utils";
 
-const {regione, provincia} = useRoute().params
+const {regione, provincia}: RouteParams = useRoute().params
+
+useHead({
+  title: `Pronto Soccorso Live - ${uppercaseFirstLetter(provincia)}`,
+  meta: [
+    { name: 'description', content: `Situazione dei pronto soccorsi a ${provincia}` },
+  ],
+})
 
 const interval = ref(null)
 
@@ -205,7 +212,7 @@ const pusher = window.pusher;
 
 const presidi = ref();
 
-const ospedali = ref([
+const ospedali: any = ref([
   {
     titolo: 'Pediatrici',
     icon: 'mdi-human-baby-changing-table',
@@ -232,25 +239,19 @@ onBeforeUnmount(() => {
 
 async function fetchData() {
   try {
+    return await fetch(`${regione}/${provincia}`);
 
-    coreStore.setLoading(true)
+    // if (!data) {
+    //   console.log('error');
+    //   showError('Page Not Found')
+    // }
 
-    const data = await fetch(`${regione}/${provincia}`);
-
-    if (!data) {
-      console.log('error');
-      showError('Page Not Found')
-    }
-
-    return data;
+    // return data;
 
   } catch (error) {
     console.error('Error fetching data:', error)
-  } finally {
-    setTimeout(() => {coreStore.setLoading(false)}, 1000)
   }
 }
-
 
 async function updatePresidi() {
   const presidi = await fetchData();
@@ -258,16 +259,19 @@ async function updatePresidi() {
   const adulti = [];
   const bambini = [];
 
-  for (const obj of presidi.data) {
-    if (obj.adulti) {
-      adulti.push(obj);
-    } else {
-      bambini.push(obj);
+  if (presidi?.data) {
+    for (const obj of presidi.data) {
+      if (obj.adulti) {
+        adulti.push(obj);
+      } else {
+        bambini.push(obj);
+      }
     }
-  }
 
-  ospedali.value[0].data = bambini;
-  ospedali.value[1].data = adulti;
+    ospedali.value[0].data = bambini;
+    ospedali.value[1].data = adulti;
+
+  }
 
   return presidi;
 }
@@ -275,7 +279,7 @@ async function updatePresidi() {
 async function subscribeToChannel() {
   channel = pusher.subscribe(presidi.value.websocket.channel);
   event = presidi.value.websocket.event;
-  channel.bind(event, (data) => {
+  channel.bind(event, (data:any) => {
     console.log('Evento ricevuto:', data);
     for (const [key, value] of Object.entries(data.data)) {
       for (const categoria of ospedali.value) {
@@ -286,10 +290,6 @@ async function subscribeToChannel() {
       }
     }
   });
-}
-
-function uppercaseFirstLetter(value) {
-  return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
 function startInterval() {
