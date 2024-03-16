@@ -14,7 +14,7 @@
       <v-col cols="12">
         <v-card class="elevation-3">
           <v-card-title>
-            <h3 class="headline">1. Scraping dei Dati</h3>
+            <h3 class="headline text-amber-accent-2"><v-icon icon="mdi-bullseye-arrow"></v-icon> Scraping dei Dati</h3>
           </v-card-title>
           <v-card-text>
             <p>
@@ -32,11 +32,11 @@
       <v-col cols="12">
         <v-card class="elevation-3">
           <v-card-title>
-            <h3 class="headline">2. Comunicazione in Tempo Reale</h3>
+            <h3 class="headline text-amber-accent-2"><v-icon icon="mdi-lightning-bolt-circle"></v-icon> Comunicazione in Tempo Reale</h3>
           </v-card-title>
           <v-card-text>
             <p>
-              Una volta che i dati sono stati recuperati, li inviamo al client tramite WebSocket.<br>
+              Una volta che i dati sono stati recuperati, vengono inviati al client tramite WebSocket.<br>
               Viene utilizzato Pusher.io per garantire una comunicazione in tempo reale.<br>
               Il tuo browser è costantemente in ascolto e si aggiorna automaticamente con i nuovi dati appena sono disponibili.
             </p>
@@ -50,7 +50,7 @@
       <v-col cols="12">
         <v-card class="elevation-3">
           <v-card-title>
-            <h3 class="headline">3. Attivazione del Polling</h3>
+            <h3 class="headline text-amber-accent-2"><v-icon icon="mdi-sync"></v-icon> Attivazione del Polling</h3>
           </v-card-title>
           <v-card-text>
             <p>
@@ -67,7 +67,7 @@
       <v-col cols="12">
         <v-card class="elevation-3">
           <v-card-title>
-            <h3 class="headline">4. Cache dei Dati</h3>
+            <h3 class="headline text-amber-accent-2"><v-icon icon="mdi-cached"></v-icon> Cache dei Dati</h3>
           </v-card-title>
           <v-card-text>
             <p>

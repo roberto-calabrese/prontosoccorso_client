@@ -32,7 +32,11 @@ export default defineNuxtConfig({
   ],
 
   pwa: {
-    /* PWA options */
+    manifest: {
+      name: 'Pronto Soccorso Live',
+      short_name: "PS_LIVE",
+      lang: 'it',
+    }
   },
 
   runtimeConfig: {
