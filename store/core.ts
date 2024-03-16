@@ -7,17 +7,19 @@ interface Snackbar {
 }
 
 export const useCoreStore = defineStore('core', {
-    state: (): { isLoading: boolean; snackbar: Snackbar } => ({
+    state: (): { isLoading: boolean; snackbars: Snackbar[] } => ({
         isLoading: false,
-        snackbar: { active: false, text: '', color: '' }
+        snackbars: []
     }),
     actions: {
         setLoading(isLoading: boolean) {
             this.isLoading = isLoading
         },
-        setSnackBar(value: Snackbar) {
-            console.log(value);
-            this.snackbar = value
+        openSnackbar(message: string, color: string = 'info') {
+            this.snackbars.push({ text: message, color: color, active: true })
+        },
+        closeSnackbar(index: number) {
+            this.snackbars.splice(index, 1)
         },
     },
 })

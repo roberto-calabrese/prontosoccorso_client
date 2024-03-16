@@ -43,17 +43,13 @@
               </template>
 
               <template v-slot:default="{ isActive }">
-
                 <v-card
-                    :title="item.nome"
                     :text="item.descrizione"
                     prepend-icon="mdi-medical-bag">
 
                   <template v-slot:title>
                     <span class="text-amber-accent-3">{{ item.nome }}</span>
                   </template>
-
-
                   <template v-slot:text>
                     <span class="text-amber-accent-4">{{ item.descrizione }}</span>
                   </template>
@@ -125,7 +121,6 @@
                       :title="`Situazione Codice ${uppercaseFirstLetter(codice)}`"
                       prepend-icon="mdi-alarm-light"
                   >
-
                     <template v-slot:text>
                       <v-table>
                         <thead>
@@ -189,7 +184,7 @@ const {regione, provincia}: RouteParams = useRoute().params
 useHead({
   title: `Pronto Soccorso Live - ${uppercaseFirstLetter(provincia)}`,
   meta: [
-    { name: 'description', content: `Situazione dei pronto soccorsi a ${provincia}` },
+    {name: 'description', content: `Situazione dei pronto soccorsi a ${provincia}`},
   ],
 })
 
@@ -279,7 +274,7 @@ async function updatePresidi() {
 async function subscribeToChannel() {
   channel = pusher.subscribe(presidi.value.websocket.channel);
   event = presidi.value.websocket.event;
-  channel.bind(event, (data:any) => {
+  channel.bind(event, (data: any) => {
     console.log('Evento ricevuto:', data);
     for (const [key, value] of Object.entries(data.data)) {
       for (const categoria of ospedali.value) {

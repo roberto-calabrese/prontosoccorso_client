@@ -8,12 +8,7 @@ export async function fetch(path: any) {
         coreStore.setLoading(true)
         return await $fetch(`${baseURL}/${path}`);
     } catch (error) {
-        console.log(error);
-        coreStore.setSnackBar({
-            active: true,
-            text: `Errore durante il fetch dei dati: ${path}`,
-            color: 'red'
-        })
+        coreStore.openSnackbar(`Errore durante il fetch dei dati: ${path}`, 'red')
     } finally {
         setTimeout(() => {
             coreStore.setLoading(false)
