@@ -67,7 +67,7 @@
       <v-col cols="12">
         <v-card class="elevation-3">
           <v-card-title>
-            <h3 class="headline text-amber-accent-2"><v-icon icon="mdi-cached"></v-icon> Cache dei Dati</h3>
+            <h3 class="headline text-amber-accent-2"><v-icon icon="mdi-database-clock"></v-icon> Cache dei Dati</h3>
           </v-card-title>
           <v-card-text>
             <p>
