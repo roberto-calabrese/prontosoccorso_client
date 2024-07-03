@@ -11,8 +11,6 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxtjs/pwa": "^3.3.5",
-    "@vite-pwa/nuxt": "^0.6.0",
     "nuxt": "^3.9.0",
     "vite-plugin-vuetify": "^2.0.1",
     "vue": "^3.4.5",

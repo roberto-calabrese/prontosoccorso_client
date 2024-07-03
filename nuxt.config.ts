@@ -18,7 +18,6 @@ export default defineNuxtConfig({
   devtools: {enabled: true},
 
   modules: [
-    '@vite-pwa/nuxt',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
