@@ -73,6 +73,16 @@
 
       <template v-slot:append>
         <div class="pa-3 text-center">
+          <div class="text-center">
+            <v-btn
+                prepend-icon="mdi-git"
+                href="https://github.com/roberto-calabrese"
+                target="_blank"
+                block
+            >
+              GitHub
+            </v-btn>
+          </div>
           <buy-me-coffe></buy-me-coffe>
         </div>
       </template>

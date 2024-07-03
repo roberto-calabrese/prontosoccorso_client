@@ -7,8 +7,8 @@
       elevation="10"
   >
     <div class="px-4 p-0 text-center w-100 text-overline">
-      <strong>PS</strong> {{ new Date().getFullYear() }} — <strong><a class="text-white" href="https://github.com/roberto-calabrese" target="_blank">Roberto Calabrese</a></strong> —
-      <span class="font-weight-thin font-italic"> v.0.1 Beta</span>
+      <strong>PS</strong> {{ new Date().getFullYear() }} — <strong><a class="text-white text-decoration-none" href="https://github.com/roberto-calabrese" target="_blank"><v-icon icon="mdi-git"></v-icon> Roberto Calabrese</a></strong> —
+      <span class="font-weight-thin font-italic"> v.0.10 Beta</span>
     </div>
   </v-footer>
 </template>
