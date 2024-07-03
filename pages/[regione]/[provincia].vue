@@ -31,7 +31,7 @@
               color="success"
           >
             <template v-slot:item.nome="{ item }">
-              <v-dialog max-width="700">
+              <v-dialog fullscreen max-width="100%" transition="dialog-bottom-transition">
                 <template v-slot:activator="{ props: activatorProps }">
                   <v-chip prepend-icon="mdi-information" size="large" variant="elevated" v-bind="activatorProps" label
                           color="teal-darken-4">
@@ -43,18 +43,21 @@
                 </template>
 
                 <template v-slot:default="{ isActive }">
-                  <v-card
-                      :text="item.descrizione"
-                      prepend-icon="mdi-medical-bag">
+                  <v-toolbar>
+                    <v-btn
+                        icon="mdi-close"
+                        @click="isActive.value = false"
+                    ></v-btn>
 
-                    <template v-slot:title>
+                    <v-toolbar-title>
                       <span class="text-amber-accent-3">{{ item.nome }}</span>
-                    </template>
-                    <template v-slot:text>
-                      <span class="text-amber-accent-4">{{ item.descrizione }}</span>
-                    </template>
+                    </v-toolbar-title>
 
+
+                  </v-toolbar>
+                  <v-card>
                     <v-card-text>
+                      <p><span class="text-amber-accent-4">{{ item.descrizione }}</span></p>
                       <p><strong>Tipo:</strong> {{ item.type }}</p>
                       <p><strong>Indirizzo:</strong> {{ item.indirizzo }}</p>
                       <p><strong>Telefono:</strong> {{ item.telefono }}</p>
@@ -189,17 +192,8 @@ useHead({
 
 const interval = ref(null)
 
-const headers = [
-  {title: 'Presidio', align: 'start', key: 'nome'},
-  {title: 'Indice Sovraffollamento: ', align: 'emd', key: 'data.data.extra.indice_sovraffollamento.value'},
-  {title: 'Codice Rosso', align: 'end', key: 'data.data.rosso.value'},
-  {title: 'Codice Giallo', align: 'end', key: 'data.data.giallo.value'},
-  {title: 'Codice Verde', align: 'end', key: 'data.data.verde.value'},
-  {title: 'Codice Bianco', align: 'end', key: 'data.data.bianco.value'},
-  {title: 'Totali', align: 'end', key: 'data.data.totali.value'},
-];
-
-const sortBy = ref([{key: 'data.data.extra.indice_sovraffollamento.value', order: 'asc'}])
+const headers = ref([]);
+const sortBy = ref([])
 
 let channel, event;
 const pusher = window.pusher;
@@ -249,6 +243,13 @@ async function fetchData() {
 
 async function updatePresidi() {
   const presidi = await fetchData();
+
+  if (presidi.tableSettings) {
+    headers.value = presidi.tableSettings.headers;
+    sortBy.value = presidi.tableSettings.sortBy;
+  } else {
+    console.error('Settings non validi:', presidi.tableSettings);
+  }
 
   const adulti = [];
   const bambini = [];
