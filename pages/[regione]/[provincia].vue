@@ -100,12 +100,12 @@
               </v-chip>
             </template>
 
-            <template v-for="codice in ['totali', 'rosso', 'giallo', 'verde', 'bianco']"
+            <template v-for="codice in ['totali', 'rosso', 'arancione', 'giallo', 'verde', 'azzurro', 'bianco']"
                       v-slot:[`item.data.data.${codice}.value`]="{ item }">
               <div v-if="!item.data.data && !item.data.data?.[codice]?.value">
                 <v-progress-circular
                     indeterminate
-                    :color="codice === 'rosso' ? 'red' : (codice === 'giallo' ? 'yellow' : (codice === 'verde' ? 'green' : 'white'))"
+                    :color=getColorProgress(codice)
                 ></v-progress-circular>
               </div>
               <template v-if="item.data.data?.[codice]?.extra">
@@ -113,7 +113,7 @@
                   <template v-slot:activator="{ props: activatorProps }">
                     <v-chip
                         v-bind="activatorProps"
-                        :color="codice === 'rosso' ? 'red' : (codice === 'giallo' ? 'yellow' : (codice === 'verde' ? 'green' : 'white'))"
+                        :color=getColorProgress(codice)
                     >
                       <h2>{{ item.data.data?.[codice]?.value }}</h2>
                     </v-chip>
@@ -138,7 +138,7 @@
                           <tr>
                             <td v-for="(extraItem, key) in item.data.data?.[codice]?.extra" :key="key">
                               <v-chip
-                                  :color="codice === 'rosso' ? 'red' : (codice === 'giallo' ? 'yellow' : (codice === 'verde' ? 'green' : 'white'))"
+                                  :color=getColorProgress(codice)
                               >
                                 <h2>{{ extraItem.value }}</h2>
                               </v-chip>
@@ -160,7 +160,7 @@
                 </v-dialog>
               </template>
               <h2 v-else-if="item.data.data" class="mr-2"
-                  :class="codice === 'rosso' ? 'text-red' : (codice === 'giallo' ? 'text-yellow' : (codice === 'verde' ? 'text-green' : 'text-white'))"
+                  :class=getColorText(codice)
               >
                 {{ item.data.data?.[codice]?.value ?? 0 }}
               </h2>
@@ -291,6 +291,40 @@ function startInterval() {
   interval.value = setInterval(async () => {
     await updatePresidi();
   }, 10000);
+}
+
+const getColorText = (codice:string) => {
+  switch (codice) {
+    case 'rosso':
+      return 'text-red';
+    case 'giallo':
+      return 'text-yellow';
+    case 'verde':
+      return 'text-green';
+    case 'arancione':
+      return 'text-orange';
+    case 'azzurro':
+      return 'text-blue';
+    default:
+      return 'text-white';
+  }
+}
+
+const getColorProgress = (codice:string) => {
+  switch (codice) {
+    case 'rosso':
+      return 'red';
+    case 'giallo':
+      return 'yellow';
+    case 'verde':
+      return 'green';
+    case 'arancione':
+      return 'orange';
+    case 'azzurro':
+      return 'blue';
+    default:
+      return 'white';
+  }
 }
 
 </script>
