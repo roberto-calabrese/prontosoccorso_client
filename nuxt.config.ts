@@ -31,13 +31,13 @@ export default defineNuxtConfig({
     {src: '~/plugins/pusher', mode: 'client'},
   ],
 
-  pwa: {
-    manifest: {
-      name: 'Pronto Soccorso Live',
-      short_name: "PS_LIVE",
-      lang: 'it',
-    }
-  },
+  // pwa: {
+  //   manifest: {
+  //     name: 'Pronto Soccorso Live',
+  //     short_name: "PS_LIVE",
+  //     lang: 'it',
+  //   }
+  // },
 
   runtimeConfig: {
     // The private keys which are only available server-side
