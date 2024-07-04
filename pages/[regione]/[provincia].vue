@@ -1,5 +1,6 @@
 <template>
   <v-container fluid>
+    <RotateAlert />
     <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza a <span class="text-amber-accent-3">{{ uppercaseFirstLetter(provincia) }}</span></h2>
     <template v-for="categoria in ospedali">
       <div v-if="categoria.data.length">
