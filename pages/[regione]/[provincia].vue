@@ -2,6 +2,9 @@
   <v-container fluid>
     <RotateAlert />
     <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza a <span class="text-amber-accent-3">{{ uppercaseFirstLetter(provincia) }}</span></h2>
+    <v-btn color="primary" @click="toggleGeolocation">
+      {{ isWatching ? 'Disattiva Geolocalizzazione' : 'Attiva Geolocalizzazione' }}
+    </v-btn>
     <template v-for="categoria in ospedali">
       <div v-if="categoria.data.length">
         <v-card elevation="10" v-if="categoria.data">
@@ -101,6 +104,13 @@
               </v-chip>
             </template>
 
+            <template v-slot:item.distanza="{ item }">
+              <v-chip rounded>
+                {{ item.distanza.toFixed(2) }} Km
+              </v-chip>
+
+            </template>
+
             <template v-for="codice in ['totali', 'rosso', 'arancione', 'giallo', 'verde', 'azzurro', 'bianco']"
                       v-slot:[`item.data.data.${codice}.value`]="{ item }">
               <div v-if="!item.data.data && !item.data.data?.[codice]?.value">
@@ -180,7 +190,11 @@
 
 <script setup lang="ts">
 import type {RouteParams} from "vue-router";
+import { useGeolocationStore } from '~/store/geolocation';
 import {uppercaseFirstLetter} from "~/utils/string-utils";
+
+const geolocationStore = useGeolocationStore();
+const isWatching = ref(false);
 
 const {regione, provincia}: RouteParams = useRoute().params
 
@@ -245,11 +259,9 @@ async function fetchData() {
 async function updatePresidi() {
   const presidi = await fetchData();
 
-  if (presidi.tableSettings) {
+  if (!headers.value.length && presidi.tableSettings) {
     headers.value = presidi.tableSettings.headers;
     sortBy.value = presidi.tableSettings.sortBy;
-  } else {
-    console.error('Settings non validi:', presidi.tableSettings);
   }
 
   const adulti = [];
@@ -267,6 +279,10 @@ async function updatePresidi() {
     ospedali.value[0].data = bambini;
     ospedali.value[1].data = adulti;
 
+  }
+
+  if(isWatching) {
+    addDistanceHospital();
   }
 
   return presidi;
@@ -326,6 +342,58 @@ const getColorProgress = (codice:string) => {
     default:
       return 'white';
   }
+}
+
+async function toggleGeolocation() {
+  if (isWatching.value) {
+    geolocationStore.stopWatchingPosition();
+    isWatching.value = false;
+  } else {
+    geolocationStore.startWatchingPosition();
+    isWatching.value = true;
+    watchUserPosition();
+    headers.value.push(
+    {
+      title: 'Distanza',
+      align: 'end',
+      key: 'distanza'
+     }
+    );
+  }
+}
+
+function watchUserPosition() {
+  watch(
+      () => geolocationStore.position,
+      (newPosition) => {
+        if (newPosition) {
+          addDistanceHospital();
+        }
+      },
+      { immediate: true }
+  );
+}
+
+function addDistanceHospital() {
+  if (geolocationStore.position) {
+    const { latitude, longitude } = geolocationStore.position;
+    ospedali.value.forEach((categoria:any) => {
+      categoria.data.forEach((ospedale:any) => {
+        ospedale.distanza = calculateDistance(latitude, longitude, ospedale.coords.lat, ospedale.coords.lng);
+      });
+    });
+  }
+}
+
+function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a =
+      0.5 - Math.cos(dLat)/2 +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      (1 - Math.cos(dLon)) / 2;
+  return R * 2 * Math.asin(Math.sqrt(a));
 }
 
 </script>

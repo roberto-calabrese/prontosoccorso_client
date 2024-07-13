@@ -24,9 +24,8 @@ export default {
   methods: {
     checkOrientation() {
       if (window.innerHeight > window.innerWidth) {
-        return  this.dialog = true;
+        this.dialog = true;
       }
-      return this.dialog = false;
     },
     closeDialog() {
       this.dialog = false;
@@ -34,7 +33,7 @@ export default {
   },
   mounted() {
     this.checkOrientation();
-    window.addEventListener("resize", this.checkOrientation);
+    // window.addEventListener("resize", this.checkOrientation);
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.checkOrientation);
