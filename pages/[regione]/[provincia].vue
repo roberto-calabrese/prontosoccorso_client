@@ -2,9 +2,6 @@
   <v-container fluid>
     <RotateAlert />
     <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza a <span class="text-amber-accent-3">{{ uppercaseFirstLetter(provincia) }}</span></h2>
-    <v-btn color="primary" @click="toggleGeolocation">
-      {{ isWatching ? 'Disattiva Geolocalizzazione' : 'Attiva Geolocalizzazione' }}
-    </v-btn>
     <template v-for="categoria in ospedali">
       <div v-if="categoria.data.length">
         <v-card elevation="10" v-if="categoria.data">
@@ -189,86 +186,117 @@
 </template>
 
 <script setup lang="ts">
-import type {RouteParams} from "vue-router";
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { useGeolocationStore } from '~/store/geolocation';
-import {uppercaseFirstLetter} from "~/utils/string-utils";
+import { uppercaseFirstLetter } from '~/utils/string-utils';
 
 const geolocationStore = useGeolocationStore();
 const isWatching = ref(false);
-
-const {regione, provincia}: RouteParams = useRoute().params
+const { regione, provincia } = useRoute().params as RouteParams;
 
 useHead({
   title: `Pronto Soccorso Live - ${uppercaseFirstLetter(provincia)}`,
   meta: [
-    {name: 'description', content: `Situazione dei pronto soccorsi a ${provincia}`},
+    { name: 'description', content: `Situazione dei pronto soccorsi a ${provincia}` },
   ],
-})
+});
 
-const interval = ref(null)
+const interval = ref<ReturnType<typeof setInterval> | null>(null);
+const headers = ref<any[]>([]);
+const sortBy = ref<any[]>([]);
 
-const headers = ref([]);
-const sortBy = ref([])
+let channel: any, event: any;
+const pusher = (window as any).pusher;
 
-let channel, event;
-const pusher = window.pusher;
+const presidi = ref<any>();
 
-const presidi = ref();
-
-const ospedali: any = ref([
+const ospedali = ref([
   {
     titolo: 'Pediatrici',
     icon: 'mdi-human-baby-changing-table',
     data: [],
-    search: ref('')
+    search: ref(''),
   },
   {
     titolo: 'Adulti',
     icon: 'mdi-account',
     data: [],
-    search: ref('')
-  }
+    search: ref(''),
+  },
 ]);
 
 onMounted(async () => {
-  startInterval()
+  startInterval();
   presidi.value = await updatePresidi();
   await subscribeToChannel();
-})
+
+  watch(
+      () => geolocationStore.geolocation.init,
+      async (newInit) => {
+        if (newInit) {
+          addDistanceHospital();
+          if (!headers.value.some(header => header.key === 'distanza')) {
+            headers.value.splice(1, 0, {
+              title: 'Distanza',
+              align: 'end',
+              key: 'distanza',
+            });
+          }
+        } else {
+          const index = headers.value.findIndex(header => header.key === 'distanza');
+          if (index !== -1) {
+            headers.value.splice(index, 1);
+          }
+        }
+      },
+      { immediate: true }
+  );
+});
 
 onBeforeUnmount(() => {
-  clearInterval(interval.value)
-})
+  if (interval.value) {
+    clearInterval(interval.value);
+  }
+  if (channel) {
+    channel.unbind(event);
+    pusher.unsubscribe(channel);
+  }
+});
 
 async function fetchData() {
   try {
     return await fetch(`${regione}/${provincia}`);
-
-    // if (!data) {
-    //   console.log('error');
-    //   showError('Page Not Found')
-    // }
-
-    // return data;
-
   } catch (error) {
-    console.error('Error fetching data:', error)
+    console.error('Error fetching data:', error);
   }
 }
 
 async function updatePresidi() {
-  const presidi = await fetchData();
+  const presidiData = await fetchData();
 
-  if (!headers.value.length && presidi.tableSettings) {
-    headers.value = presidi.tableSettings.headers;
-    sortBy.value = presidi.tableSettings.sortBy;
+  console.log(headers.value.length);
+
+  if (!headers.value.length && presidiData.tableSettings) {
+    headers.value = presidiData.tableSettings.headers;
+    sortBy.value = presidiData.tableSettings.sortBy;
+  }
+
+  if (geolocationStore.geolocation.init) {
+    if (!headers.value.some(header => header.key === 'distanza')) {
+      headers.value.splice(1, 0, {
+        title: 'Distanza',
+        align: 'end',
+        key: 'distanza',
+      });
+    }
   }
 
   const adulti = [];
   const bambini = [];
 
-  if (presidi?.data) {
-    for (const obj of presidi.data) {
+  if (presidiData?.data) {
+    for (const obj of presidiData.data) {
       if (obj.adulti) {
         adulti.push(obj);
       } else {
@@ -278,14 +306,13 @@ async function updatePresidi() {
 
     ospedali.value[0].data = bambini;
     ospedali.value[1].data = adulti;
-
   }
 
-  if(isWatching) {
+  if (geolocationStore.geolocation.init) {
     addDistanceHospital();
   }
 
-  return presidi;
+  return presidiData;
 }
 
 async function subscribeToChannel() {
@@ -295,7 +322,7 @@ async function subscribeToChannel() {
     console.log('Evento ricevuto:', data);
     for (const [key, value] of Object.entries(data.data)) {
       for (const categoria of ospedali.value) {
-        const presidio = categoria.data.find(presidio => presidio.key === key);
+        const presidio = categoria.data.find((presidio: any) => presidio.key === key);
         if (presidio) {
           presidio.data = value;
         }
@@ -310,7 +337,7 @@ function startInterval() {
   }, 10000);
 }
 
-const getColorText = (codice:string) => {
+const getColorText = (codice: string) => {
   switch (codice) {
     case 'rosso':
       return 'text-red';
@@ -325,9 +352,9 @@ const getColorText = (codice:string) => {
     default:
       return 'text-white';
   }
-}
+};
 
-const getColorProgress = (codice:string) => {
+const getColorProgress = (codice: string) => {
   switch (codice) {
     case 'rosso':
       return 'red';
@@ -342,58 +369,16 @@ const getColorProgress = (codice:string) => {
     default:
       return 'white';
   }
-}
-
-async function toggleGeolocation() {
-  if (isWatching.value) {
-    geolocationStore.stopWatchingPosition();
-    isWatching.value = false;
-  } else {
-    geolocationStore.startWatchingPosition();
-    isWatching.value = true;
-    watchUserPosition();
-    headers.value.push(
-    {
-      title: 'Distanza',
-      align: 'end',
-      key: 'distanza'
-     }
-    );
-  }
-}
-
-function watchUserPosition() {
-  watch(
-      () => geolocationStore.position,
-      (newPosition) => {
-        if (newPosition) {
-          addDistanceHospital();
-        }
-      },
-      { immediate: true }
-  );
-}
+};
 
 function addDistanceHospital() {
-  if (geolocationStore.position) {
-    const { latitude, longitude } = geolocationStore.position;
-    ospedali.value.forEach((categoria:any) => {
-      categoria.data.forEach((ospedale:any) => {
-        ospedale.distanza = calculateDistance(latitude, longitude, ospedale.coords.lat, ospedale.coords.lng);
+  if (geolocationStore.userPosition) {
+    const { latitude, longitude } = geolocationStore.userPosition;
+    ospedali.value.forEach((categoria: any) => {
+      categoria.data.forEach((ospedale: any) => {
+        ospedale.distanza = geolocationStore.calculateDistance(latitude, longitude, ospedale.coords.lat, ospedale.coords.lng);
       });
     });
   }
 }
-
-function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 6371;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a =
-      0.5 - Math.cos(dLat)/2 +
-      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-      (1 - Math.cos(dLon)) / 2;
-  return R * 2 * Math.asin(Math.sqrt(a));
-}
-
 </script>

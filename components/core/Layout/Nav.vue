@@ -21,6 +21,11 @@
         </div>
       </template>
 
+      <template v-slot:append>
+        <button-geolocation></button-geolocation>
+      </template>
+
+
       <v-progress-linear
           :active="coreStore.isLoading"
           :indeterminate="coreStore.isLoading"
@@ -91,17 +96,16 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
-const route = useRoute()
-
-import {useCoreStore} from "~/store/core";
-const coreStore = useCoreStore();
-
+import ButtonGeolocation from "~/components/core/ButtonGeolocation.vue";
+import {useRoute} from 'vue-router'
 import {useApiStore} from "~/store/api";
-const apiStore = useApiStore();
-apiStore.fetchSettings();
+import {useCoreStore} from "~/store/core";
 
+const route = useRoute()
+const coreStore = useCoreStore();
+const apiStore = useApiStore();
 const drawer = ref(false);
+apiStore.fetchSettings();
 
 </script>
 
