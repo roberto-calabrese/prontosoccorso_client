@@ -274,9 +274,6 @@ async function fetchData() {
 
 async function updatePresidi() {
   const presidiData = await fetchData();
-
-  console.log(headers.value.length);
-
   if (!headers.value.length && presidiData.tableSettings) {
     headers.value = presidiData.tableSettings.headers;
     sortBy.value = presidiData.tableSettings.sortBy;
