@@ -34,8 +34,7 @@
             <template v-slot:item.nome="{ item }">
               <v-dialog fullscreen max-width="100%" transition="dialog-bottom-transition">
                 <template v-slot:activator="{ props: activatorProps }">
-                  <v-chip prepend-icon="mdi-information" size="large" variant="elevated" v-bind="activatorProps" label
-                          color="teal-darken-4">
+                  <v-chip prepend-icon="mdi-information" size="large" variant="elevated" v-bind="activatorProps" label color="teal-darken-4">
                     <template slot="prepend">
                       <v-icon icon="mdi-information"/>
                     </template>
@@ -65,6 +64,9 @@
                       <p><strong>Email:</strong> {{ item.email }}</p>
                       <p><strong>Web:</strong> <a :href="item.web" target="_blank">Link</a></p>
                       <p><strong>Coordinate:</strong> Lat {{ item.coords.lat }}, Lng {{ item.coords.lng }}</p>
+                      <p v-if="geolocationStore.geolocation.init"><strong>Distanza:</strong> {{ geolocationStore.calculateDistance(geolocationStore.userPosition.latitude, geolocationStore.userPosition.longitude, item.coords.lat, item.coords.lng).toFixed(2) }} Km</p>
+                      <v-divider class="my-4"></v-divider>
+                      <MapHospital :lat="item.coords.lat" :lng="item.coords.lng" :label="item.nome" />
                       <v-divider class="my-4"></v-divider>
                       <template v-if="!item.data?.data">
                         <v-progress-linear
@@ -136,8 +138,7 @@
                         <v-table>
                           <thead>
                           <tr>
-                            <th class="text-left" v-for="(extraItem, key) in item.data.data?.[codice]?.extra"
-                                :key="key">
+                            <th class="text-left" v-for="(extraItem, key) in item.data.data?.[codice]?.extra" :key="key">
                               {{ extraItem.label }}
                             </th>
                           </tr>
@@ -145,9 +146,7 @@
                           <tbody>
                           <tr>
                             <td v-for="(extraItem, key) in item.data.data?.[codice]?.extra" :key="key">
-                              <v-chip
-                                  :color=getColorProgress(codice)
-                              >
+                              <v-chip :color=getColorProgress(codice)>
                                 <h2>{{ extraItem.value }}</h2>
                               </v-chip>
                             </td>
@@ -190,6 +189,8 @@ import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useGeolocationStore } from '~/store/geolocation';
 import { uppercaseFirstLetter } from '~/utils/string-utils';
+
+import MapHospital from '@/components/MapHospital.vue'
 
 const geolocationStore = useGeolocationStore();
 const isWatching = ref(false);

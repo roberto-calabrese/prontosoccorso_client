@@ -48,14 +48,14 @@ export const useGeolocationStore = defineStore('geolocation', () => {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
         };
-        // Chiamata per ordinare per distanza, definisci la tua logica qui
-        // dispatch('sortByDistance');
     };
 
     const failurePosition = (error: GeolocationPositionError) => {
         geolocation.value.loading = false;
         console.error('Error Code:', error.code, 'Error Message:', error.message);
-        dangerNotify('Non è stato possibile determinare la tua posizione');
+        const message = 'Non è stato possibile determinare la tua posizione'
+        alert(message)
+        dangerNotify(message);
     };
 
     const clearWatch = () => {
@@ -63,6 +63,7 @@ export const useGeolocationStore = defineStore('geolocation', () => {
             navigator.geolocation.clearWatch(geolocation.value.watch);
         }
         geolocation.value.init = false;
+        userPosition.value = null;
         dangerNotify('Geolocalizzazione disattivata');
     };
 
