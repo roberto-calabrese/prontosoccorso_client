@@ -12,7 +12,7 @@ export default defineNuxtConfig({
 
   },
   build: {
-    transpile: ['vuetify', 'leaflet'],
+    transpile: ['vuetify'],
   },
 
   devtools: {enabled: true},

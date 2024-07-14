@@ -2,6 +2,36 @@
   <v-container fluid>
     <RotateAlert />
     <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza a <span class="text-amber-accent-3">{{ uppercaseFirstLetter(provincia) }}</span></h2>
+    <div class="text-center my-4">
+      <v-dialog
+          v-model="showMap"
+          transition="dialog-bottom-transition"
+          fullscreen
+      >
+        <template v-slot:activator="{ props: activatorProps }">
+          <v-btn
+              prepend-icon="mdi-map"
+              size="large"
+              text="Mostra su mappa"
+              v-bind="activatorProps"
+          ></v-btn>
+        </template>
+
+        <v-card>
+          <v-toolbar>
+            <v-btn
+                icon="mdi-close"
+                @click="showMap = false"
+            ></v-btn>
+            <v-toolbar-title>Mappa Ospedali</v-toolbar-title>
+          </v-toolbar>
+          <MapHospital :ospedali="datiMappa" height="100%" />
+        </v-card>
+
+
+      </v-dialog>
+    </div>
+
     <template v-for="categoria in ospedali">
       <div v-if="categoria.data.length">
         <v-card elevation="10" v-if="categoria.data">
@@ -32,7 +62,7 @@
               color="success"
           >
             <template v-slot:item.nome="{ item }">
-              <v-dialog fullscreen max-width="100%" transition="dialog-bottom-transition">
+              <v-dialog fullscreen max-width="100%" min-height="100%" transition="dialog-bottom-transition">
                 <template v-slot:activator="{ props: activatorProps }">
                   <v-chip prepend-icon="mdi-information" size="large" variant="elevated" v-bind="activatorProps" label color="teal-darken-4">
                     <template slot="prepend">
@@ -52,10 +82,9 @@
                     <v-toolbar-title>
                       <span class="text-amber-accent-3">{{ item.nome }}</span>
                     </v-toolbar-title>
-
-
                   </v-toolbar>
-                  <v-card>
+
+                  <v-card min-width="100" min-height="100">
                     <v-card-text>
                       <p><span class="text-amber-accent-4">{{ item.descrizione }}</span></p>
                       <p><strong>Tipo:</strong> {{ item.type }}</p>
@@ -66,7 +95,7 @@
                       <p><strong>Coordinate:</strong> Lat {{ item.coords.lat }}, Lng {{ item.coords.lng }}</p>
                       <p v-if="geolocationStore.geolocation.init"><strong>Distanza:</strong> {{ geolocationStore.calculateDistance(geolocationStore.userPosition.latitude, geolocationStore.userPosition.longitude, item.coords.lat, item.coords.lng).toFixed(2) }} Km</p>
                       <v-divider class="my-4"></v-divider>
-                      <MapHospital :lat="item.coords.lat" :lng="item.coords.lng" :label="item.nome" />
+                      <MapHospital :ospedali="[{lat: item.coords.lat, lng: item.coords.lng, label: item.nome}]" />
                       <v-divider class="my-4"></v-divider>
                       <template v-if="!item.data?.data">
                         <v-progress-linear
@@ -85,13 +114,6 @@
                       </template>
                     </v-card-text>
 
-                    <template v-slot:actions>
-                      <v-btn
-                          class="ml-auto"
-                          text="Chiudi"
-                          @click="isActive.value = false"
-                      ></v-btn>
-                    </template>
                   </v-card>
                 </template>
               </v-dialog>
@@ -185,16 +207,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch, shallowRef, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useGeolocationStore } from '~/store/geolocation';
 import { uppercaseFirstLetter } from '~/utils/string-utils';
-
-import MapHospital from '@/components/MapHospital.vue'
+import MapHospital from '@/components/provincia/MapHospital.vue'
 
 const geolocationStore = useGeolocationStore();
-const isWatching = ref(false);
 const { regione, provincia } = useRoute().params as RouteParams;
+const showMap = shallowRef(false)
 
 useHead({
   title: `Pronto Soccorso Live - ${uppercaseFirstLetter(provincia)}`,
@@ -379,4 +400,46 @@ function addDistanceHospital() {
     });
   }
 }
+
+interface Ospedale {
+  label: string;
+  lat: string;
+  lng: string;
+}
+
+
+const datiMappa = computed(() => {
+  const result = [];
+
+  ospedali.value.forEach((categoria) => {
+    categoria.data.forEach((ospedale) => {
+      result.push({
+        label: ospedale.nome,
+        lat: ospedale.coords.lat,
+        lng: ospedale.coords.lng
+      });
+    });
+  });
+
+  return result;
+});
+
+const datiMappaOld = () => {
+  const result: Ospedale[] = [];
+
+  ospedali.value.forEach((categoria: any) => {
+    categoria.data.forEach((ospedale: any) => {
+      result.push({
+        label: ospedale.nome,
+        lat: ospedale.coords.lat,
+        lng: ospedale.coords.lng
+      });
+    });
+  });
+
+  console.log(result);
+
+  // return result;
+}
+
 </script>
