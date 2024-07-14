@@ -8,11 +8,11 @@ export default defineNuxtConfig({
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
     },
-    pageTransition: { name: 'page', mode: 'out-in' }
+    pageTransition: {name: 'page', mode: 'out-in'}
 
   },
   build: {
-    transpile: ['vuetify'],
+    transpile: ['vuetify', 'leaflet'],
   },
 
   devtools: {enabled: true},
@@ -29,14 +29,6 @@ export default defineNuxtConfig({
   plugins: [
     {src: '~/plugins/pusher', mode: 'client'},
   ],
-
-  // pwa: {
-  //   manifest: {
-  //     name: 'Pronto Soccorso Live',
-  //     short_name: "PS_LIVE",
-  //     lang: 'it',
-  //   }
-  // },
 
   runtimeConfig: {
     // The private keys which are only available server-side

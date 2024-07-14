@@ -8,6 +8,12 @@ import { useGeolocationStore } from '@/store/geolocation'; // Assicurati di usar
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: '/images/markers/marker-icon-2x.png',
+  iconUrl: '/images/markers/marker-icon.png',
+  shadowUrl: '/images/markers/marker-shadow.png',
+});
+
 interface MappaProps {
   lat: string;
   lng: string;
