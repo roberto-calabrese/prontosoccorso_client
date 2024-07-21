@@ -22,6 +22,7 @@
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "granim": "^2.0.0",
     "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3",
     "pinia": "^2.1.7",
     "pusher-js": "^8.4.0-rc2",
     "remove": "^0.1.5"

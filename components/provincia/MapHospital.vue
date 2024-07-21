@@ -7,6 +7,9 @@ import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useGeolocationStore } from '@/store/geolocation'; // Assicurati di usare il percorso corretto
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -18,7 +21,13 @@ L.Icon.Default.mergeOptions({
 interface Ospedale {
   lat: string;
   lng: string;
-  label: string;
+  nome: string;
+  descrizione: string;
+  adulti: boolean;
+  indirizzo: string;
+  telefono: string;
+  email: string;
+  web: string;
 }
 
 export default defineComponent({
@@ -33,9 +42,10 @@ export default defineComponent({
       default: '400px'
     }
   },
-  setup(props: Ospedale[]) {
+  setup(props) {
     const map = ref<L.Map | null>(null);
     const userMarker = ref<L.Marker | null>(null);
+    const markers = ref<L.MarkerClusterGroup | null>(null);
     const geolocationStore = useGeolocationStore();
 
     const userIcon = L.divIcon({
@@ -45,45 +55,56 @@ export default defineComponent({
       iconAnchor: [10, 10],
     });
 
-    onMounted(() => {
-      map.value = L.map('map').setView([props.ospedali[0].lat, props.ospedali[0].lng], 13);
+    const initializeMap = () => {
+      if (props.ospedali.length > 0) {
+        map.value = L.map('map').setView([parseFloat(props.ospedali[0].lat), parseFloat(props.ospedali[0].lng)], 13);
 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: 'Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(map.value);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: 'Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map.value);
 
-      props.ospedali.forEach((hospital:any) => {
-        L.marker([hospital.lat, hospital.lng]).addTo(map.value).bindPopup(hospital.label).openPopup();
-      });
+        markers.value = L.markerClusterGroup();
 
-      if (geolocationStore.userPosition) {
-        userMarker.value = L.marker(
-            [geolocationStore.userPosition.latitude, geolocationStore.userPosition.longitude],
-            { icon: userIcon }
-        ).addTo(map.value);
-        fitMapBounds();
+        props.ospedali.forEach((hospital: Ospedale) => {
+          const popupContent = `
+            <div>
+              <h3>${hospital.nome}</h3>
+              <hr>
+              <h4><strong>Adulti:</strong> ${hospital.adulti ? 'Sì' : 'No'}</h4>
+              <p>${hospital.descrizione}</p>
+              <p><strong>Indirizzo:</strong> ${hospital.indirizzo}</p>
+              <p><strong>Telefono:</strong> <a href="tel:${hospital.telefono}">${hospital.telefono}</a></p>
+              <p><strong>Email:</strong> <a href="mailto:${hospital.email}">${hospital.email}</a></p>
+              <p><strong>Web:</strong> <a href="${hospital.web}" target="_blank">${hospital.web}</a></p>
+            </div>
+          `;
+          const marker = L.marker([parseFloat(hospital.lat), parseFloat(hospital.lng)]).bindPopup(popupContent);
+          markers.value?.addLayer(marker);
+        });
+
+        map.value.addLayer(markers.value);
+
+        if (geolocationStore.userPosition) {
+          const popupContentUser = `
+            <div>
+              <h3>La tua posizione</h3>
+            </div>
+          `;
+          userMarker.value = L.marker(
+              [geolocationStore.userPosition.latitude, geolocationStore.userPosition.longitude],
+              { icon: userIcon }
+          ).bindPopup(popupContentUser).addTo(map.value);
+          fitMapBounds();
+        }
+
+        addFitBoundsButton();
       }
-    });
-
-    watch(
-        () => geolocationStore.userPosition,
-        (newUserPosition) => {
-          if (map.value && newUserPosition) {
-            if (userMarker.value) {
-              userMarker.value.setLatLng([newUserPosition.latitude, newUserPosition.longitude]);
-            } else {
-              userMarker.value = L.marker([newUserPosition.latitude, newUserPosition.longitude], { color: 'blue' }).addTo(map.value);
-            }
-            fitMapBounds();
-          }
-        },
-        { immediate: true }
-    );
+    };
 
     const fitMapBounds = () => {
       if (map.value) {
         let bounds: L.LatLngBounds | null = null;
-        props.ospedali.forEach((ospedale:any) => {
+        props.ospedali.forEach((ospedale: Ospedale) => {
           const hospitalLatLng = L.latLng(parseFloat(ospedale.lat), parseFloat(ospedale.lng));
           if (!bounds) {
             bounds = L.latLngBounds(hospitalLatLng, hospitalLatLng);
@@ -109,6 +130,38 @@ export default defineComponent({
         }
       }
     };
+
+    const addFitBoundsButton = () => {
+      const fitBoundsButton = L.control({ position: 'topright' });
+
+      fitBoundsButton.onAdd = function () {
+        const button = L.DomUtil.create('button', 'fit-bounds-button');
+        button.innerHTML = 'Riposiziona'
+        button.onclick = fitMapBounds;
+        return button;
+      };
+
+      fitBoundsButton.addTo(map.value);
+    };
+
+    onMounted(() => {
+      initializeMap();
+    });
+
+    watch(
+        () => geolocationStore.userPosition,
+        (newUserPosition) => {
+          if (map.value && newUserPosition) {
+            if (userMarker.value) {
+              userMarker.value.setLatLng([newUserPosition.latitude, newUserPosition.longitude]);
+            } else {
+              userMarker.value = L.marker([newUserPosition.latitude, newUserPosition.longitude], { icon: userIcon }).addTo(map.value);
+            }
+            fitMapBounds();
+          }
+        },
+        { immediate: true }
+    );
 
     return {};
   },
@@ -142,5 +195,17 @@ export default defineComponent({
     transform: scale(2.4);
     opacity: 0;
   }
+}
+
+.fit-bounds-button {
+  background-color: #0a1412;
+  border: 1px solid #ec0f0f;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.fit-bounds-button:hover {
+  background-color: rgba(10, 10, 37, 0.73);
 }
 </style>

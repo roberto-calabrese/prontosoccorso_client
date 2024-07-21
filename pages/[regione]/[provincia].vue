@@ -12,7 +12,7 @@
           <v-btn
               prepend-icon="mdi-map"
               size="large"
-              text="Mostra su mappa"
+              text="Mostra mappa"
               v-bind="activatorProps"
           ></v-btn>
         </template>
@@ -95,7 +95,17 @@
                       <p><strong>Coordinate:</strong> Lat {{ item.coords.lat }}, Lng {{ item.coords.lng }}</p>
                       <p v-if="geolocationStore.geolocation.init"><strong>Distanza:</strong> {{ geolocationStore.calculateDistance(geolocationStore.userPosition.latitude, geolocationStore.userPosition.longitude, item.coords.lat, item.coords.lng).toFixed(2) }} Km</p>
                       <v-divider class="my-4"></v-divider>
-                      <MapHospital :ospedali="[{lat: item.coords.lat, lng: item.coords.lng, label: item.nome}]" />
+                      <MapHospital :ospedali="[{
+                        nome: item.nome,
+                        descrizione: item.descrizione,
+                        adulti: item.adulti,
+                        indirizzo: item.indirizzo,
+                        telefono: item.telefono,
+                        email: item.email,
+                        web: item.web,
+                        lat: item.coords.lat,
+                        lng: item.coords.lng
+                        }]" />
                       <v-divider class="my-4"></v-divider>
                       <template v-if="!item.data?.data">
                         <v-progress-linear
@@ -414,7 +424,13 @@ const datiMappa = computed(() => {
   ospedali.value.forEach((categoria) => {
     categoria.data.forEach((ospedale) => {
       result.push({
-        label: ospedale.nome,
+        nome: ospedale.nome,
+        descrizione: ospedale.descrizione,
+        adulti: ospedale.adulti,
+        indirizzo: ospedale.indirizzo,
+        telefono: ospedale.telefono,
+        email: ospedale.email,
+        web: ospedale.web,
         lat: ospedale.coords.lat,
         lng: ospedale.coords.lng
       });
@@ -423,23 +439,4 @@ const datiMappa = computed(() => {
 
   return result;
 });
-
-const datiMappaOld = () => {
-  const result: Ospedale[] = [];
-
-  ospedali.value.forEach((categoria: any) => {
-    categoria.data.forEach((ospedale: any) => {
-      result.push({
-        label: ospedale.nome,
-        lat: ospedale.coords.lat,
-        lng: ospedale.coords.lng
-      });
-    });
-  });
-
-  console.log(result);
-
-  // return result;
-}
-
 </script>
