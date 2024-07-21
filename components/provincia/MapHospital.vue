@@ -158,7 +158,6 @@ export default defineComponent({
             } else {
               userMarker.value = L.marker([newUserPosition.latitude, newUserPosition.longitude], { icon: userIcon }).addTo(map.value);
             }
-            fitMapBounds();
           }
         },
         { immediate: true }
