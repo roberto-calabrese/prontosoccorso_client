@@ -7,6 +7,7 @@
 <style>
 .buy-me-coffe {
   max-width: 230px;
+  padding: 0;
 }
 
 </style>

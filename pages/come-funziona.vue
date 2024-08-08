@@ -6,6 +6,9 @@
         <p class="subtitle-1">
           Ti spiego in dettaglio il processo dietro le quinte e come vengono forniti i dati relativi ai pronto soccorso.
         </p>
+        <div class="mt-4">
+          <buy-me-coffe />
+        </div>
       </v-col>
     </v-row>
 
@@ -14,7 +17,7 @@
       <v-col cols="12">
         <v-card class="elevation-3">
           <v-card-title>
-            <h3 class="headline text-amber-accent-2"><v-icon icon="mdi-bullseye-arrow"></v-icon> Scraping dei Dati</h3>
+            <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-bullseye-arrow"></v-icon> Scraping dei Dati</h4>
           </v-card-title>
           <v-card-text>
             <p>
@@ -32,7 +35,7 @@
       <v-col cols="12">
         <v-card class="elevation-3">
           <v-card-title>
-            <h3 class="headline text-amber-accent-2"><v-icon icon="mdi-lightning-bolt-circle"></v-icon> Comunicazione in Tempo Reale</h3>
+            <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-lightning-bolt-circle"></v-icon> Comunicazione in Tempo Reale</h4>
           </v-card-title>
           <v-card-text>
             <p>
@@ -50,7 +53,7 @@
       <v-col cols="12">
         <v-card class="elevation-3">
           <v-card-title>
-            <h3 class="headline text-amber-accent-2"><v-icon icon="mdi-sync"></v-icon> Attivazione del Polling</h3>
+            <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-sync"></v-icon> Attivazione del Polling</h4>
           </v-card-title>
           <v-card-text>
             <p>
@@ -67,7 +70,7 @@
       <v-col cols="12">
         <v-card class="elevation-3">
           <v-card-title>
-            <h3 class="headline text-amber-accent-2"><v-icon icon="mdi-database-clock"></v-icon> Cache dei Dati</h3>
+            <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-database-clock"></v-icon> Cache dei Dati</h4>
           </v-card-title>
           <v-card-text>
             <p>
@@ -91,4 +94,7 @@ export default {
 </script>
 
 <style scoped>
+.v-card-title {
+  white-space: initial;
+}
 </style>

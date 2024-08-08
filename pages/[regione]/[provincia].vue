@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <RotateAlert />
-    <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza a <span class="text-amber-accent-3">{{ uppercaseFirstLetter(provincia) }}</span></h2>
+    <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza nella provincia di <span class="text-amber-accent-3">{{ uppercaseFirstLetter(provincia) }}</span></h2>
     <div class="text-center my-4">
       <v-dialog
           v-model="showMap"

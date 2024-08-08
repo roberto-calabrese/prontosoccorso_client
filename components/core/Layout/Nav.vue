@@ -82,13 +82,15 @@
             <v-btn
                 prepend-icon="mdi-git"
                 href="https://github.com/roberto-calabrese"
+                color=""
+                variant="outlined"
                 target="_blank"
+                size="small"
                 block
             >
               GitHub
             </v-btn>
           </div>
-          <buy-me-coffe></buy-me-coffe>
         </div>
       </template>
     </v-navigation-drawer>
