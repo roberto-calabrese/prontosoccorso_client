@@ -40,7 +40,6 @@
           <v-card-text>
             <p>
               Una volta che i dati sono stati recuperati, vengono inviati al client tramite WebSocket.<br>
-              Viene utilizzato Pusher.io per garantire una comunicazione in tempo reale.<br>
               Il tuo browser è costantemente in ascolto e si aggiorna automaticamente con i nuovi dati appena sono disponibili.
             </p>
           </v-card-text>
