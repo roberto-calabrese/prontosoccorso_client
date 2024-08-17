@@ -214,6 +214,7 @@
         <v-divider color="success" class="my-8"></v-divider>
       </div>
     </template>
+    <core-navigation-button v-if="ospedali" :destination=regione />
   </v-container>
 </template>
 

@@ -4,7 +4,6 @@
     <v-main class="background-main">
       <slot/>
     </v-main>
-    <core-navigation-button />
     <core-layout-footer/>
     <core-snack-bar></core-snack-bar>
   </v-app>

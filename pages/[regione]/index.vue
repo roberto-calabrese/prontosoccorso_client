@@ -34,6 +34,7 @@
         </v-col>
       </template>
     </v-row>
+    <core-navigation-button v-if="province" destination="/" />
   </v-container>
 
 </template>
