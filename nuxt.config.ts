@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     pageTransition: {name: 'page', mode: 'out-in'}
 
   },
+
   build: {
     transpile: ['vuetify'],
   },
@@ -54,5 +55,7 @@ export default defineNuxtConfig({
         transformAssetUrls,
       },
     },
-  }
+  },
+
+  compatibilityDate: '2024-08-14'
 })

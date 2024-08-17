@@ -60,6 +60,7 @@
               :sort-by="sortBy"
               :items-per-page="0"
               color="success"
+              style="z-index: 100"
           >
             <template v-slot:item.nome="{ item }">
               <v-dialog fullscreen max-width="100%" min-height="100%" transition="dialog-bottom-transition">

@@ -1,10 +1,11 @@
-import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import {defineStore} from 'pinia';
+import {computed, ref} from 'vue';
+import {Geolocation} from '@capacitor/geolocation';
 
 interface GeolocationState {
     init: boolean;
     loading: boolean;
-    watch: number | null;
+    watch: string | number | null; // Il tipo string è per supportare l'ID del watch di Capacitor
 }
 
 interface UserPosition {
@@ -21,9 +22,32 @@ export const useGeolocationStore = defineStore('geolocation', () => {
 
     const userPosition = ref<UserPosition | null>(null);
 
-    const trackPosition = () => {
+    const isCapacitorNative = () => {
+        return !!(window as any).Capacitor?.isNativePlatform?.();
+    }
+
+    const trackPosition = async () => {
         geolocation.value.loading = true;
-        if (navigator.geolocation) {
+        if (isCapacitorNative()) {
+            try {
+                geolocation.value.watch = await Geolocation.watchPosition(
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 15000,
+                        maximumAge: 0,
+                    },
+                    (position, err) => {
+                        if (position) {
+                            successPosition(position);
+                        } else if (err) {
+                            failurePosition(err);
+                        }
+                    }
+                );
+            } catch (error) {
+                failurePosition(error);
+            }
+        } else if (navigator.geolocation) {
             geolocation.value.watch = navigator.geolocation.watchPosition(
                 (position) => successPosition(position),
                 (error) => failurePosition(error),
@@ -38,7 +62,7 @@ export const useGeolocationStore = defineStore('geolocation', () => {
         }
     };
 
-    const successPosition = (position: GeolocationPosition) => {
+    const successPosition = (position: any) => {
         if (!geolocation.value.init) {
             geolocation.value.init = true;
             successNotify('Geolocalizzazione attivata con successo!');
@@ -50,7 +74,7 @@ export const useGeolocationStore = defineStore('geolocation', () => {
         };
     };
 
-    const failurePosition = (error: GeolocationPositionError) => {
+    const failurePosition = (error: any) => {
         geolocation.value.loading = false;
         console.error('Error Code:', error.code, 'Error Message:', error.message);
         const message = 'Non è stato possibile determinare la tua posizione'
@@ -58,9 +82,13 @@ export const useGeolocationStore = defineStore('geolocation', () => {
         dangerNotify(message);
     };
 
-    const clearWatch = () => {
+    const clearWatch = async () => {
         if (geolocation.value.watch !== null) {
-            navigator.geolocation.clearWatch(geolocation.value.watch);
+            if (isCapacitorNative()) {
+                await Geolocation.clearWatch({ id: geolocation.value.watch as string });
+            } else {
+                navigator.geolocation.clearWatch(geolocation.value.watch as number);
+            }
         }
         geolocation.value.init = false;
         userPosition.value = null;
