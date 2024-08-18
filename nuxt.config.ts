@@ -45,7 +45,8 @@ export default defineNuxtConfig({
         port: process.env.PUSHER_PORT,
         schema: process.env.PUSHER_SCHEME,
         appCluster: process.env.PUSHER_APP_CLUSTER
-      }
+      },
+      ga_measurement_id: process.env.GA_MEASUREMENT_ID
     }
   },
 
