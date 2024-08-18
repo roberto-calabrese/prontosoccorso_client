@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
@@ -25,10 +24,13 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify({autoImport: true}))
       })
     },
+
   ],
+
 
   plugins: [
     {src: '~/plugins/pusher', mode: 'client'},
+    {src: '~/plugins/google-analytics.client', mode: 'client'},
   ],
 
   runtimeConfig: {
