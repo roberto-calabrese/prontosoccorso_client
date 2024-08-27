@@ -159,6 +159,7 @@
                         :color=getColorProgress(codice)
                     >
                       <h2>{{ item.data.data?.[codice]?.value }}</h2>
+                      <p v-if="codice === 'totali'">&nbsp;In attesa</p>
                     </v-chip>
                   </template>
 
@@ -199,11 +200,15 @@
                   </template>
                 </v-dialog>
               </template>
-              <h2 v-else-if="item.data.data" class="mr-2"
-                  :class=getColorText(codice)
-              >
-                {{ item.data.data?.[codice]?.value ?? 0 }}
-              </h2>
+              <div  v-else-if="item.data.data">
+                <h2 style="display: inline-block" class="mr-2"
+                    :class=getColorText(codice)
+                >
+                  {{ item.data.data?.[codice]?.value ?? 0 }}
+                </h2>
+                <small v-if="codice === 'totali'">Pazienti Totali</small>
+              </div>
+
             </template>
 
             <template v-slot:bottom></template>
