@@ -14,11 +14,11 @@
     "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^6.1.2",
     "@nuxtjs/google-analytics": "^2.4.0",
-    "nuxt": "^3.9.0",
-    "vite-plugin-vuetify": "^2.0.1",
-    "vue": "^3.4.5",
-    "vue-router": "^4.2.5",
-    "vuetify": "^3.4.9"
+    "nuxt": "^3.13.0",
+    "vite-plugin-vuetify": "^2.0.4",
+    "vue": "^3.4.38",
+    "vue-router": "^4.4.3",
+    "vuetify": "^3.7.1"
   },
   "dependencies": {
     "@capacitor/android": "^6.1.2",
@@ -30,7 +30,7 @@
     "granim": "^2.0.0",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
-    "pinia": "^2.1.7",
+    "pinia": "^2.2.2",
     "pusher-js": "^8.4.0-rc2",
     "remove": "^0.1.5"
   }

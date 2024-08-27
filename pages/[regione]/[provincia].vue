@@ -206,7 +206,8 @@
                 >
                   {{ item.data.data?.[codice]?.value ?? 0 }}
                 </h2>
-                <small v-if="codice === 'totali'">Pazienti Totali</small>
+                <small v-if="codice === 'totali'" v-tooltip="'Pazienti presenti nella struttura, in attesa, in trattamento, in osservazione ecc.. '">Pazienti totali</small>
+
               </div>
 
             </template>
