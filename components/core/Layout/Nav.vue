@@ -144,7 +144,7 @@ apiStore.fetchSettings();
   cursor: pointer;
   top: 19px;
   position: absolute;
-  left: 60px;
+  left: 53px;
 }
 .loading svg polyline {
   fill: none;
