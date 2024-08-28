@@ -162,7 +162,7 @@ apiStore.fetchSettings();
   stroke: #FF0000;
   stroke-dasharray: 48, 144;
   stroke-dashoffset: 192;
-  animation: dash_682 1.4s linear infinite;
+  animation: dash_682 1.4s linear infinite, animationLogo 10s infinite;
 }
 
 @keyframes dash_682 {
@@ -174,6 +174,8 @@ apiStore.fetchSettings();
     stroke-dashoffset: 0;
   }
 }
+
+
 </style>
 
 

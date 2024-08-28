@@ -32,18 +32,23 @@
 @keyframes animationLogo {
   0% {
     color: red;
+    stroke: red;
   }
   25% {
     color: yellow;
+    stroke: yellow;
   }
   50% {
     color: green;
+    stroke: green;
   }
   75% {
     color: white;
+    stroke: white;
   }
   100% {
     color: red;
+    stroke: red;
   }
 }
 
