@@ -88,12 +88,12 @@
                   <v-card min-width="100" min-height="100">
                     <v-card-text>
                       <p><span class="text-amber-accent-4">{{ item.descrizione }}</span></p>
-                      <p><strong>Tipo:</strong> {{ item.type }}</p>
+                      <p><strong>Tipo:</strong> {{ item.adulti ? 'Adulti': 'Bambini'  }}</p>
                       <p><strong>Indirizzo:</strong> {{ item.indirizzo }}</p>
                       <p><strong>Telefono:</strong> {{ item.telefono }}</p>
                       <p><strong>Email:</strong> {{ item.email }}</p>
                       <p><strong>Web:</strong> <a :href="item.web" target="_blank">Link</a></p>
-                      <p><strong>Coordinate:</strong> Lat {{ item.coords.lat }}, Lng {{ item.coords.lng }}</p>
+                      <v-btn v-if="item?.google_maps" theme="light" prepend-icon="mdi-google-maps" target="_blank" :href="item.google_maps" class="mt-3">Indicazioni stradali</v-btn>
                       <p v-if="geolocationStore.geolocation.init"><strong>Distanza:</strong> {{ geolocationStore.calculateDistance(geolocationStore.userPosition.latitude, geolocationStore.userPosition.longitude, item.coords.lat, item.coords.lng).toFixed(2) }} Km</p>
                       <v-divider class="my-4"></v-divider>
                       <MapHospital :ospedali="[{

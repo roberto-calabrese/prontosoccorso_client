@@ -6,6 +6,12 @@ export default defineNuxtConfig({
       title: "Pronto Soccorso Live",
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
+      link: [
+        { rel: 'icon', type: 'image/gif', href: '/favicon.gif' },
+        // { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        // { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon.png' },
+      ]
+
     },
     pageTransition: {name: 'page', mode: 'out-in'}
 
