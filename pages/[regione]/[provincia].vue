@@ -124,7 +124,6 @@
                         </v-card-text>
                       </template>
                     </v-card-text>
-
                   </v-card>
                 </template>
               </v-dialog>
@@ -169,24 +168,19 @@
                         prepend-icon="mdi-alarm-light"
                     >
                       <template v-slot:text>
-                        <v-table>
-                          <thead>
-                          <tr>
-                            <th class="text-left" v-for="(extraItem, key) in item.data.data?.[codice]?.extra" :key="key">
-                              {{ extraItem.label }}
-                            </th>
-                          </tr>
-                          </thead>
-                          <tbody>
-                          <tr>
-                            <td v-for="(extraItem, key) in item.data.data?.[codice]?.extra" :key="key">
-                              <v-chip :color=getColorProgress(codice)>
-                                <h2>{{ extraItem.value }}</h2>
-                              </v-chip>
-                            </td>
-                          </tr>
-                          </tbody>
-                        </v-table>
+                        <v-list>
+                          <v-list-item
+                              v-for="(extraItem, key) in item.data.data?.[codice]?.extra"
+                              :key="key">
+                              <v-list-item-title>
+                                {{ extraItem.label }}
+                                <v-chip :color="getColorProgress(codice)">
+                                  <h2>{{ extraItem.value }}</h2>
+                                </v-chip>
+                              </v-list-item-title>
+
+                          </v-list-item>
+                        </v-list>
                       </template>
 
                       <template v-slot:actions>

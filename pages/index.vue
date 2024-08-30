@@ -9,7 +9,7 @@
 
       <template v-for="(item, i) in regioni" :key="i">
           <v-col
-              cols="12"
+              cols="6"
               md="3"
           >
             <v-hover v-slot="{ isHovering, props }">
