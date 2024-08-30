@@ -151,7 +151,7 @@
                 ></v-progress-circular>
               </div>
               <template v-if="item.data.data?.[codice]?.extra">
-                <v-dialog max-width="540">
+                <v-dialog max-width="400">
                   <template v-slot:activator="{ props: activatorProps }">
                     <v-chip
                         v-bind="activatorProps"
