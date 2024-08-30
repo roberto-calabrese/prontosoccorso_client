@@ -12,10 +12,19 @@
       </v-col>
     </v-row>
 
-    <!-- Scraping dei Dati -->
+
     <v-row>
-      <v-col cols="12">
-        <v-card class="elevation-3">
+
+    </v-row>
+
+
+    <v-row>
+
+
+
+      <v-col md="8" cols="12">
+        <!-- Scraping dei Dati -->
+        <v-card class="elevation-3 mb-5">
           <v-card-title>
             <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-bullseye-arrow"></v-icon> Scraping dei Dati</h4>
           </v-card-title>
@@ -27,30 +36,22 @@
             </p>
           </v-card-text>
         </v-card>
-      </v-col>
-    </v-row>
 
-    <!-- Comunicazione in Tempo Reale -->
-    <v-row>
-      <v-col cols="12">
-        <v-card class="elevation-3">
-          <v-card-title>
-            <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-lightning-bolt-circle"></v-icon> Comunicazione in Tempo Reale</h4>
-          </v-card-title>
-          <v-card-text>
-            <p>
-              Una volta che i dati sono stati recuperati, vengono inviati al client tramite WebSocket.<br>
-              Il tuo browser è costantemente in ascolto e si aggiorna automaticamente con i nuovi dati appena sono disponibili.
-            </p>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+        <!-- Comunicazione in Tempo Reale -->
+        <v-card class="elevation-3 mb-5">
+        <v-card-title>
+          <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-lightning-bolt-circle"></v-icon> Comunicazione in Tempo Reale</h4>
+        </v-card-title>
+        <v-card-text>
+          <p>
+            Una volta che i dati sono stati recuperati, vengono inviati al client tramite WebSocket.<br>
+            Il tuo browser è costantemente in ascolto e si aggiorna automaticamente con i nuovi dati appena sono disponibili.
+          </p>
+        </v-card-text>
+      </v-card>
 
-    <!-- Attivazione del Polling -->
-    <v-row>
-      <v-col cols="12">
-        <v-card class="elevation-3">
+        <!-- Attivazione del Polling -->
+        <v-card class="elevation-3 mb-5">
           <v-card-title>
             <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-sync"></v-icon> Attivazione del Polling</h4>
           </v-card-title>
@@ -61,13 +62,10 @@
             </p>
           </v-card-text>
         </v-card>
-      </v-col>
-    </v-row>
 
-    <!-- Cache dei Dati -->
-    <v-row>
-      <v-col cols="12">
-        <v-card class="elevation-3">
+
+        <!-- Cache dei Dati -->
+        <v-card class="elevation-3 mb-5">
           <v-card-title>
             <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-database-clock"></v-icon> Cache dei Dati</h4>
           </v-card-title>
@@ -81,6 +79,31 @@
             </p>
           </v-card-text>
         </v-card>
+
+
+      </v-col>
+
+
+      <v-col md="4" cols="12">
+        <v-card class="elevation-3 mb-5">
+          <v-img
+              class="mx-auto"
+              height="300"
+              lazy-src="/images/lazy-come-funziona-dark.png"
+              max-width="500"
+              src="/images/come-funziona-white.gif"
+          >
+            <template v-slot:placeholder>
+              <div class="d-flex align-center justify-center fill-height">
+                <v-progress-circular
+                    color="grey-lighten-4"
+                    indeterminate
+                ></v-progress-circular>
+              </div>
+            </template>
+          </v-img>
+        </v-card>
+
       </v-col>
     </v-row>
   </v-container>
