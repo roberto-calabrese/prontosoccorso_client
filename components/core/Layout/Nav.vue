@@ -61,7 +61,7 @@
           <template v-slot:activator="{ props }">
             <v-list-item
                 v-bind="props"
-                prepend-icon="mdi mdi-medical-bag"
+                prepend-icon="mdi mdi-hospital"
                 :title="regione.regione"
             >
               <template v-slot:subtitle>
