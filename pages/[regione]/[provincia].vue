@@ -2,34 +2,36 @@
   <v-container fluid>
     <RotateAlert />
     <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza nella provincia di <span class="text-amber-accent-3">{{ provincia.replace('-', ' ') }}</span></h2>
-    <div class="text-center my-4">
+    <div class="text-center my-4" v-if="headers.length">
+      <!-- Mappa -->
       <v-dialog
-          v-model="showMap"
-          transition="dialog-bottom-transition"
-          fullscreen
-      >
-        <template v-slot:activator="{ props: activatorProps }">
-          <v-btn
-              prepend-icon="mdi-map"
-              size="large"
-              text="Mostra mappa"
-              v-bind="activatorProps"
-          ></v-btn>
-        </template>
-
-        <v-card>
-          <v-toolbar>
+            v-model="showMap"
+            transition="dialog-bottom-transition"
+            fullscreen
+        >
+          <template v-slot:activator="{ props: activatorProps }">
             <v-btn
-                icon="mdi-close"
-                @click="showMap = false"
+                prepend-icon="mdi-map"
+                size="large"
+                text="Mostra mappa"
+                v-bind="activatorProps"
             ></v-btn>
-            <v-toolbar-title>Mappa Ospedali</v-toolbar-title>
-          </v-toolbar>
-          <MapHospital :ospedali="datiMappa" height="100%" />
-        </v-card>
+          </template>
 
+          <v-card>
+            <v-toolbar>
+              <v-btn
+                  icon="mdi-close"
+                  @click="showMap = false"
+              ></v-btn>
+              <v-toolbar-title>Mappa Ospedali</v-toolbar-title>
+            </v-toolbar>
+            <MapHospital :ospedali="datiMappa" height="100%" />
+          </v-card>
+        </v-dialog>
 
-      </v-dialog>
+      <!-- Info Codici -->
+      <InfoCodici/>
     </div>
 
     <template v-for="categoria in ospedali">
@@ -51,52 +53,52 @@
             ></v-text-field>
           </v-card-title>
 
-          <v-divider></v-divider>
-          <v-data-table
-              v-model:search="categoria.search"
-              :headers="headers"
-              :items="categoria.data"
-              :loading="false"
-              :sort-by="sortBy"
-              :items-per-page="0"
-              color="success"
-              style="z-index: 100"
-          >
-            <template v-slot:item.nome="{ item }">
-              <v-dialog fullscreen max-width="100%" min-height="100%" transition="dialog-bottom-transition">
-                <template v-slot:activator="{ props: activatorProps }">
-                  <v-chip prepend-icon="mdi-information" size="large" variant="elevated" v-bind="activatorProps" label color="teal-darken-4">
-                    <template slot="prepend">
-                      <v-icon icon="mdi-information"/>
-                    </template>
-                    <span class="text-white">{{ item.nome }}</span>
-                  </v-chip>
-                </template>
+            <v-divider></v-divider>
+            <v-data-table
+                v-model:search="categoria.search"
+                :headers="headers"
+                :items="categoria.data"
+                :loading="false"
+                :sort-by="sortBy"
+                :items-per-page="0"
+                color="success"
+                style="z-index: 100"
+            >
+              <template v-slot:item.nome="{ item }">
+                <v-dialog fullscreen max-width="100%" min-height="100%" transition="dialog-bottom-transition">
+                  <template v-slot:activator="{ props: activatorProps }">
+                    <v-chip prepend-icon="mdi-information" size="large" variant="elevated" v-bind="activatorProps" label color="teal-darken-4">
+                      <template slot="prepend">
+                        <v-icon icon="mdi-information"/>
+                      </template>
+                      <span class="text-white">{{ item.nome }}</span>
+                    </v-chip>
+                  </template>
 
-                <template v-slot:default="{ isActive }">
-                  <v-toolbar>
-                    <v-btn
-                        icon="mdi-close"
-                        @click="isActive.value = false"
-                    ></v-btn>
+                  <template v-slot:default="{ isActive }">
+                    <v-toolbar>
+                      <v-btn
+                          icon="mdi-close"
+                          @click="isActive.value = false"
+                      ></v-btn>
 
-                    <v-toolbar-title>
-                      <span class="text-amber-accent-3">{{ item.nome }}</span>
-                    </v-toolbar-title>
-                  </v-toolbar>
+                      <v-toolbar-title>
+                        <span class="text-amber-accent-3">{{ item.nome }}</span>
+                      </v-toolbar-title>
+                    </v-toolbar>
 
-                  <v-card min-width="100" min-height="100">
-                    <v-card-text>
-                      <p><span class="text-amber-accent-4">{{ item.descrizione }}</span></p>
-                      <p><strong>Tipo:</strong> {{ item.adulti ? 'Adulti': 'Bambini'  }}</p>
-                      <p><strong>Indirizzo:</strong> {{ item.indirizzo }}</p>
-                      <p><strong>Telefono:</strong> {{ item.telefono }}</p>
-                      <p><strong>Email:</strong> {{ item.email }}</p>
-                      <p><strong>Web:</strong> <a :href="item.web" target="_blank">Link</a></p>
-                      <v-btn v-if="item?.google_maps" theme="light" prepend-icon="mdi-google-maps" target="_blank" :href="item.google_maps" class="mt-3">Indicazioni stradali</v-btn>
-                      <p v-if="geolocationStore.geolocation.init"><strong>Distanza:</strong> {{ geolocationStore.calculateDistance(geolocationStore.userPosition.latitude, geolocationStore.userPosition.longitude, item.coords.lat, item.coords.lng).toFixed(2) }} Km</p>
-                      <v-divider class="my-4"></v-divider>
-                      <MapHospital :ospedali="[{
+                    <v-card min-width="100" min-height="100">
+                      <v-card-text>
+                        <p><span class="text-amber-accent-4">{{ item.descrizione }}</span></p>
+                        <p><strong>Tipo:</strong> {{ item.adulti ? 'Adulti': 'Bambini'  }}</p>
+                        <p><strong>Indirizzo:</strong> {{ item.indirizzo }}</p>
+                        <p><strong>Telefono:</strong> {{ item.telefono }}</p>
+                        <p><strong>Email:</strong> {{ item.email }}</p>
+                        <p><strong>Web:</strong> <a :href="item.web" target="_blank">Link</a></p>
+                        <v-btn v-if="item?.google_maps" theme="light" prepend-icon="mdi-google-maps" target="_blank" :href="item.google_maps" class="mt-3">Indicazioni stradali</v-btn>
+                        <p v-if="geolocationStore.geolocation.init"><strong>Distanza:</strong> {{ geolocationStore.calculateDistance(geolocationStore.userPosition.latitude, geolocationStore.userPosition.longitude, item.coords.lat, item.coords.lng).toFixed(2) }} Km</p>
+                        <v-divider class="my-4"></v-divider>
+                        <MapHospital :ospedali="[{
                         nome: item.nome,
                         descrizione: item.descrizione,
                         adulti: item.adulti,
@@ -107,107 +109,107 @@
                         lat: item.coords.lat,
                         lng: item.coords.lng
                         }]" />
-                      <v-divider class="my-4"></v-divider>
-                      <template v-if="!item.data?.data">
-                        <v-progress-linear
-                            color="teal"
-                            indeterminate
-                        ></v-progress-linear>
-                      </template>
-                      <template v-else v-for="(value, key) in item.data.data" :key="key">
-                        <v-card-text v-show="key === 'extra'">
-                          <p v-for="(extraValue, extraKey) in value" :key="extraKey">
-                            <strong>{{ extraValue.label }}: </strong>
-                            <v-chip color="success" size="small" label>{{ extraValue.value }}<span
-                                v-if="extraValue.label === 'Indice di sovraffollamento'">%</span></v-chip>
-                          </p>
-                        </v-card-text>
-                      </template>
-                    </v-card-text>
-                  </v-card>
-                </template>
-              </v-dialog>
-            </template>
-
-            <template v-slot:item.data.data.extra.indice_sovraffollamento.value="{ item }">
-              <v-chip rounded>
-                {{ item.data.data?.extra?.indice_sovraffollamento.value }}%
-              </v-chip>
-            </template>
-
-            <template v-slot:item.distanza="{ item }">
-              <v-chip rounded>
-                {{ item.distanza.toFixed(2) }} Km
-              </v-chip>
-
-            </template>
-
-            <template v-for="codice in ['totali', 'rosso', 'arancione', 'giallo', 'verde', 'azzurro', 'bianco']"
-                      v-slot:[`item.data.data.${codice}.value`]="{ item }">
-              <div v-if="!item.data.data && !item.data.data?.[codice]?.value">
-                <v-progress-circular
-                    indeterminate
-                    :color=getColorProgress(codice)
-                ></v-progress-circular>
-              </div>
-              <template v-if="item.data.data?.[codice]?.extra">
-                <v-dialog max-width="400">
-                  <template v-slot:activator="{ props: activatorProps }">
-                    <v-chip
-                        v-bind="activatorProps"
-                        :color=getColorProgress(codice)
-                    >
-                      <h2>{{ item.data.data?.[codice]?.value }}</h2>
-                      <p v-if="codice === 'totali'">&nbsp;In attesa</p>
-                    </v-chip>
-                  </template>
-
-                  <template v-slot:default="{ isActive }">
-                    <v-card
-                        :title="`Situazione Codice ${uppercaseFirstLetter(codice)}`"
-                        prepend-icon="mdi-alarm-light"
-                    >
-                      <template v-slot:text>
-                        <v-list>
-                          <v-list-item
-                              v-for="(extraItem, key) in item.data.data?.[codice]?.extra"
-                              :key="key">
-                              <v-list-item-title>
-                                {{ extraItem.label }}
-                                <v-chip :color="getColorProgress(codice)">
-                                  <h2>{{ extraItem.value }}</h2>
-                                </v-chip>
-                              </v-list-item-title>
-
-                          </v-list-item>
-                        </v-list>
-                      </template>
-
-                      <template v-slot:actions>
-                        <v-btn
-                            class="ml-auto"
-                            text="Chiudi"
-                            @click="isActive.value = false"
-                        ></v-btn>
-                      </template>
+                        <v-divider class="my-4"></v-divider>
+                        <template v-if="!item.data?.data">
+                          <v-progress-linear
+                              color="teal"
+                              indeterminate
+                          ></v-progress-linear>
+                        </template>
+                        <template v-else v-for="(value, key) in item.data.data" :key="key">
+                          <v-card-text v-show="key === 'extra'">
+                            <p v-for="(extraValue, extraKey) in value" :key="extraKey">
+                              <strong>{{ extraValue.label }}: </strong>
+                              <v-chip color="success" size="small" label>{{ extraValue.value }}<span
+                                  v-if="extraValue.label === 'Indice di sovraffollamento'">%</span></v-chip>
+                            </p>
+                          </v-card-text>
+                        </template>
+                      </v-card-text>
                     </v-card>
                   </template>
                 </v-dialog>
               </template>
-              <div  v-else-if="item.data.data">
-                <h2 style="display: inline-block" class="mr-2"
-                    :class=getColorText(codice)
-                >
-                  {{ item.data.data?.[codice]?.value ?? 0 }}
-                </h2>
-                <small v-if="codice === 'totali'" v-tooltip="{openOnClick: true, text: 'Pazienti presenti nella struttura, in attesa, in trattamento, in osservazione ecc..' }">Pazienti totali</small>
-              </div>
 
-            </template>
+              <template v-slot:item.data.data.extra.indice_sovraffollamento.value="{ item }">
+                <v-chip rounded>
+                  {{ item.data.data?.extra?.indice_sovraffollamento.value }}%
+                </v-chip>
+              </template>
 
-            <template v-slot:bottom></template>
+              <template v-slot:item.distanza="{ item }">
+                <v-chip rounded>
+                  {{ item.distanza.toFixed(2) }} Km
+                </v-chip>
 
-          </v-data-table>
+              </template>
+
+              <template v-for="codice in ['totali', 'rosso', 'arancione', 'giallo', 'verde', 'azzurro', 'bianco']"
+                        v-slot:[`item.data.data.${codice}.value`]="{ item }">
+                <div v-if="!item.data.data && !item.data.data?.[codice]?.value">
+                  <v-progress-circular
+                      indeterminate
+                      :color=getColorProgress(codice)
+                  ></v-progress-circular>
+                </div>
+                <template v-if="item.data.data?.[codice]?.extra">
+                  <v-dialog max-width="400">
+                    <template v-slot:activator="{ props: activatorProps }">
+                      <v-chip
+                          v-bind="activatorProps"
+                          :color=getColorProgress(codice)
+                      >
+                        <h2>{{ item.data.data?.[codice]?.value }}</h2>
+                        <p v-if="codice === 'totali'">&nbsp;In attesa</p>
+                      </v-chip>
+                    </template>
+
+                    <template v-slot:default="{ isActive }">
+                      <v-card
+                          :title="`Situazione Codice ${uppercaseFirstLetter(codice)}`"
+                          prepend-icon="mdi-alarm-light"
+                      >
+                        <template v-slot:text>
+                          <v-list>
+                            <v-list-item
+                                v-for="(extraItem, key) in item.data.data?.[codice]?.extra"
+                                :key="key">
+                              <v-list-item-title>
+                                <v-chip :color="getColorProgress(codice)">
+                                  <h2>{{ extraItem.value }}</h2>
+                                </v-chip>
+                                {{ extraItem.label }}
+                              </v-list-item-title>
+
+                            </v-list-item>
+                          </v-list>
+                        </template>
+
+                        <template v-slot:actions>
+                          <v-btn
+                              class="ml-auto"
+                              text="Chiudi"
+                              @click="isActive.value = false"
+                          ></v-btn>
+                        </template>
+                      </v-card>
+                    </template>
+                  </v-dialog>
+                </template>
+                <div  v-else-if="item.data.data">
+                  <h2 style="display: inline-block" class="mr-2"
+                      :class=getColorText(codice)
+                  >
+                    {{ item.data.data?.[codice]?.value ?? 0 }}
+                  </h2>
+                  <small v-if="codice === 'totali'" v-tooltip="{openOnClick: true, text: 'Pazienti presenti nella struttura, in attesa, in trattamento, in osservazione ecc..' }">Pazienti totali</small>
+                </div>
+
+              </template>
+
+              <template v-slot:bottom></template>
+
+            </v-data-table>
 
         </v-card>
         <v-divider color="success" class="my-8"></v-divider>
@@ -223,6 +225,7 @@ import { useRoute } from 'vue-router';
 import { useGeolocationStore } from '~/store/geolocation';
 import { uppercaseFirstLetter } from '~/utils/string-utils';
 import MapHospital from '@/components/provincia/MapHospital.vue'
+import InfoCodici from '@/components/InfoCodici.vue'
 
 const geolocationStore = useGeolocationStore();
 const { regione, provincia } = useRoute().params as RouteParams;
