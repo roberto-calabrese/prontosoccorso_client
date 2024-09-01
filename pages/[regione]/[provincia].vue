@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <RotateAlert />
-    <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza nella provincia di <span class="text-amber-accent-3">{{ uppercaseFirstLetter(provincia) }}</span></h2>
+    <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza nella provincia di <span class="text-amber-accent-3">{{ provincia.replace('-', ' ') }}</span></h2>
     <div class="text-center my-4">
       <v-dialog
           v-model="showMap"
@@ -244,7 +244,14 @@ const pusher = (window as any).pusher;
 
 const presidi = ref<any>();
 
-const ospedali = ref([
+interface Ospedale {
+  titolo: string;
+  icon: string;
+  data: any[];
+  search: Ref<string>
+}
+
+const ospedali = ref<Ospedale[]>([
   {
     titolo: 'Pediatrici',
     icon: 'mdi-human-baby-changing-table',
@@ -307,7 +314,7 @@ async function fetchData() {
 
 async function updatePresidi() {
   const presidiData = await fetchData();
-  if (!headers.value.length && presidiData.tableSettings) {
+  if (presidiData && !headers.value.length && presidiData.tableSettings) {
     headers.value = presidiData.tableSettings.headers;
     sortBy.value = presidiData.tableSettings.sortBy;
   }
@@ -412,18 +419,12 @@ function addDistanceHospital() {
   }
 }
 
-interface Ospedale {
-  label: string;
-  lat: string;
-  lng: string;
-}
-
 
 const datiMappa = computed(() => {
-  const result = [];
+  const result: any[] = [];
 
-  ospedali.value.forEach((categoria) => {
-    categoria.data.forEach((ospedale) => {
+  ospedali.value.forEach((categoria: any) => {
+    categoria.data.forEach((ospedale: any) => {
       result.push({
         nome: ospedale.nome,
         descrizione: ospedale.descrizione,
