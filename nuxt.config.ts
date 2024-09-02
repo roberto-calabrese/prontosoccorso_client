@@ -46,7 +46,7 @@ export default defineNuxtConfig({
 
   plugins: [
     {src: '~/plugins/pusher', mode: 'client'},
-    {src: '~/plugins/google-analytics.client', mode: 'client'},
+    // {src: '~/plugins/google-analytics.client', mode: 'client'},
   ],
 
   runtimeConfig: {

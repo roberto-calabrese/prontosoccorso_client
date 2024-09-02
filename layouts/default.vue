@@ -6,6 +6,7 @@
     </v-main>
     <core-layout-footer/>
     <core-snack-bar></core-snack-bar>
+    <cookie-banner></cookie-banner>
   </v-app>
 </template>
 
@@ -53,3 +54,5 @@
 }
 
 </style>
+<script setup lang="ts">
+</script>
