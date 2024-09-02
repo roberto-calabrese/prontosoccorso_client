@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Parallax Header -->
-    <v-parallax dark src="/images/ps-live-progetto.png">
+    <v-parallax height="450" dark src="/images/ps-live-progetto.png">
       <div class="d-flex flex-column fill-height justify-center align-center text-white">
         <h1 class="text-h4 font-weight-thin mb-1 btn-shine">
           Pronto Soccorso Live
@@ -32,7 +32,7 @@
           <v-card>
             <v-card-title class="headline text-amber-accent-2"><v-icon icon="mdi-code-json"></v-icon> Codice Sorgente e Collaborazione</v-card-title>
             <v-card-text>
-              Il codice sorgente del progetto è disponibile su <v-icon color="blue">mdi-github</v-icon> <a href="https://github.com/roberto-calabrese" target="_blank">GitHub</a>. Se sei uno sviluppatore, un designer, o semplicemente un appassionato, ti invito a unirti per migliorare il progetto. Ogni contributo è ben accetto!
+              Il codice sorgente del progetto è disponibile su <v-icon color="orange">mdi-github</v-icon> <a href="https://github.com/roberto-calabrese" target="_blank">GitHub</a>. Se sei uno sviluppatore, un designer, o semplicemente un appassionato, ti invito a unirti per migliorare il progetto. Ogni contributo è ben accetto!
             </v-card-text>
           </v-card>
         </v-col>
@@ -71,15 +71,7 @@
               Se trovi utile questo servizio e desideri che continui a crescere, considera una donazione su <v-icon color="orange">mdi-coffee</v-icon> <a href="https://buymeacoffee.com/roberto.calabrese?l=it" target="_blank">Buy Me a Coffee</a>. Il tuo contributo aiuterà a coprire i costi e a migliorare il progetto.
             </v-card-text>
             <div class="text-center mb-3">
-              <v-btn
-                  color="orange"
-                  dark
-                  large
-                  href="https://buymeacoffee.com/roberto.calabrese?l=it"
-                  target="_blank"
-              >
-                <v-icon>mdi-coffee</v-icon> Offrimi un caffè
-              </v-btn>
+              <buy-me-coffe />
             </div>
 
           </v-card>
