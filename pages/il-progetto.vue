@@ -1,4 +1,5 @@
 <template>
+  <div>
     <!-- Parallax Header -->
     <v-parallax dark src="/images/ps-live-progetto.png">
       <div class="d-flex flex-column fill-height justify-center align-center text-white">
@@ -82,6 +83,8 @@
         </v-col>
       </v-row>
     </v-container>
+  </div>
+
 </template>
 
 <script>
