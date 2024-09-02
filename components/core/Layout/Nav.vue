@@ -53,6 +53,7 @@
 
       <v-list>
         <v-list-item exac prepend-icon="mdi-view-dashboard" to="/" title="Home"></v-list-item>
+        <v-list-item exac prepend-icon="mdi mdi-network-pos" to="/il-progetto" title="Il Progetto"></v-list-item>
         <v-list-item exac prepend-icon="mdi mdi-network-pos" to="/come-funziona" title="Come Funziona"></v-list-item>
       </v-list>
 

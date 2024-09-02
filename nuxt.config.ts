@@ -8,8 +8,18 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       link: [
         { rel: 'icon', type: 'image/gif', href: '/favicon.gif' },
-        // { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        // { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon.png' },
+      ],
+      meta: [
+        { name: 'description', content: 'Pronto Soccorso Live ti offre una panoramica in tempo reale dello stato dei pronto soccorso in Italia, suddiviso per regione/provincia.' },
+        { property: 'og:title', content: 'Pronto Soccorso Live' },
+        { property: 'og:description', content: 'Visualizza lo stato attuale dei pronto soccorso in Italia, organizzato per regione/provincia.' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: 'https://prontosoccorso.live' },
+        { property: 'og:image', content: 'https://prontosoccorso.live/images/ps-live-og.png' },
+        { property: 'og:image:alt', content: 'Pronto Soccorso Live - Stato dei pronto soccorso in Italia' },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:locale', content: 'it_IT' }
       ]
 
     },

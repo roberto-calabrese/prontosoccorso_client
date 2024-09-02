@@ -11,17 +11,7 @@
         </div>
       </v-col>
     </v-row>
-
-
     <v-row>
-
-    </v-row>
-
-
-    <v-row>
-
-
-
       <v-col md="8" cols="12">
         <!-- Scraping dei Dati -->
         <v-card class="elevation-3 mb-5">
@@ -63,7 +53,6 @@
           </v-card-text>
         </v-card>
 
-
         <!-- Cache dei Dati -->
         <v-card class="elevation-3 mb-5">
           <v-card-title>
@@ -79,11 +68,7 @@
             </p>
           </v-card-text>
         </v-card>
-
-
       </v-col>
-
-
       <v-col md="4" cols="12">
         <v-card class="elevation-3 mb-5">
           <v-img
@@ -110,9 +95,13 @@
 </template>
 
 <script>
-export default {
-  name: 'ComeFunziona',
-}
+
+useHead({
+  title: `Pronto Soccorso Live - Come Funziona`,
+  meta: [
+    { name: 'description', content: `dettaglio del processo dietro le quinte su vengono forniti i dati relativi ai pronto soccorso.` },
+  ],
+})
 </script>
 
 <style scoped>
