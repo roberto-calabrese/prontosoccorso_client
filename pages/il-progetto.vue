@@ -32,6 +32,7 @@
           <v-card>
             <v-card-title class="headline text-amber-accent-2"><v-icon icon="mdi-code-json"></v-icon> Codice Sorgente e Collaborazione</v-card-title>
             <v-card-text>
+              <p>Questo progetto è ancora work in progress e stiamo cercando supporto per arricchire ulteriormente la nostra banca dati. Se hai competenze o risorse che potrebbero essere utili, il tuo contributo sarebbe molto apprezzato!</p>
               Il codice sorgente del progetto è disponibile su <v-icon color="orange">mdi-github</v-icon> <a href="https://github.com/roberto-calabrese" target="_blank">GitHub</a>. Se sei uno sviluppatore, un designer, o semplicemente un appassionato, ti invito a unirti per migliorare il progetto. Ogni contributo è ben accetto!
             </v-card-text>
           </v-card>
@@ -66,7 +67,7 @@
       <v-row class="mt-10">
         <v-col cols="12" md="8" offset-md="2">
           <v-card>
-            <v-card-title class="headline text-amber-accent-2"><v-icon icon="mdi-weight-lifter"></v-icon>Supporta il Progetto</v-card-title>
+            <v-card-title class="headline text-amber-accent-2"><v-icon icon="mdi-weight-lifter"></v-icon>Sostieni il Progetto</v-card-title>
             <v-card-text>
               Se trovi utile questo servizio e desideri che continui a crescere, considera una donazione su <v-icon color="orange">mdi-coffee</v-icon> <a href="https://buymeacoffee.com/roberto.calabrese?l=it" target="_blank">Buy Me a Coffee</a>. Il tuo contributo aiuterà a coprire i costi e a migliorare il progetto.
             </v-card-text>
@@ -79,7 +80,6 @@
       </v-row>
     </v-container>
   </div>
-
 </template>
 
 <script>
