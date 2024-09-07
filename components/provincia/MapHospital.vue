@@ -66,18 +66,30 @@ export default defineComponent({
         markers.value = L.markerClusterGroup();
 
         props.ospedali.forEach((hospital: Ospedale) => {
+          const hospitalId = hospital.nome;
+
           const popupContent = `
-            <div>
+              <div>
               <h3>${hospital.nome}</h3>
               <hr>
               <h4><strong>Adulti:</strong> ${hospital.adulti ? 'Sì' : 'No'}</h4>
-              <p>${hospital.descrizione}</p>
-              <p><strong>Indirizzo:</strong> ${hospital.indirizzo}</p>
-              <p><strong>Telefono:</strong> <a href="tel:${hospital.telefono}">${hospital.telefono}</a></p>
-              <p><strong>Email:</strong> <a href="mailto:${hospital.email}">${hospital.email}</a></p>
-              <p><strong>Web:</strong> <a href="${hospital.web}" target="_blank">${hospital.web}</a></p>
+              ${hospital.descrizione ? `<p><strong>Descrizione:</strong> <div style="max-height: 70px; overflow-y: auto;">${hospital.descrizione}</div></p>` : ''}
+              ${hospital.indirizzo ? `<p><strong>Indirizzo:</strong> ${hospital.indirizzo}</p>` : ''}
+              ${hospital.telefono ? `<p><strong>Telefono:</strong> <a href="tel:${hospital.telefono}">${hospital.telefono}</a></p>` : ''}
+              ${hospital.email ? `<p><strong>Email:</strong> <a href="mailto:${hospital.email}">${hospital.email}</a></p>` : ''}
+              ${hospital.web ? `<p><strong>Web:</strong> <a href="${hospital.web}" target="_blank">Sito Web</a></p>` : ''}
+              ${hospital.google_maps ? `<div class="text-center"><button class="googleMaps" id="googleMapsBtn-${hospitalId}"><i class="mdi-map mdi v-icon notranslate v-theme--customDarkTheme v-icon--size-default" aria-hidden="true"></i> Apri in Google Maps</button></div>` : ''}
             </div>
           `;
+
+          document.addEventListener('click', function (event) {
+            const target = event.target as HTMLElement;
+            if (target && target.id === `googleMapsBtn-${hospitalId}`) {
+              window.open(hospital.google_maps, '_blank');
+            }
+          });
+
+          // Aggiungi il marker alla mappa
           const marker = L.marker([parseFloat(hospital.lat), parseFloat(hospital.lng)]).bindPopup(popupContent);
           markers.value?.addLayer(marker);
         });
@@ -207,5 +219,19 @@ export default defineComponent({
 
 .fit-bounds-button:hover {
   background-color: rgba(10, 10, 37, 0.73);
+}
+
+.leaflet-popup-content hr{
+  margin: 15px 0;
+}
+
+.leaflet-popup-content p{
+  margin: 10px 0;
+}
+
+.googleMaps {
+  padding: 15px;
+  background: #fff3e0;
+
 }
 </style>

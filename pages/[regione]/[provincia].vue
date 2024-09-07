@@ -149,7 +149,7 @@
                 <div v-if="!item.data.data && !item.data.data?.[codice]?.value">
                   <v-progress-circular
                       indeterminate
-                      :color=getColorProgress(codice)
+                      :color=getColor(codice).text
                   ></v-progress-circular>
                 </div>
                 <template v-if="item.data.data?.[codice]?.extra">
@@ -157,7 +157,7 @@
                     <template v-slot:activator="{ props: activatorProps }">
                       <v-chip
                           v-bind="activatorProps"
-                          :color=getColorProgress(codice)
+                          :color=getColor(codice).text
                       >
                         <h2>{{ item.data.data?.[codice]?.value }}</h2>
                         <p v-if="codice === 'totali'">&nbsp;In attesa</p>
@@ -175,7 +175,7 @@
                                 v-for="(extraItem, key) in item.data.data?.[codice]?.extra"
                                 :key="key">
                               <v-list-item-title>
-                                <v-chip :color="getColorProgress(codice)">
+                                <v-chip :color="getColor(codice).text">
                                   <h2>{{ extraItem.value }}</h2>
                                 </v-chip>
                                 {{ extraItem.label }}
@@ -198,7 +198,7 @@
                 </template>
                 <div  v-else-if="item.data.data">
                   <h2 style="display: inline-block" class="mr-2"
-                      :class=getColorText(codice)
+                      :class=getColor(codice).textColor
                   >
                     {{ item.data.data?.[codice]?.value ?? 0 }}
                   </h2>
@@ -377,37 +377,21 @@ function startInterval() {
   }, 10000);
 }
 
-const getColorText = (codice: string) => {
-  switch (codice) {
-    case 'rosso':
-      return 'text-red';
-    case 'giallo':
-      return 'text-yellow';
-    case 'verde':
-      return 'text-green';
-    case 'arancione':
-      return 'text-orange';
-    case 'azzurro':
-      return 'text-blue';
-    default:
-      return 'text-white';
-  }
-};
 
-const getColorProgress = (codice: string) => {
+const getColor = (codice: string) => {
   switch (codice) {
     case 'rosso':
-      return 'red';
+      return {textColor: 'text-red', text: 'red' };
     case 'giallo':
-      return 'yellow';
+      return {textColor: 'text-yellow', text: 'yellow' };
     case 'verde':
-      return 'green';
+      return {textColor: 'text-green', text: 'green' };
     case 'arancione':
-      return 'orange';
+      return {textColor: 'text-orange', text: 'orange' };
     case 'azzurro':
-      return 'blue';
+      return {textColor: 'text-blue', text: 'blue' };
     default:
-      return 'white';
+      return {textColor: 'text-white', text: 'white' };
   }
 };
 
@@ -432,12 +416,13 @@ const datiMappa = computed(() => {
         nome: ospedale.nome,
         descrizione: ospedale.descrizione,
         adulti: ospedale.adulti,
-        indirizzo: ospedale.indirizzo,
-        telefono: ospedale.telefono,
-        email: ospedale.email,
-        web: ospedale.web,
+        indirizzo: ospedale?.indirizzo,
+        telefono: ospedale?.telefono,
+        email: ospedale?.email,
+        web: ospedale?.web,
         lat: ospedale.coords.lat,
-        lng: ospedale.coords.lng
+        lng: ospedale.coords.lng,
+        google_maps: ospedale?.google_maps,
       });
     });
   });
