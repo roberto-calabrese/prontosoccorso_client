@@ -32,6 +32,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { uppercaseFirstLetter } from '~/utils/string-utils';
+const colorOrder = ['rosso', 'giallo', 'arancione', 'verde', 'azzurro', 'bianco', 'totali'];
 
 export default defineComponent({
   name: 'TableDetail',
@@ -43,7 +44,7 @@ export default defineComponent({
   },
   computed: {
     extraHeaders() {
-      const colorOrder = ['rosso', 'giallo', 'arancione', 'verde', 'azzurro', 'bianco', 'totali'];
+
       const headersSet = new Set<string>();
 
       colorOrder.forEach(color => {
@@ -63,8 +64,6 @@ export default defineComponent({
     },
 
     tableData() {
-      const colorOrder = ['rosso', 'giallo', 'arancione', 'verde', 'azzurro', 'bianco', 'totali'];
-
       return colorOrder.map(color => {
         const extra = this.data[color]?.extra;
 

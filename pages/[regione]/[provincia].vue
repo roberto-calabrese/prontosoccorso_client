@@ -64,31 +64,21 @@
                 color="success"
                 style="z-index: 100"
             >
+
               <template v-slot:item.nome="{ item }">
-                <v-dialog fullscreen max-width="100%" min-height="100%" transition="dialog-bottom-transition">
-                  <template v-slot:activator="{ props: activatorProps }">
-                    <v-chip prepend-icon="mdi-information" size="large" variant="elevated" v-bind="activatorProps" label color="teal-darken-4">
-                      <template slot="prepend">
-                        <v-icon icon="mdi-information"/>
-                      </template>
-                      <span class="text-white">{{ item.nome }}</span>
-                    </v-chip>
+                <v-chip
+                    prepend-icon="mdi-information"
+                    size="large"
+                    variant="elevated"
+                    label
+                    color="teal-darken-4"
+                    @click="openModal(item)"
+                >
+                  <template #prepend>
+                    <v-icon icon="mdi-information"/>
                   </template>
-
-                  <template v-slot:default="{ isActive }">
-                    <v-toolbar>
-                      <v-btn
-                          icon="mdi-close"
-                          @click="isActive.value = false"
-                      ></v-btn>
-
-                      <v-toolbar-title>
-                        <span class="text-amber-accent-3">{{ item.nome }}</span>
-                      </v-toolbar-title>
-                    </v-toolbar>
-                    <provincia-show-details :item="item" />
-                  </template>
-                </v-dialog>
+                  <span class="text-white">{{ item.nome }}</span>
+                </v-chip>
               </template>
 
               <template v-slot:item.data.data.extra.indice_sovraffollamento.value="{ item }">
@@ -176,6 +166,25 @@
       </div>
     </template>
     <core-navigation-button v-if="ospedali" :destination=regione />
+    <v-dialog
+        v-model="isModalOpen"
+        fullscreen
+        max-width="100%"
+        min-height="100%"
+        transition="dialog-bottom-transition"
+    >
+      <v-toolbar v-if="selectedItem">
+        <v-btn
+            icon="mdi-close"
+            @click="closeModal"
+        ></v-btn>
+
+        <v-toolbar-title>
+          <span class="text-amber-accent-3">{{ selectedItem.nome }}</span>
+        </v-toolbar-title>
+      </v-toolbar>
+      <provincia-show-details v-if="selectedItem" :item="selectedItem" />
+    </v-dialog>
   </v-container>
 </template>
 
@@ -183,7 +192,7 @@
 import { ref, onMounted, onBeforeUnmount, watch, shallowRef, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useGeolocationStore } from '~/store/geolocation';
-import { uppercaseFirstLetter } from '~/utils/string-utils';
+import { uppercaseFirstLetter, createSlug } from '~/utils/string-utils';
 import MapHospital from '@/components/provincia/MapHospital.vue'
 import InfoCodici from '@/components/InfoCodici.vue'
 
@@ -229,10 +238,41 @@ const ospedali = ref<Ospedale[]>([
   },
 ]);
 
+
+const route = useRoute();
+const router = useRouter();
+const isModalOpen = ref(false);
+const selectedItem = ref(null);
+
+const openModal = async (item) => {
+  selectedItem.value = item;
+  await nextTick();
+  isModalOpen.value = true;
+  router.push({ query: { ps: createSlug(item.nome) } });
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  selectedItem.value = null;
+  router.push({ query: {} });
+};
+
+const checkAndOpenModalFromURL = async () => {
+  if (route.query.ps) {
+    const itemId = route.query.ps;
+    const item = ospedali.value.flatMap(categoria => categoria.data).find(item => createSlug(item.nome) === itemId);
+    if (item) {
+      await openModal(item);
+    }
+  }
+};
+
 onMounted(async () => {
   startInterval();
   presidi.value = await updatePresidi();
   await subscribeToChannel();
+
+  await checkAndOpenModalFromURL();
 
   watch(
       () => geolocationStore.geolocation.init,
@@ -256,6 +296,18 @@ onMounted(async () => {
       { immediate: true }
   );
 });
+
+watch(() => route.query.ps, async (newValue, oldValue) => {
+  if (!newValue) {
+    closeModal();
+  } else if (newValue !== oldValue) {
+    await checkAndOpenModalFromURL();
+  }
+});
+
+watch(() => route.fullPath, async () => {
+  await checkAndOpenModalFromURL();
+}, { immediate: true });
 
 onBeforeUnmount(() => {
   if (interval.value) {
