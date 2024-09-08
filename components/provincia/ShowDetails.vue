@@ -77,7 +77,7 @@
               <!-- INFO EXTRA -->
               <v-col cols="12">
                 <v-card color="amber-accent-4" variant="outlined" class="mb-4">
-                  <v-card-title>Dettagli Extra</v-card-title>
+                  <v-card-title>Informazioni Extra</v-card-title>
                   <v-card-text class="pa-0">
                     <!-- Skeleton loader per il caricamento -->
                     <v-skeleton-loader
