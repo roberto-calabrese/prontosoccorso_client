@@ -24,10 +24,11 @@ interface Ospedale {
   nome: string;
   descrizione: string;
   adulti: boolean;
-  indirizzo: string;
-  telefono: string;
-  email: string;
-  web: string;
+  indirizzo?: string;
+  telefono?: string;
+  email?: string;
+  web?: string;
+  google_maps?: string;
 }
 
 export default defineComponent({
@@ -72,12 +73,12 @@ export default defineComponent({
               <div>
               <h3>${hospital.nome}</h3>
               <hr>
-              <h4><strong>Adulti:</strong> ${hospital.adulti ? 'Sì' : 'No'}</h4>
+              <h4><strong>Tipologia:</strong> ${hospital.adulti ? 'Adulti' : 'Pediatrico'}</h4>
               ${hospital.descrizione ? `<p><strong>Descrizione:</strong> <div style="max-height: 70px; overflow-y: auto;">${hospital.descrizione}</div></p>` : ''}
               ${hospital.indirizzo ? `<p><strong>Indirizzo:</strong> ${hospital.indirizzo}</p>` : ''}
               ${hospital.telefono ? `<p><strong>Telefono:</strong> <a href="tel:${hospital.telefono}">${hospital.telefono}</a></p>` : ''}
               ${hospital.email ? `<p><strong>Email:</strong> <a href="mailto:${hospital.email}">${hospital.email}</a></p>` : ''}
-              ${hospital.web ? `<p><strong>Web:</strong> <a href="${hospital.web}" target="_blank">Sito Web</a></p>` : ''}
+              ${hospital.web ? `<p><strong>Sito Internet:</strong> <a href="${hospital.web}" target="_blank">Link esterno</a></p>` : ''}
               ${hospital.google_maps ? `<div class="text-center"><button class="googleMaps" id="googleMapsBtn-${hospitalId}"><i class="mdi-map mdi v-icon notranslate v-theme--customDarkTheme v-icon--size-default" aria-hidden="true"></i> Apri in Google Maps</button></div>` : ''}
             </div>
           `;
@@ -222,15 +223,16 @@ export default defineComponent({
 }
 
 .leaflet-popup-content hr{
-  margin: 15px 0;
+  margin: 6px 0;
 }
 
 .leaflet-popup-content p{
-  margin: 10px 0;
+  margin: 4px 0;
 }
 
 .googleMaps {
-  padding: 15px;
+  margin-top: 4px;
+  padding: 8px;
   background: #fff3e0;
 
 }

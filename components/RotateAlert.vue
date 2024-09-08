@@ -23,8 +23,11 @@ export default {
   },
   methods: {
     checkOrientation() {
-      if (window.innerHeight > window.innerWidth) {
+      const dialogShown = localStorage.getItem('dialogShown');
+
+      if (!dialogShown && window.innerHeight > window.innerWidth) {
         this.dialog = true;
+        localStorage.setItem('dialogShown', 'true');
       }
     },
     closeDialog() {

@@ -87,46 +87,47 @@
                       </v-toolbar-title>
                     </v-toolbar>
 
-                    <v-card min-width="100" min-height="100">
-                      <v-card-text>
-                        <p><span class="text-amber-accent-4">{{ item.descrizione }}</span></p>
-                        <p><strong>Tipo:</strong> {{ item.adulti ? 'Adulti': 'Bambini'  }}</p>
-                        <p><strong>Indirizzo:</strong> {{ item.indirizzo }}</p>
-                        <p><strong>Telefono:</strong> {{ item.telefono }}</p>
-                        <p><strong>Email:</strong> {{ item.email }}</p>
-                        <p><strong>Web:</strong> <a :href="item.web" target="_blank">Link</a></p>
-                        <v-btn v-if="item?.google_maps" theme="light" prepend-icon="mdi-google-maps" target="_blank" :href="item.google_maps" class="mt-3">Indicazioni stradali</v-btn>
-                        <p v-if="geolocationStore.geolocation.init"><strong>Distanza:</strong> {{ geolocationStore.calculateDistance(geolocationStore.userPosition.latitude, geolocationStore.userPosition.longitude, item.coords.lat, item.coords.lng).toFixed(2) }} Km</p>
-                        <v-divider class="my-4"></v-divider>
-                        <MapHospital :ospedali="[{
-                        nome: item.nome,
-                        descrizione: item.descrizione,
-                        adulti: item.adulti,
-                        indirizzo: item.indirizzo,
-                        telefono: item.telefono,
-                        email: item.email,
-                        web: item.web,
-                        lat: item.coords.lat,
-                        lng: item.coords.lng
-                        }]" />
-                        <v-divider class="my-4"></v-divider>
-                        <template v-if="!item.data?.data">
-                          <v-progress-linear
-                              color="teal"
-                              indeterminate
-                          ></v-progress-linear>
-                        </template>
-                        <template v-else v-for="(value, key) in item.data.data" :key="key">
-                          <v-card-text v-show="key === 'extra'">
-                            <p v-for="(extraValue, extraKey) in value" :key="extraKey">
-                              <strong>{{ extraValue.label }}: </strong>
-                              <v-chip color="success" size="small" label>{{ extraValue.value }}<span
-                                  v-if="extraValue.label === 'Indice di sovraffollamento'">%</span></v-chip>
-                            </p>
-                          </v-card-text>
-                        </template>
-                      </v-card-text>
-                    </v-card>
+<!--                    <v-card min-width="100" min-height="100">-->
+<!--                      <v-card-text>-->
+<!--                        <p><span class="text-amber-accent-4">{{ item.descrizione }}</span></p>-->
+<!--                        <p><strong>Tipo:</strong> {{ item.adulti ? 'Adulti': 'Bambini'  }}</p>-->
+<!--                        <p><strong>Indirizzo:</strong> {{ item.indirizzo }}</p>-->
+<!--                        <p><strong>Telefono:</strong> {{ item.telefono }}</p>-->
+<!--                        <p><strong>Email:</strong> {{ item.email }}</p>-->
+<!--                        <p><strong>Web:</strong> <a :href="item.web" target="_blank">Link</a></p>-->
+<!--                        <v-btn v-if="item?.google_maps" theme="light" prepend-icon="mdi-google-maps" target="_blank" :href="item.google_maps" class="mt-3">Indicazioni stradali</v-btn>-->
+<!--                        <p v-if="geolocationStore.geolocation.init"><strong>Distanza:</strong> {{ geolocationStore.calculateDistance(geolocationStore.userPosition.latitude, geolocationStore.userPosition.longitude, item.coords.lat, item.coords.lng).toFixed(2) }} Km</p>-->
+<!--                        <v-divider class="my-4"></v-divider>-->
+<!--                        <MapHospital :ospedali="[{-->
+<!--                        nome: item.nome,-->
+<!--                        descrizione: item.descrizione,-->
+<!--                        adulti: item.adulti,-->
+<!--                        indirizzo: item.indirizzo,-->
+<!--                        telefono: item.telefono,-->
+<!--                        email: item.email,-->
+<!--                        web: item.web,-->
+<!--                        lat: item.coords.lat,-->
+<!--                        lng: item.coords.lng-->
+<!--                        }]" />-->
+<!--                        <v-divider class="my-4"></v-divider>-->
+<!--                        <template v-if="!item.data?.data">-->
+<!--                          <v-progress-linear-->
+<!--                              color="teal"-->
+<!--                              indeterminate-->
+<!--                          ></v-progress-linear>-->
+<!--                        </template>-->
+<!--                        <template v-else v-for="(value, key) in item.data.data" :key="key">-->
+<!--                          <v-card-text v-show="key === 'extra'">-->
+<!--                            <p v-for="(extraValue, extraKey) in value" :key="extraKey">-->
+<!--                              <strong>{{ extraValue.label }}: </strong>-->
+<!--                              <v-chip color="success" size="small" label>{{ extraValue.value }}<span-->
+<!--                                  v-if="extraValue.label === 'Indice di sovraffollamento'">%</span></v-chip>-->
+<!--                            </p>-->
+<!--                          </v-card-text>-->
+<!--                        </template>-->
+<!--                      </v-card-text>-->
+<!--                    </v-card>-->
+                    <provincia-show-details :item="item" />
                   </template>
                 </v-dialog>
               </template>
