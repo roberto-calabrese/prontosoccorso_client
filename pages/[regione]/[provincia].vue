@@ -200,12 +200,14 @@ const geolocationStore = useGeolocationStore();
 const { regione, provincia } = useRoute().params as RouteParams;
 const showMap = shallowRef(false)
 
-useHead({
+const metaPage = {
   title: `Pronto Soccorso Live - ${uppercaseFirstLetter(provincia)}`,
   meta: [
     { name: 'description', content: `Situazione dei pronto soccorsi a ${provincia}` },
   ],
-});
+}
+
+useHead(metaPage);
 
 const interval = ref<ReturnType<typeof setInterval> | null>(null);
 const headers = ref<any[]>([]);
@@ -248,13 +250,21 @@ const openModal = async (item) => {
   selectedItem.value = item;
   await nextTick();
   isModalOpen.value = true;
+  console.log(item.nome)
   router.push({ query: { ps: createSlug(item.nome) } });
+  useHead({
+    title: `Pronto Soccorso Live - ${item.nome}`,
+    meta: [
+      { name: 'description', content: `Situazione del pronto soccorso ${regione} - ${provincia} - ${item.nome}`, },
+    ],
+  })
 };
 
 const closeModal = () => {
   isModalOpen.value = false;
   selectedItem.value = null;
   router.push({ query: {} });
+  useHead(metaPage);
 };
 
 const checkAndOpenModalFromURL = async () => {
