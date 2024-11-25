@@ -39,7 +39,10 @@
             <!-- MAPPA -->
             <v-col cols="12">
               <v-card color="amber-accent-4" variant="outlined">
-                <v-card-title>Posizione</v-card-title>
+                <v-card-title>Mappa</v-card-title>
+                <v-card-subtitle v-if="geolocationStore.geolocation.init">
+                  <p><strong>Distanza:</strong> {{ calculateDistance.toFixed(2) }} Km</p>
+                </v-card-subtitle>
                 <v-card-text>
                   <provincia-map-hospital :ospedali="formattedHospitalData" />
                 </v-card-text>
@@ -66,10 +69,6 @@
                       <table-detail :data="item.data?.data" />
                     </v-col>
 
-                    <!-- Geolocalizzazione e distanza -->
-                    <v-col cols="12" v-if="geolocationStore.geolocation.init">
-                      <p><strong>Distanza:</strong> {{ calculateDistance.toFixed(2) }} Km</p>
-                    </v-col>
                   </v-card-text>
                 </v-card>
               </v-col>

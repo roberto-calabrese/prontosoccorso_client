@@ -7,14 +7,14 @@
       <v-btn
           prepend-icon="mdi-information-slab-circle-outline"
           size="large"
-          text="Codici"
+          text="Legenda"
           v-bind="activatorProps"
           class="ml-4"
       ></v-btn>
     </template>
 
     <template v-slot:default="{ isActive }">
-      <v-card title="Info Codici">
+      <v-card title="Legenda Codici">
         <v-card-text>
           <v-list lines="two">
             <v-list-item>

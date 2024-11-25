@@ -4,7 +4,9 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, ref, watch } from 'vue';
-import { useGeolocationStore } from '@/store/geolocation'; // Assicurati di usare il percorso corretto
+import { useGeolocationStore } from '@/store/geolocation';
+import {createSlug} from '@/utils/string-utils'; // Assicurati di usare il percorso corretto
+import { useRouter } from 'vue-router';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster';
@@ -29,6 +31,7 @@ interface Ospedale {
   email?: string;
   web?: string;
   google_maps?: string;
+  data?: Object;
 }
 
 export default defineComponent({
@@ -56,6 +59,13 @@ export default defineComponent({
       iconAnchor: [10, 10],
     });
 
+
+    const router = useRouter();
+
+    const fullPath = router.currentRoute.value.path;
+    const trimmedPath = fullPath.startsWith('/') ? fullPath.slice(1) : fullPath;
+
+
     const initializeMap = () => {
       if (props.ospedali.length > 0) {
         map.value = L.map('map').setView([parseFloat(props.ospedali[0].lat), parseFloat(props.ospedali[0].lng)], 13);
@@ -68,10 +78,11 @@ export default defineComponent({
 
         props.ospedali.forEach((hospital: Ospedale) => {
           const hospitalId = hospital.nome;
+          const hospitalUrl = `/${trimmedPath}?ps=${createSlug(hospitalId)}`;
 
           const popupContent = `
               <div>
-              <h3>${hospital.nome}</h3>
+              <h3>${hospitalId}</h3>
               <hr>
               <h4><strong>Tipologia:</strong> ${hospital.adulti ? 'Adulti' : 'Pediatrico'}</h4>
               ${hospital.descrizione ? `<p><strong>Descrizione:</strong> <div style="max-height: 70px; overflow-y: auto;">${hospital.descrizione}</div></p>` : ''}
@@ -79,7 +90,8 @@ export default defineComponent({
               ${hospital.telefono ? `<p><strong>Telefono:</strong> <a href="tel:${hospital.telefono}">${hospital.telefono}</a></p>` : ''}
               ${hospital.email ? `<p><strong>Email:</strong> <a href="mailto:${hospital.email}">${hospital.email}</a></p>` : ''}
               ${hospital.web ? `<p><strong>Sito Internet:</strong> <a href="${hospital.web}" target="_blank">Link esterno</a></p>` : ''}
-              ${hospital.google_maps ? `<div class="text-center"><button class="googleMaps" id="googleMapsBtn-${hospitalId}"><i class="mdi-map mdi v-icon notranslate v-theme--customDarkTheme v-icon--size-default" aria-hidden="true"></i> Apri in Google Maps</button></div>` : ''}
+              ${hospital.google_maps ? `<div class="text-center googleMaps"><button class="" id="googleMapsBtn-${hospitalId}"><i class="mdi-map mdi v-icon notranslate v-theme--customDarkTheme v-icon--size-default" aria-hidden="true"></i> Apri in Google Maps</button></div>` : ''}
+              <div class="text-center btnScheda"><a target="_parent" href="${hospitalUrl}">Dettagli </a></div>
             </div>
           `;
 
@@ -93,6 +105,7 @@ export default defineComponent({
           // Aggiungi il marker alla mappa
           const marker = L.marker([parseFloat(hospital.lat), parseFloat(hospital.lng)]).bindPopup(popupContent);
           markers.value?.addLayer(marker);
+
         });
 
         map.value.addLayer(markers.value);
@@ -181,7 +194,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style lang="postcss">
 #map {
   height: 100%;
   width: 100%;
@@ -234,6 +247,15 @@ export default defineComponent({
   margin-top: 4px;
   padding: 8px;
   background: #fff3e0;
-
 }
+
+.btnScheda {
+  margin-top: 6px;
+  padding: 8px;
+  background: #fff3e0;
+}
+.btnScheda a {
+  text-decoration: none;
+}
+
 </style>

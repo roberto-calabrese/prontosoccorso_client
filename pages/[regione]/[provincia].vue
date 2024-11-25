@@ -25,13 +25,16 @@
                   @click="showMap = false"
               ></v-btn>
               <v-toolbar-title>Mappa Ospedali</v-toolbar-title>
+              <v-spacer></v-spacer>
+
+              <button-geolocation></button-geolocation>
             </v-toolbar>
             <MapHospital :ospedali="datiMappa" height="100%" />
           </v-card>
         </v-dialog>
 
       <!-- Info Codici -->
-      <InfoCodici/>
+      <Legenda/>
     </div>
 
     <template v-for="categoria in ospedali">
@@ -165,6 +168,15 @@
         <v-divider color="success" class="my-8"></v-divider>
       </div>
     </template>
+    <v-alert
+        text="I dati mostrati in questa applicazione sono forniti in tempo reale dai pronto soccorso e potrebbero non essere sempre accurati o aggiornati. L’applicazione non è responsabile per eventuali inesattezze o disguidi derivanti dall’utilizzo di queste informazioni. Per emergenze, si consiglia di contattare direttamente il pronto soccorso."
+        type="warning"
+        closable
+        border="start"
+        close-label="Close Alert"
+        variant="tonal"
+
+    ></v-alert>
     <core-navigation-button v-if="ospedali" :destination=regione />
     <v-dialog
         v-model="isModalOpen"
@@ -194,7 +206,9 @@ import { useRoute } from 'vue-router';
 import { useGeolocationStore } from '~/store/geolocation';
 import { uppercaseFirstLetter, createSlug } from '~/utils/string-utils';
 import MapHospital from '@/components/provincia/MapHospital.vue'
-import InfoCodici from '@/components/InfoCodici.vue'
+import InfoCodici from '~/components/Legenda.vue'
+import Legenda from "~/components/Legenda.vue";
+import ButtonGeolocation from "~/components/core/ButtonGeolocation.vue";
 
 const geolocationStore = useGeolocationStore();
 const { regione, provincia } = useRoute().params as RouteParams;
@@ -250,7 +264,6 @@ const openModal = async (item) => {
   selectedItem.value = item;
   await nextTick();
   isModalOpen.value = true;
-  console.log(item.nome)
   router.push({ query: { ps: createSlug(item.nome) } });
   useHead({
     title: `Pronto Soccorso Live - ${item.nome}`,
@@ -445,6 +458,7 @@ const datiMappa = computed(() => {
         lat: ospedale.coords.lat,
         lng: ospedale.coords.lng,
         google_maps: ospedale?.google_maps,
+        data: ospedale.data.data
       });
     });
   });
