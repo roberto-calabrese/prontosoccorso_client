@@ -6,9 +6,6 @@
         <p class="subtitle-1">
           Ti spiego in dettaglio il processo dietro le quinte e come vengono forniti i dati relativi ai pronto soccorso.
         </p>
-        <div class="mt-4">
-          <buy-me-coffe />
-        </div>
       </v-col>
     </v-row>
     <v-row>
@@ -88,6 +85,10 @@
             </template>
           </v-img>
         </v-card>
+        <div class="text-center">
+          <buy-me-coffe />
+        </div>
+
 
       </v-col>
     </v-row>

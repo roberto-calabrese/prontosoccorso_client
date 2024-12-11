@@ -165,9 +165,13 @@
             </v-data-table>
 
         </v-card>
-        <v-divider color="success" class="my-8"></v-divider>
+        <v-divider color="success" class="my-5"></v-divider>
       </div>
     </template>
+    <div class="text-center">
+      <buy-me-coffe />
+    </div>
+
     <v-alert
         text="I dati mostrati in questa applicazione sono forniti in tempo reale dai pronto soccorso e potrebbero non essere sempre accurati o aggiornati. L’applicazione non è responsabile per eventuali inesattezze o disguidi derivanti dall’utilizzo di queste informazioni. Per emergenze, si consiglia di contattare direttamente il pronto soccorso."
         type="warning"
