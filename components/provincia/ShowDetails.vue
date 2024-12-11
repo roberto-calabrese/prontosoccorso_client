@@ -124,7 +124,7 @@
                       </v-table>
                     </template>
                     <template v-else>
-                       <p class="pa-4">Nessuno dato disponibile</p>
+                       <p class="pa-4">Nessun dato disponibile</p>
                     </template>
                   </v-card-text>
                 </v-card>

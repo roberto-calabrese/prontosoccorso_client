@@ -47,12 +47,14 @@
             <h3 class="text-h6 text-amber-accent-2">Come Gestire o Disabilitare i Cookie</h3>
             <p>
               Gli utenti possono gestire o disabilitare i cookie dalle impostazioni del proprio browser:
-              <ul>
-                <li><a href="https://support.google.com/chrome/answer/95647?hl=it" target="_blank">Google Chrome</a></li>
-                <li><a href="https://support.mozilla.org/it/kb/Attivare%20e%20disattivare%20i%20cookie" target="_blank">Mozilla Firefox</a></li>
-                <li><a href="https://support.apple.com/it-it/guide/safari/sfri11471/mac" target="_blank">Safari</a></li>
-                <li><a href="https://support.microsoft.com/it-it/microsoft-edge/eliminare-i-cookie-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank">Microsoft Edge</a></li>
-              </ul>
+            </p>
+            <ul>
+              <li><a href="https://support.google.com/chrome/answer/95647?hl=it" target="_blank">Google Chrome</a></li>
+              <li><a href="https://support.mozilla.org/it/kb/Attivare%20e%20disattivare%20i%20cookie" target="_blank">Mozilla Firefox</a></li>
+              <li><a href="https://support.apple.com/it-it/guide/safari/sfri11471/mac" target="_blank">Safari</a></li>
+              <li><a href="https://support.microsoft.com/it-it/microsoft-edge/eliminare-i-cookie-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank">Microsoft Edge</a></li>
+            </ul>
+            <p>
               Puoi anche usare strumenti di terze parti come <a href="https://www.youronlinechoices.com/it/" target="_blank">Your Online Choices</a> per gestire le tue preferenze sui cookie.
             </p>
 
