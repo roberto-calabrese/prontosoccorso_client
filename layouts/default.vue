@@ -2,6 +2,7 @@
   <v-app>
     <core-layout-nav/>
     <v-main class="background-main">
+      <breadcrumbs />
       <slot/>
     </v-main>
     <core-layout-footer/>
@@ -55,4 +56,5 @@
 
 </style>
 <script setup lang="ts">
+import Breadcrumbs from "~/components/core/Breadcrumbs.vue";
 </script>
