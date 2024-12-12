@@ -1,7 +1,16 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
-  RewriteRule ^index\.html$ - [L]
+
+  # Eccezione per file statici specifici come sitemap.xml
+  RewriteCond %{REQUEST_URI} ^/sitemap\.xml$ [NC]
+  RewriteRule ^ - [L]
+
+  # Servi direttamente i file esistenti (CSS, JS, immagini, ecc.)
+  RewriteCond %{REQUEST_FILENAME} -f
+  RewriteRule ^ - [L]
+
+  # Reindirizza tutte le altre richieste a index.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
