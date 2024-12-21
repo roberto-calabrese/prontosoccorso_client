@@ -1,6 +1,7 @@
 <template>
   <v-container class="pa-4 text-center" fluid>
-    <h2 class="my-8 text-uppercase">Dati nelle <span class="text-green-accent-4">province</span> disponibili</h2>
+    <h2 class="text-uppercase">Dati nelle <span class="text-green-accent-4">province</span> disponibili</h2>
+    <h3 v-if="ospedaliTotali" class="mb-8 text-uppercase"><span class="text-green-accent-4">{{ ospedaliTotali }}</span> Ospedali</h3>
     <v-row
         align="center"
         class="fill-height"
@@ -52,7 +53,7 @@ useHead({
 
 const province = ref();
 const currentRegione = ref();
-
+const ospedaliTotali = ref();
 
 onMounted(async () => {
 
@@ -68,6 +69,7 @@ onMounted(async () => {
 
     currentRegione.value = data.regione;
     province.value = data.provincie;
+    ospedaliTotali.value = data.ospedaliTotali;
 
   } catch (error) {
     console.error('Error fetching data:', error)

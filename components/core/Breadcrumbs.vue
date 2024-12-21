@@ -10,7 +10,6 @@
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
-// Funzione per generare i breadcrumbs
 const generateBreadcrumbs = (route) => {
   const breadcrumbs = [];
   const pathArray = route.path.split('/').filter((part) => part);
@@ -30,7 +29,6 @@ const generateBreadcrumbs = (route) => {
 const route = useRoute();
 const breadcrumbs = ref(generateBreadcrumbs(route));
 
-// Aggiorna i breadcrumbs quando cambia la route
 watch(
     () => route.path,
     (newPath) => {
@@ -40,5 +38,5 @@ watch(
 </script>
 
 <style scoped>
-/* Stile opzionale per i breadcrumbs */
+
 </style>

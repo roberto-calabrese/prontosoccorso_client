@@ -1,7 +1,8 @@
 <template>
   <v-container fluid>
     <RotateAlert />
-    <h2 class="my-8 text-uppercase text-center">Presidi Medici di Emergenza nella provincia di <span class="text-amber-accent-3">{{ provincia.replace('-', ' ') }}</span></h2>
+    <h2 class="text-uppercase text-center">Presidi Medici di Emergenza nella provincia di <span class="text-amber-accent-3">{{ provincia.replace('-', ' ') }}</span></h2>
+    <h3 v-if="ospedaliTotali" class="mb-8 text-uppercase text-center"><span class="text-green-accent-4">{{ ospedaliTotali }}</span> Ospedali</h3>
     <div class="text-center my-4" v-if="headers.length">
       <!-- Mappa -->
       <v-dialog
@@ -235,6 +236,7 @@ let channel: any, event: any;
 const pusher = (window as any).pusher;
 
 const presidi = ref<any>();
+const ospedaliTotali = ref();
 
 interface Ospedale {
   titolo: string;
@@ -385,6 +387,7 @@ async function updatePresidi() {
 
     ospedali.value[0].data = bambini;
     ospedali.value[1].data = adulti;
+    ospedaliTotali.value = presidiData.ospedaliTotali;
   }
 
   if (geolocationStore.geolocation.init) {
