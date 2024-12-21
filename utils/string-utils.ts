@@ -10,7 +10,15 @@ const createSlug = (str: string): string  => {
         .replace(/-+/g, '-');
 }
 
+const slugToTitle = (input:string) => {
+    return input
+        .split('-')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
+
 export {
     uppercaseFirstLetter,
-    createSlug
+    createSlug,
+    slugToTitle
 }

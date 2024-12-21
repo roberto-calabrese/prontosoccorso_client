@@ -9,6 +9,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { slugToTitle } from '@/utils/string-utils';
 
 const generateBreadcrumbs = (route) => {
   const breadcrumbs = [];
@@ -17,7 +18,7 @@ const generateBreadcrumbs = (route) => {
   pathArray.reduce((path, part) => {
     const fullPath = `${path}/${part}`;
     breadcrumbs.push({
-      title: part.charAt(0).toUpperCase() + part.slice(1), // Capitalizza il nome
+      title: slugToTitle(part),
       to: fullPath,
     });
     return fullPath;

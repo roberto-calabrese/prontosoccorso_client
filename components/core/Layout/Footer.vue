@@ -10,10 +10,10 @@
       <strong>PS</strong> {{ new Date().getFullYear() }} —
       <strong>
         <a class="text-white text-decoration-none" href="https://github.com/roberto-calabrese" target="_blank">
-          <v-icon icon="mdi-git"></v-icon> Roberto Calabrese
+          <v-icon icon="mdi-github"></v-icon> Roberto Calabrese
         </a>
       </strong> —
-      <span class="font-weight-thin font-italic"> v.0.9</span>
+      <span class="font-weight-thin font-italic"> v.{{ appVersion }}</span>
       <div class="privacy" :class="{'privacy-mdAndUp': mdAndUp}">
         <v-btn to="/privacy-policy" title="Privacy Policy" size="small" density="compact">Privacy Policy</v-btn>
         <v-btn to="/cookie-policy" title="Cookie Policy" size="small" density="compact">Cookie Policy</v-btn>
@@ -24,7 +24,17 @@
 
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
+import { useRuntimeConfig } from '#app';
+// import {useApiStore} from "~/store/api";
+// const apiStore = useApiStore();
+// onMounted(() => {
+//   apiStore.fetchGitHub();
+// });
+// const stars = computed(() => apiStore.github?.stars || 0);
+
+const config = useRuntimeConfig();
+const appVersion = config.public.appVersion;
 
 const { mdAndUp } = useDisplay();
 

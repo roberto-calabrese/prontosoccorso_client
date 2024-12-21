@@ -1,6 +1,6 @@
 import {useCoreStore} from "~/store/core";
 
-export async function fetch(path: any) {
+export async function fetch(path: string) {
     const config = useRuntimeConfig()
     const baseURL = config.public.apiBaseUrl
     const coreStore = useCoreStore()

@@ -109,11 +109,9 @@
 
 <script setup lang="ts">
 import ButtonGeolocation from "~/components/core/ButtonGeolocation.vue";
-import {useRoute} from 'vue-router'
 import {useApiStore} from "~/store/api";
 import {useCoreStore} from "~/store/core";
 
-const route = useRoute()
 const coreStore = useCoreStore();
 const apiStore = useApiStore();
 const drawer = ref(false);
@@ -147,6 +145,7 @@ apiStore.fetchSettings();
   position: absolute;
   left: 53px;
 }
+
 .loading svg polyline {
   fill: none;
   stroke-width: 3;

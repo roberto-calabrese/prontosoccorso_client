@@ -1,4 +1,5 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import { version } from './package.json';
 
 export default defineNuxtConfig({
   app: {
@@ -53,6 +54,7 @@ export default defineNuxtConfig({
     secret: process.env.SECRET,
     // Keys within public are also exposed client-side
     public: {
+      appVersion: version,
       apiBaseUrl: process.env.API_BASEURL,
       pusher: {
         appId: process.env.PUSHER_APP_ID,
