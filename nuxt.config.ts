@@ -70,6 +70,18 @@ export default defineNuxtConfig({
   ssr: false,
 
   vite: {
+    build: {
+      minify: 'terser', // Usa Terser invece di esbuild
+      terserOptions: {
+        compress: {
+          drop_console: true, // Rimuovi i console.log in produzione
+          drop_debugger: true, // Rimuovi i debugger in produzione
+        },
+        output: {
+          comments: false, // Rimuovi i commenti
+        },
+      },
+    },
     vue: {
       template: {
         transformAssetUrls,
