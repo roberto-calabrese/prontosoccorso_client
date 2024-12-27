@@ -67,6 +67,7 @@
                 :items-per-page="0"
                 color="success"
                 style="z-index: 100"
+                :hover="true"
             >
 
               <template v-slot:item.nome="{ item }">
@@ -74,6 +75,7 @@
                     prepend-icon="mdi-information"
                     size="large"
                     variant="elevated"
+                    density="compact"
                     label
                     color="teal-darken-4"
                     @click="openModal(item)"
