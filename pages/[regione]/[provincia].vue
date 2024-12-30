@@ -156,7 +156,7 @@
                   <h2 style="display: inline-block" class="mr-2"
                       :class=getColor(codice).textColor
                   >
-                    {{ item.data.data?.[codice]?.value ?? 0 }}
+                    {{ item.data.data?.[codice] === undefined ? '-' : (item.data.data?.[codice]?.value ?? 0) }}
                   </h2>
                   <small v-if="codice === 'totali'" v-tooltip="{openOnClick: true, text: 'Pazienti presenti nella struttura, in attesa, in trattamento, in osservazione ecc..' }">Pazienti totali</small>
                 </div>
