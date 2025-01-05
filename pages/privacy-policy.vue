@@ -4,8 +4,8 @@
       <v-col cols="12" md="8">
         <v-card class="pa-4">
           <div class="text-center">
-            <h1 class="text-h4 text-amber-accent-2">Privacy Policy</h1>
-            <p class="text-amber-accent-2">Ultimo aggiornamento: <strong>09/09/2024</strong></p>
+            <h1 class="text-h4 text-1">Privacy Policy</h1>
+            <p class="text-1">Ultimo aggiornamento: <strong>09/09/2024</strong></p>
           </div>
 
           <v-card-text>
@@ -20,7 +20,7 @@
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 mt-4 text-amber-accent-2">Titolare del Trattamento dei Dati</h3>
+            <h3 class="text-h6 mt-4 text-1">Titolare del Trattamento dei Dati</h3>
             <p>
               Il titolare del trattamento dei dati per questo sito web è:
             </p>
@@ -31,8 +31,8 @@
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 mt-4 text-amber-accent-2">Tipi di Dati Raccolti</h3>
-            <h4 class="mt-3 text-amber-accent-2">1. Dati raccolti automaticamente</h4>
+            <h3 class="text-h6 mt-4 text-1">Tipi di Dati Raccolti</h3>
+            <h4 class="mt-3 text-1">1. Dati raccolti automaticamente</h4>
             <p>
               Quando visiti il nostro sito web, i server registrano automaticamente
               alcune informazioni tecniche, come:
@@ -49,7 +49,7 @@
               monitoraggio. Non vengono utilizzati per identificare gli utenti.
             </p>
 
-            <h4 class="mt-3 text-amber-accent-2">2. Cookie e tecnologie di tracciamento</h4>
+            <h4 class="mt-3 text-1">2. Cookie e tecnologie di tracciamento</h4>
             <p>
               Utilizziamo tecnologie di tracciamento come i cookie per migliorare
               l'esperienza utente e garantire il funzionamento del sito. I cookie
@@ -67,17 +67,17 @@
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 mt-4 text-amber-accent-2">Uso dei Dati</h3>
+            <h3 class="text-h6 mt-4 text-1">Uso dei Dati</h3>
             <p>I dati raccolti vengono utilizzati esclusivamente per:</p>
 
-            <h4 class="mt-3 text-amber-accent-2">1. Funzionamento del sito (Pusher)</h4>
+            <h4 class="mt-3 text-1">1. Funzionamento del sito (Pusher)</h4>
             <p>
               Utilizziamo <strong>Pusher</strong> per gestire la comunicazione in tempo reale sul sito. Questo è un
               servizio necessario per il corretto funzionamento del sito e non richiede consenso, in quanto rientra nei
               cookie essenziali.
             </p>
 
-            <h4 class="mt-3 text-amber-accent-2">2. Monitoraggio e Statistiche (Google Analytics)</h4>
+            <h4 class="mt-3 text-1">2. Monitoraggio e Statistiche (Google Analytics)</h4>
             <p>
               Utilizziamo <strong>Google Analytics</strong> per raccogliere informazioni anonime e statistiche sul
               traffico del sito, come l'indirizzo IP anonimizzato, comportamento di navigazione e altre metriche. Questi
@@ -86,7 +86,7 @@
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 mt-4 text-amber-accent-2">Base giuridica del trattamento</h3>
+            <h3 class="text-h6 mt-4 text-1">Base giuridica del trattamento</h3>
             <p>
               - <strong>Cookie essenziali (Pusher)</strong>: Il trattamento dei dati tecnici è necessario per il
               legittimo interesse del titolare del sito (art. 6(1)(f) del GDPR).
@@ -98,7 +98,7 @@
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 mt-4 text-amber-accent-2">Condivisione dei dati</h3>
+            <h3 class="text-h6 mt-4 text-1">Condivisione dei dati</h3>
             <p>
               I dati tecnici raccolti possono essere condivisi con i seguenti servizi:
             </p>
@@ -118,7 +118,7 @@
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 mt-4 text-amber-accent-2">Conservazione dei dati</h3>
+            <h3 class="text-h6 mt-4 text-1">Conservazione dei dati</h3>
             <p>
               - <strong>Dati di log del server</strong>: Gli indirizzi IP e altre informazioni tecniche raccolte nei log
               del server vengono conservati per un periodo limitato.
@@ -130,7 +130,7 @@
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 mt-4 text-amber-accent-2">Diritti degli Utenti</h3>
+            <h3 class="text-h6 mt-4 text-1">Diritti degli Utenti</h3>
             <p>
               Non raccogliendo dati personali direttamente dagli utenti, il sito limita il trattamento alle informazioni
               tecniche. Tuttavia, gli utenti hanno i seguenti diritti:
@@ -147,7 +147,7 @@
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 mt-4 text-amber-accent-2">Modifiche a questa Privacy Policy</h3>
+            <h3 class="text-h6 mt-4 text-1">Modifiche a questa Privacy Policy</h3>
             <p>
               Ci riserviamo il diritto di modificare la presente Privacy Policy in qualsiasi momento. Le modifiche
               saranno pubblicate su questa pagina, con l'indicazione della data di aggiornamento.
@@ -155,7 +155,7 @@
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 mt-4 text-amber-accent-2">Contatti</h3>
+            <h3 class="text-h6 mt-4 text-1">Contatti</h3>
             <p>
               Per qualsiasi domanda relativa alla presente Privacy Policy, puoi contattarci all'indirizzo email
               seguente:

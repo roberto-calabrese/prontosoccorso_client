@@ -6,25 +6,25 @@
           <v-row>
             <!-- INFO BASE -->
             <v-col cols="12">
-              <v-card color="amber-accent-4" variant="outlined" class="mb-4">
+              <v-card color="1" variant="outlined" class="mb-4">
                 <v-card-title>
-                  <span class="text-amber-accent-4">Informazioni</span>
+                  <span class="text-1">Informazioni</span>
                 </v-card-title>
                 <v-card-subtitle class="text-wrap">
-                  <p class="mt-2">Ospedale: <span class="text-white">{{ item.nome }}</span></p>
-                  <p class="mt-2">Tipologia: <span class="text-white">{{ item.adulti ? 'Adulti' : 'Pediatrico' }}</span></p>
+                  <p class="mt-2">Ospedale: <span class="text-string">{{ item.nome }}</span></p>
+                  <p class="mt-2">Tipologia: <span class="text-string">{{ item.adulti ? 'Adulti' : 'Pediatrico' }}</span></p>
                 </v-card-subtitle>
                 <v-card-text>
-                  <p class="mt-2" v-if="item.descrizione"><strong>Descrizione:</strong> <span class="text-white">{{ item.descrizione }}</span></p>
-                  <p class="mt-2" v-if="item.indirizzo"><strong>Indirizzo:</strong> <span class="text-white">{{ item.indirizzo }}</span></p>
-                  <p class="mt-2" v-if="item.telefono"><strong>Telefono:</strong> <span class="text-white">{{ item.telefono }}</span></p>
-                  <p class="mt-2" v-if="item.email"><strong>Email:</strong> <span class="text-white">{{ item.email }}</span></p>
+                  <p class="mt-2" v-if="item.descrizione"><strong>Descrizione:</strong> <span class="text-string">{{ item.descrizione }}</span></p>
+                  <p class="mt-2" v-if="item.indirizzo"><strong>Indirizzo:</strong> <span class="text-string">{{ item.indirizzo }}</span></p>
+                  <p class="mt-2" v-if="item.telefono"><strong>Telefono:</strong> <span class="text-string">{{ item.telefono }}</span></p>
+                  <p class="mt-2" v-if="item.email"><strong>Email:</strong> <span class="text-string">{{ item.email }}</span></p>
                   <p class="mt-2" v-if="item.web"><strong>Sito Internet:</strong> <a :href="item.web" target="_blank">Link Esterno</a></p>
 
                   <!-- Google Maps Button -->
                   <v-btn
                       v-if="item?.google_maps"
-                      theme="light"
+                      color="primary"
                       prepend-icon="mdi-google-maps"
                       target="_blank"
                       :href="item.google_maps"
@@ -36,15 +36,23 @@
               </v-card>
             </v-col>
 
-            <!-- MAPPA -->
+            <!-- STATO CODICI -->
             <v-col cols="12">
-              <v-card color="amber-accent-4" variant="outlined">
-                <v-card-title>Mappa</v-card-title>
-                <v-card-subtitle v-if="geolocationStore.geolocation.init">
-                  <p><strong>Distanza:</strong> {{ calculateDistance.toFixed(2) }} Km</p>
-                </v-card-subtitle>
-                <v-card-text>
-                  <provincia-map-hospital :ospedali="formattedHospitalData" />
+              <v-card color="1" variant="outlined" class="mb-4">
+                <v-card-title>Stato Attuale</v-card-title>
+                <v-card-text class="pa-0">
+                  <!-- Skeleton loader per il caricamento -->
+                  <v-skeleton-loader
+                      v-if="!item.data?.data"
+                      type="list-item-two-line, list-item-two-line"
+                      height="150px"
+                  ></v-skeleton-loader>
+
+                  <!-- Tabella dinamica -->
+                  <v-col v-else cols="12" class="pa-0">
+                    <table-detail :data="item.data?.data" />
+                  </v-col>
+
                 </v-card-text>
               </v-card>
             </v-col>
@@ -52,40 +60,17 @@
         </v-col>
         <v-col cols="12" md="6">
             <v-row>
-              <!-- STATO CODICI -->
-              <v-col cols="12">
-                <v-card color="amber-accent-4" variant="outlined" class="mb-4">
-                  <v-card-title>Stato Attuale</v-card-title>
-                  <v-card-text class="pa-0">
-                    <!-- Skeleton loader per il caricamento -->
-                    <v-skeleton-loader
-                        v-if="!item.data?.data"
-                        type="list-item-two-line, list-item-two-line"
-                        height="150px"
-                    ></v-skeleton-loader>
-
-                    <!-- Tabella dinamica -->
-                    <v-col v-else cols="12" class="pa-0">
-                      <table-detail :data="item.data?.data" />
-                    </v-col>
-
-                  </v-card-text>
-                </v-card>
-              </v-col>
-
               <!-- INFO EXTRA -->
               <v-col cols="12">
-                <v-card color="amber-accent-4" variant="outlined" class="mb-4">
+                <v-card color="1" variant="outlined" class="mb-4">
                   <v-card-title>Informazioni Extra</v-card-title>
                   <v-card-text class="pa-0">
-                    <!-- Skeleton loader per il caricamento -->
                     <v-skeleton-loader
                         v-if="!item.data?.data"
                         type="list-item-two-line, list-item-two-line"
                         height="200px"
                     ></v-skeleton-loader>
 
-                    <!-- Tabella dei dati extra -->
                     <template v-else-if="item.data?.data?.extra">
                       <v-table class="pa-0">
                         <thead>
@@ -95,25 +80,24 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <!-- Iteriamo sui dati -->
+
                         <template v-for="(value, key) in item.data.data" :key="key">
-                          <!-- Solo per 'extra' -->
+
                           <template v-if="key === 'extra'">
                             <template v-for="(extraValue, extraKey) in value" :key="extraKey">
                               <tr>
-                                <!-- Stampa il label dell'elemento extra -->
                                 <td>
                                   <strong>{{ extraValue.label }}:</strong>
                                 </td>
-                                <!-- Stampa il valore dell'elemento extra -->
                                 <td>
                                   <v-chip
-                                      color="success"
+                                      color="warning"
                                       size="small"
                                       label
+                                      variant="flat"
                                   >
-                                    {{ extraValue.value }}
-                                    <span v-if="extraValue.label === 'Indice di sovraffollamento'">%</span>
+                                    <h4 class="text-black bold">{{ extraValue.value }}</h4>
+                                    <span class="text-black"  v-if="extraValue.label === 'Indice di sovraffollamento'">%</span>
                                   </v-chip>
                                 </td>
                               </tr>
@@ -126,6 +110,20 @@
                     <template v-else>
                        <p class="pa-4">Nessun dato disponibile</p>
                     </template>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+
+              <!-- MAPPA -->
+              <v-col cols="12">
+                <v-card color="1" variant="outlined">
+                  <v-card-title>Mappa</v-card-title>
+                  <v-card-subtitle v-if="geolocationStore.geolocation.init">
+                    <p><strong>Distanza:</strong> {{ calculateDistance.toFixed(2) }} Km</p>
+                  </v-card-subtitle>
+                  <v-card-text>
+                    {{embedded}}
+                    <provincia-map-hospital :ospedali="formattedHospitalData" :embedded="embedded" />
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -167,9 +165,17 @@ export default defineComponent({
       type: Object as () => Item,
       required: true,
     },
+    embedded: {
+      type: Boolean,
+      default: false,
+    }
   },
   setup(props) {
     const geolocationStore = useGeolocationStore();
+
+    const embedded = computed(() => {
+      return props.embedded;
+    });
 
     const calculateDistance = computed(() => {
       if (geolocationStore.geolocation.init) {
@@ -200,6 +206,7 @@ export default defineComponent({
       geolocationStore,
       calculateDistance,
       formattedHospitalData,
+      embedded
     };
   },
 });

@@ -16,17 +16,18 @@
             <v-card
                 :class="{ 'on-hover': isHovering }"
                 :elevation="isHovering ? 12 : 2"
+                class="card"
                 v-bind="props"
                 :to="currentRegione+'/'+item.meta.slug"
             >
               <v-card-title class="text-uppercase text-h5 text-white d-flex flex-column">
-                <p class="mt-2 text-amber-accent-3">
+                <p class="mt-2 text-1">
                   {{ item.meta.Titolo }}
                 </p>
 
                 <div>
-                  <p class="text-uppercase text-caption font-weight-medium">
-                    numero ospedali: <strong class="text-amber-accent-4 text-sm-h6">{{ item.numero_ospedali }}</strong>
+                  <p class="text-uppercase text-caption font-weight-medium text-string">
+                    numero ospedali: <strong class="text-1 text-sm-h6">{{ item.numero_ospedali }}</strong>
                   </p>
                 </div>
               </v-card-title>

@@ -1,8 +1,17 @@
 <template>
-  <NuxtLayout>
+  <NuxtLayout :name="layout">
     <NuxtPage/>
   </NuxtLayout>
 </template>
+
+
+<script setup>
+const route = useRoute()
+
+const layout = computed(() => {
+  return route.query.embedded === 'true' ? 'embedded' : 'default'
+})
+</script>
 
 <style lang="postcss">
 .page-enter-active,

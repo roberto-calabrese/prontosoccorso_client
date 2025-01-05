@@ -1,19 +1,19 @@
 <template>
   <div>
-    <v-app-bar class="background-bar">
+    <v-app-bar class="bg-nav-bar">
 
       <template v-slot:image>
         <v-img
-            class="background-bar"
+            class="bg-nav-bar"
         ></v-img>
       </template>
 
       <template v-slot:prepend>
-        <v-app-bar-nav-icon
+        <v-app-bar-nav-icon class="text-string"
             @click.stop="drawer = !drawer"
         ></v-app-bar-nav-icon>
         <div class="logo" @click="$router.push('/')">
-          <h2 class="text-uppercase">Pronto Soccorso</h2>
+          <h2 class="text-uppercase text-string">Pronto Soccorso</h2>
           <h1 class="text-uppercase text-overline-">L i v e</h1>
         </div>
         <!--From Uiverse.io by RaspberryBee-->
@@ -31,7 +31,8 @@
       </template>
 
       <template v-slot:append>
-        <button-geolocation></button-geolocation>
+        <button-geolocation />
+        <change-theme />
       </template>
 
 
@@ -66,7 +67,7 @@
                 :title="regione.regione"
             >
               <template v-slot:subtitle>
-                <span class="text-amber-accent-3">Ospedali: {{ regione.n_ospedali }}</span>
+                <span class="text-1">Ospedali: {{ regione.n_ospedali }}</span>
               </template>
             </v-list-item>
           </template>
@@ -80,7 +81,7 @@
               active-class="info--text"
           >
             <template v-slot:title>
-              {{ provincia.meta.Titolo }} <span class="text-amber-accent-3">{{ provincia.n_ospedali }}</span>
+              {{ provincia.meta.Titolo }} <span class="text-1">{{ provincia.n_ospedali }}</span>
             </template>
           </v-list-item>
         </v-list-group>
@@ -111,6 +112,7 @@
 import ButtonGeolocation from "~/components/core/ButtonGeolocation.vue";
 import {useApiStore} from "~/store/api";
 import {useCoreStore} from "~/store/core";
+import ChangeTheme from "~/components/core/ChangeTheme.vue";
 
 const coreStore = useCoreStore();
 const apiStore = useApiStore();
@@ -120,10 +122,6 @@ apiStore.fetchSettings();
 </script>
 
 <style lang="postcss">
-.background-bar {
-  background-image: linear-gradient(to bottom, #0a1412, #101817, #151b1b, #1a1f1f, #1e2323) !important;
-}
-
 .logo {
   line-height: normal;
   cursor: pointer;

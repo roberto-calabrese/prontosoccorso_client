@@ -28,6 +28,10 @@ export default defineNuxtConfig({
 
   },
 
+  css: [
+    '@/assets/styles/global.scss',
+  ],
+
   build: {
     transpile: ['vuetify'],
   },
@@ -70,6 +74,22 @@ export default defineNuxtConfig({
   ssr: false,
 
   vite: {
+    // css: {
+    //   preprocessorOptions: {
+    //     scss: {
+    //       additionalData: `
+    //         @import "@/assets/styles/global.scss";
+    //       `,
+    //     },
+    //   },
+    // },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: 'modern-compiler' // or "modern"
+        }
+      }
+    },
     build: {
       minify: 'terser', // Usa Terser invece di esbuild
       terserOptions: {

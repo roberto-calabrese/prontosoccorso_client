@@ -44,6 +44,10 @@ export default defineComponent({
     height: {
       type: String,
       default: '400px'
+    },
+    embedded: {
+      type: Boolean,
+      default: false,
     }
   },
   setup(props) {
@@ -78,7 +82,8 @@ export default defineComponent({
 
         props.ospedali.forEach((hospital: Ospedale) => {
           const hospitalId = hospital.nome;
-          const hospitalUrl = `/${trimmedPath}?ps=${createSlug(hospitalId)}`;
+          const baseUrl = `/${trimmedPath}?ps=${createSlug(hospitalId)}`;
+          const hospitalUrl = props.embedded ? `${baseUrl}&embedded=true` : baseUrl;
 
           const popupContent = `
               <div>
@@ -224,7 +229,8 @@ export default defineComponent({
 }
 
 .fit-bounds-button {
-  background-color: #0a1412;
+  background-color: #fff !important;
+  color: #000;
   border: 1px solid #ec0f0f;
   padding: 5px 10px;
   cursor: pointer;

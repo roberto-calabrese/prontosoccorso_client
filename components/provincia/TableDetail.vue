@@ -11,13 +11,13 @@
         <tbody>
         <tr v-for="(row, rowIndex) in tableData" :key="rowIndex">
           <td>
-            <v-chip :color=getColor(row.color).text
+            <v-chip variant="elevated" :color=getColor(row.color).text
             >
               <h4>{{ uppercaseFirstLetter(row.color) }}</h4>
             </v-chip>
           </td>
           <td v-for="(label, colIndex) in extraHeaders" :key="colIndex">
-            <v-chip :color=getColor(row.color).text
+            <v-chip variant="elevated" :color=getColor(row.color).text
             >
               <h4>{{ row.extra[label]?.value ?? '-' }} </h4>
             </v-chip>
@@ -92,7 +92,7 @@ export default defineComponent({
           color,
           extra: extraData,
         };
-      }).filter(row => row !== null); // Filtra fuori le righe vuote
+      }).filter(row => row !== null);
     },
 
   },
@@ -111,7 +111,7 @@ export default defineComponent({
         case 'azzurro':
           return { textColor: 'text-blue', text: 'blue' };
         default:
-          return { textColor: 'text-white', text: 'white' };
+          return { textColor: 'text-string', text: 'string' };
       }
     },
   },

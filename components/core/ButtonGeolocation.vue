@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn append-icon="mdi-crosshairs-gps" @click="toggleGeolocation" :color="gpsOk ? 'green' : ''">
+    <v-btn rounded append-icon="mdi-crosshairs-gps" class="text-string" @click="toggleGeolocation" :color="gpsOk ? 'green' : ''">
       {{ messageSwitch }}
       <v-progress-circular
           v-if="geolocationEnabled && !userPosition"

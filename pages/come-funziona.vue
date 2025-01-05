@@ -13,7 +13,7 @@
         <!-- Scraping dei Dati -->
         <v-card class="elevation-3 mb-5">
           <v-card-title>
-            <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-bullseye-arrow"></v-icon> Scraping dei Dati</h4>
+            <h4 class="headline text-1"><v-icon icon="mdi-bullseye-arrow"></v-icon> Scraping dei Dati</h4>
           </v-card-title>
           <v-card-text>
             <p>
@@ -27,7 +27,7 @@
         <!-- Comunicazione in Tempo Reale -->
         <v-card class="elevation-3 mb-5">
         <v-card-title>
-          <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-lightning-bolt-circle"></v-icon> Comunicazione in Tempo Reale</h4>
+          <h4 class="headline text-1"><v-icon icon="mdi-lightning-bolt-circle"></v-icon> Comunicazione in Tempo Reale</h4>
         </v-card-title>
         <v-card-text>
           <p>
@@ -40,7 +40,7 @@
         <!-- Attivazione del Polling -->
         <v-card class="elevation-3 mb-5">
           <v-card-title>
-            <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-sync"></v-icon> Attivazione del Polling</h4>
+            <h4 class="headline text-1"><v-icon icon="mdi-sync"></v-icon> Attivazione del Polling</h4>
           </v-card-title>
           <v-card-text>
             <p>
@@ -53,7 +53,7 @@
         <!-- Cache dei Dati -->
         <v-card class="elevation-3 mb-5">
           <v-card-title>
-            <h4 class="headline text-amber-accent-2"><v-icon icon="mdi-database-clock"></v-icon> Cache dei Dati</h4>
+            <h4 class="headline text-1"><v-icon icon="mdi-database-clock"></v-icon> Cache dei Dati</h4>
           </v-card-title>
           <v-card-text>
             <p>
@@ -88,8 +88,6 @@
         <div class="text-center">
           <buy-me-coffe />
         </div>
-
-
       </v-col>
     </v-row>
   </v-container>

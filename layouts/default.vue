@@ -14,10 +14,11 @@
 
 <style lang="postcss">
 .background-main {
-  background-image: linear-gradient(to right top, #393c3c, #3c4041, #3f4546, #434a4b, #464e51, #495256, #4d565a, #505a5f, #545e65, #59636b, #5e6770, #636b76);
+  background-image: linear-gradient(to right top, rgb(var(--v-theme-bg1)), rgb(var(--v-theme-bg2)));
   background-size: 200% auto;
   animation: gradientAnimation 10s linear infinite;
 }
+
 
 @keyframes gradientAnimation {
   0% {

@@ -1,8 +1,9 @@
 <template>
   <v-container fluid>
     <RotateAlert />
-    <h2 class="text-uppercase text-center">Presidi Medici di Emergenza nella provincia di <span class="text-amber-accent-3">{{ provincia.replace('-', ' ') }}</span></h2>
+    <h2 class="text-uppercase text-center">Presidi Medici di Emergenza nella provincia di <span class="text-1">{{ provincia.replace('-', ' ') }}</span></h2>
     <h3 v-if="ospedaliTotali" class="mb-8 text-uppercase text-center"><span class="text-green-accent-4">{{ ospedaliTotali }}</span> Ospedali</h3>
+
     <div class="text-center my-4" v-if="headers.length">
       <!-- Mappa -->
       <v-dialog
@@ -30,7 +31,7 @@
 
               <button-geolocation></button-geolocation>
             </v-toolbar>
-            <MapHospital :ospedali="datiMappa" height="100%" />
+            <MapHospital :ospedali="datiMappa" height="100%" :embedded="embedded" />
           </v-card>
         </v-dialog>
 
@@ -38,12 +39,14 @@
       <Legenda/>
     </div>
 
+    <v-skeleton-loader class="mt-md-16 mt-sm-12" v-show="!ospedali[1]?.data.length" type="table"></v-skeleton-loader>
+
     <template v-for="categoria in ospedali">
       <div v-if="categoria.data.length">
         <v-card elevation="10" v-if="categoria.data">
           <v-card-title class="d-flex align-center pe-2">
             <v-icon :icon="categoria.icon"></v-icon> &nbsp;
-            Pronto Soccorso &nbsp; <span class="text-amber-accent-1"> {{ categoria.titolo }}</span>
+            Pronto Soccorso &nbsp; <span class="text-1"> {{ categoria.titolo }}</span>
             <v-spacer></v-spacer>
             <v-text-field
                 v-model="categoria.search"
@@ -88,7 +91,8 @@
               </template>
 
               <template v-slot:item.data.data.extra.indice_sovraffollamento.value="{ item }">
-                <v-chip rounded>
+                <v-chip rounded variant="flat">
+
                   {{ item.data.data?.extra?.indice_sovraffollamento.value }}%
                 </v-chip>
               </template>
@@ -113,6 +117,7 @@
                     <template v-slot:activator="{ props: activatorProps }">
                       <v-chip
                           v-bind="activatorProps"
+                          variant="elevated"
                           :color=getColor(codice).text
                       >
                         <h2>{{ item.data.data?.[codice]?.value }}</h2>
@@ -184,7 +189,7 @@
         variant="tonal"
 
     ></v-alert>
-    <core-navigation-button v-if="ospedali" :destination=regione />
+<!--    <core-navigation-button v-if="ospedali" :destination=regione />-->
     <v-dialog
         v-model="isModalOpen"
         fullscreen
@@ -199,10 +204,10 @@
         ></v-btn>
 
         <v-toolbar-title>
-          <span class="text-amber-accent-3">{{ selectedItem.nome }}</span>
+          <span class="text-1">{{ selectedItem.nome }}</span>
         </v-toolbar-title>
       </v-toolbar>
-      <provincia-show-details v-if="selectedItem" :item="selectedItem" />
+      <provincia-show-details v-if="selectedItem" :item="selectedItem" :embedded="embedded"/>
     </v-dialog>
   </v-container>
 </template>
@@ -213,7 +218,6 @@ import { useRoute } from 'vue-router';
 import { useGeolocationStore } from '~/store/geolocation';
 import { uppercaseFirstLetter, createSlug } from '~/utils/string-utils';
 import MapHospital from '@/components/provincia/MapHospital.vue'
-import InfoCodici from '~/components/Legenda.vue'
 import Legenda from "~/components/Legenda.vue";
 import ButtonGeolocation from "~/components/core/ButtonGeolocation.vue";
 
@@ -265,6 +269,9 @@ const ospedali = ref<Ospedale[]>([
 
 const route = useRoute();
 const router = useRouter();
+
+const embedded = route.query.embedded === 'true' ?? false
+
 const isModalOpen = ref(false);
 const selectedItem = ref(null);
 
@@ -272,7 +279,7 @@ const openModal = async (item) => {
   selectedItem.value = item;
   await nextTick();
   isModalOpen.value = true;
-  router.push({ query: { ps: createSlug(item.nome) } });
+  if(!embedded) router.push({ query: { ps: createSlug(item.nome) } });
   useHead({
     title: `Pronto Soccorso Live - ${item.nome}`,
     meta: [
@@ -284,7 +291,7 @@ const openModal = async (item) => {
 const closeModal = () => {
   isModalOpen.value = false;
   selectedItem.value = null;
-  router.push({ query: {} });
+  if(!embedded) router.push({ query: {} });
   useHead(metaPage);
 };
 
@@ -435,7 +442,7 @@ const getColor = (codice: string) => {
     case 'azzurro':
       return {textColor: 'text-blue', text: 'blue' };
     default:
-      return {textColor: 'text-white', text: 'white' };
+      return {textColor: 'text-string', text: 'string' };
   }
 };
 

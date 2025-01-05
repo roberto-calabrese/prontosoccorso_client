@@ -1,6 +1,6 @@
 {
   "name": "prontosoccorso-live-client",
-  "version": "1.1",
+  "version": "1.2",
   "description": "parte client del progetto prontosoccorso.live, utile a dare panoramica in tempo reale dello stato dei pronto soccorso in Italia, suddiviso per regione e provincia.",
   "author": "Roberto Calabrese - https://github.com/roberto-calabrese",
   "private": false,

@@ -4,8 +4,8 @@
       <v-col cols="12" md="8">
         <v-card class="pa-4">
           <div class="text-center">
-            <h1 class="text-h4 text-amber-accent-2">Cookie Policy</h1>
-            <p class="text-amber-accent-2">Ultimo aggiornamento: <strong>09/09/2024</strong></p>
+            <h1 class="text-h4 text-1">Cookie Policy</h1>
+            <p class="text-1">Ultimo aggiornamento: <strong>09/09/2024</strong></p>
           </div>
 
           <v-card-text>
@@ -15,14 +15,14 @@
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 text-amber-accent-2">Cosa sono i cookie?</h3>
+            <h3 class="text-h6 text-1">Cosa sono i cookie?</h3>
             <p>
               I cookie sono piccoli file di testo che vengono memorizzati sul dispositivo dell'utente (computer, smartphone, tablet) quando visita un sito web. Questi file contengono informazioni che vengono utilizzate per garantire il corretto funzionamento del sito o per tracciare l'attività dell'utente e migliorare i servizi offerti.
             </p>
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 text-amber-accent-2">Tipi di Cookie Utilizzati</h3>
+            <h3 class="text-h6 text-1">Tipi di Cookie Utilizzati</h3>
             <ul>
               <li>
                 <strong>Cookie Tecnici ed Essenziali</strong>: Questi cookie sono necessari per il corretto funzionamento del sito e non richiedono il consenso dell'utente. Ad esempio, usiamo <strong>Pusher</strong> per comunicazioni in tempo reale.
@@ -37,14 +37,14 @@
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 text-amber-accent-2">Gestione e Consenso per i Cookie</h3>
+            <h3 class="text-h6 text-1">Gestione e Consenso per i Cookie</h3>
             <p>
               Al primo accesso al sito, ti verrà mostrato un banner che richiede il consenso all'uso dei cookie. Puoi scegliere di accettare tutti i cookie, rifiutare quelli non necessari o personalizzare le tue preferenze. Puoi modificare le preferenze sui cookie in qualsiasi momento cliccando su "Impostazioni Cookie" nel footer del sito.
             </p>
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 text-amber-accent-2">Come Gestire o Disabilitare i Cookie</h3>
+            <h3 class="text-h6 text-1">Come Gestire o Disabilitare i Cookie</h3>
             <p>
               Gli utenti possono gestire o disabilitare i cookie dalle impostazioni del proprio browser:
             </p>
@@ -60,35 +60,35 @@
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 text-amber-accent-2">Durata dei Cookie</h3>
+            <h3 class="text-h6 text-1">Durata dei Cookie</h3>
             <p>
               I cookie possono essere "di sessione" (vengono eliminati alla chiusura del browser) o "persistenti" (rimangono fino alla scadenza o eliminazione manuale). La durata dei cookie di analisi, come quelli di Google Analytics, può variare.
             </p>
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 text-amber-accent-2">Condivisione dei Dati Raccolti dai Cookie</h3>
+            <h3 class="text-h6 text-1">Condivisione dei Dati Raccolti dai Cookie</h3>
             <p>
               I dati raccolti tramite cookie possono essere condivisi con servizi terzi, come Google Analytics, per analisi anonime. Questi dati non permettono l'identificazione personale degli utenti.
             </p>
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 text-amber-accent-2">Revoca del Consenso e Diritto all'Oblio</h3>
+            <h3 class="text-h6 text-1">Revoca del Consenso e Diritto all'Oblio</h3>
             <p>
               Puoi revocare il consenso ai cookie di analisi in qualsiasi momento, modificando le tue preferenze tramite il banner dei cookie o le impostazioni del browser. Per richiedere l'eliminazione dei dati raccolti tramite cookie, contattaci all'indirizzo sotto indicato.
             </p>
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 text-amber-accent-2">Modifiche alla Cookie Policy</h3>
+            <h3 class="text-h6 text-1">Modifiche alla Cookie Policy</h3>
             <p>
               Ci riserviamo il diritto di apportare modifiche a questa Cookie Policy. Le modifiche verranno pubblicate su questa pagina. Ti invitiamo a controllarla regolarmente per eventuali aggiornamenti.
             </p>
 
             <v-divider class="my-3"></v-divider>
 
-            <h3 class="text-h6 text-amber-accent-2">Contatti</h3>
+            <h3 class="text-h6 text-1">Contatti</h3>
             <p>
               Se hai domande o dubbi riguardanti questa Cookie Policy o il trattamento dei tuoi dati personali, contattaci ai seguenti recapiti:
             </p>
