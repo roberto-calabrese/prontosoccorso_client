@@ -110,8 +110,10 @@ export default defineComponent({
           return { textColor: 'text-orange', text: 'orange' };
         case 'azzurro':
           return { textColor: 'text-blue', text: 'blue' };
+        case 'bianco':
+          return { textColor: 'text-neutro', text: 'neutro' };
         default:
-          return { textColor: 'text-string', text: 'string' };
+          return { textColor: '', text: '' };
       }
     },
   },

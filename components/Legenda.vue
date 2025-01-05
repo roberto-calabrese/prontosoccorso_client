@@ -19,20 +19,20 @@
           <v-list lines="two">
             <v-list-item>
               <v-list-item-title>
-                <v-chip color="red">Rosso</v-chip>
+                <v-chip variant="flat" color="red">Rosso</v-chip>
                 Emergenza
               </v-list-item-title>
-              <v-list-item-subtitle>
+              <v-list-item-subtitle class="mt-1 ms-1">
                 Assenza o rapido deterioramento di una o più funzioni vitali
               </v-list-item-subtitle>
             </v-list-item>
 
             <v-list-item>
               <v-list-item-title>
-                <v-chip color="yellow">Giallo</v-chip>
+                <v-chip variant="flat" color="yellow">Giallo</v-chip>
                 Urgenza indifferibile
               </v-list-item-title>
-              <v-list-item-subtitle>
+              <v-list-item-subtitle class="mt-1 ms-1">
                 Rischio compromissione funzioni vitali. Condizione stabile con rischio evolutivo
               </v-list-item-subtitle>
 
@@ -40,30 +40,30 @@
 
             <v-list-item>
               <v-list-item-title>
-                <v-chip color="green">Verde</v-chip>
+                <v-chip variant="flat" color="green">Verde</v-chip>
                 Urgenza differibile
               </v-list-item-title>
-              <v-list-item-subtitle>
+              <v-list-item-subtitle class="mt-1 ms-1">
                 Condizione stabile senza rischio evolutivo con sofferenza e ricaduta sullo stato generale
               </v-list-item-subtitle>
             </v-list-item>
 
             <v-list-item>
               <v-list-item-title>
-                <v-chip color="blue">Blu</v-chip>
+                <v-chip variant="flat" color="blue">Azzurro</v-chip>
                 Urgenza minore
               </v-list-item-title>
-              <v-list-item-subtitle>
+              <v-list-item-subtitle class="mt-1 ms-1">
                 Condizione stabile senza rischio evolutivo
               </v-list-item-subtitle>
             </v-list-item>
 
             <v-list-item>
               <v-list-item-title>
-                <v-chip color="white">Bianco</v-chip>
+                <v-chip variant="flat" color="neutro">Bianco</v-chip>
                 Non urgenza
               </v-list-item-title>
-              <v-list-item-subtitle>
+              <v-list-item-subtitle class="mt-1 ms-1">
                 Condizione stabile senza rischio evolutivo, non urgente o minima rilevanza clinica
               </v-list-item-subtitle>
             </v-list-item>

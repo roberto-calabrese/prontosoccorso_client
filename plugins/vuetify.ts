@@ -23,6 +23,7 @@ export default defineNuxtPlugin((app) => {
             string: "#ffffff",
             1: "#ffd740",
             table: "#1E2323",
+            neutro: "#fff",
         },
     };
 
@@ -44,6 +45,7 @@ export default defineNuxtPlugin((app) => {
             string: "#0c0c0c",
             1: "#111619",
             table: "#1E2323",
+            neutro: "#8f8f8f",
         },
     };
 

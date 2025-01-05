@@ -92,7 +92,6 @@
 
               <template v-slot:item.data.data.extra.indice_sovraffollamento.value="{ item }">
                 <v-chip rounded variant="flat">
-
                   {{ item.data.data?.extra?.indice_sovraffollamento.value }}%
                 </v-chip>
               </template>
@@ -432,17 +431,19 @@ function startInterval() {
 const getColor = (codice: string) => {
   switch (codice) {
     case 'rosso':
-      return {textColor: 'text-red', text: 'red' };
+      return { textColor: 'text-red', text: 'red' };
     case 'giallo':
-      return {textColor: 'text-yellow', text: 'yellow' };
+      return { textColor: 'text-yellow', text: 'yellow' };
     case 'verde':
-      return {textColor: 'text-green', text: 'green' };
+      return { textColor: 'text-green', text: 'green' };
     case 'arancione':
-      return {textColor: 'text-orange', text: 'orange' };
+      return { textColor: 'text-orange', text: 'orange' };
     case 'azzurro':
-      return {textColor: 'text-blue', text: 'blue' };
+      return { textColor: 'text-blue', text: 'blue' };
+    case 'bianco':
+      return { textColor: 'text-neutro', text: 'neutro' };
     default:
-      return {textColor: 'text-string', text: 'string' };
+      return { textColor: '', text: '' };
   }
 };
 
