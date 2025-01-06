@@ -12,6 +12,7 @@ export default defineNuxtConfig({
       ],
       meta: [
         { name: 'description', content: 'Pronto Soccorso Live ti offre una panoramica in tempo reale dello stato dei pronto soccorso in Italia, suddiviso per regione/provincia.' },
+        { name: '"content-language"', content: 'it-IT' },
         { property: 'og:title', content: 'Pronto Soccorso Live' },
         { property: 'og:description', content: 'Visualizza lo stato attuale dei pronto soccorso in Italia, organizzato per regione/provincia.' },
         { property: 'og:type', content: 'website' },

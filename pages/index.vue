@@ -1,6 +1,6 @@
 <template>
   <v-container class="pa-4 text-center" fluid>
-    <h2 class="mt-8 text-uppercase">Pronto soccorso in <span class="text-green-accent-4">tempo reale</span></h2>
+    <h1 class="mt-8 text-uppercase">Pronto soccorso in <span class="text-green-accent-4">tempo reale</span></h1>
     <h3 v-if="ospedaliTotali" class="mb-8 text-uppercase"><span class="text-green-accent-4">{{ ospedaliTotali }}</span> Ospedali</h3>
     <v-row
         align="center"
