@@ -9,6 +9,7 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       link: [
         { rel: 'icon', type: 'image/gif', href: '/favicon.gif' },
+        { rel: 'icon', type: 'manifest', href: 'manifest.json' },
       ],
       meta: [
         { name: 'description', content: 'Pronto Soccorso Live ti offre una panoramica in tempo reale dello stato dei pronto soccorso in Italia, suddiviso per regione/provincia.' },
