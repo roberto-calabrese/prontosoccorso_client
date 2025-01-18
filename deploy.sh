@@ -17,5 +17,5 @@ if [ -d "$DIR_COMPILED" ]; then
   echo "$DIR_COMPILED è stata rimossa"
 fi
 
-cp -r $DIR_GENERATE DIR_COMPILED
+cp -r $DIR_GENERATE $DIR_COMPILED
 echo "Deploy completato"
