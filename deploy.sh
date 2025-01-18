@@ -1,6 +1,6 @@
 #!/bin/bash
 DIR_GENERATE=".output/public"
-DIR_ONLINE=".output/online"
+DIR_COMPILED="compiled"
 
 echo "GIT PULL"
 git pull
@@ -12,6 +12,10 @@ echo "aggiunto .htaccess"
 cp .htaccess $DIR_GENERATE/
 
 echo "faccio lo switch del deploy"
-rm $DIR_ONLINE
-cp -r $DIR_GENERATE $DIR_ONLINE
+if [ -d "$DIR_COMPILED" ]; then
+  rm -r "$DIR_COMPILED"
+  echo "$DIR_COMPILED è stata rimossa"
+fi
+
+cp -r $DIR_GENERATE DIR_COMPILED
 echo "Deploy completato"
