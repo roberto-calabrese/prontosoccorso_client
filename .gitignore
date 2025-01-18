@@ -24,4 +24,4 @@ logs
 !.env.example
 
 sw.*
-compile-public-assets/
+dist-temp/
