@@ -75,6 +75,12 @@ export default defineNuxtConfig({
 
   ssr: false,
 
+  nitro: {
+    output: {
+      publicDir: 'compile-public-assets',
+    },
+  },
+
   vite: {
     // css: {
     //   preprocessorOptions: {
@@ -94,6 +100,8 @@ export default defineNuxtConfig({
     },
     build: {
       minify: 'terser', // Usa Terser invece di esbuild
+      sourcemap: false,
+      cssMinify: true,
       terserOptions: {
         compress: {
           drop_console: true, // Rimuovi i console.log in produzione

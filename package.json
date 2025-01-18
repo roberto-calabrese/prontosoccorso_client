@@ -11,6 +11,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "production": "npm run build && npm run generate && cp .htaccess dist/",
+    "production-ec2": "npm run build && npm run generate && cp -r compile-public-assets .output/public && cp .htaccess dist/",
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
