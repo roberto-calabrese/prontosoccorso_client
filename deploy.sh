@@ -1,19 +1,17 @@
 #!/bin/bash
-
-# Directory temporanea per la build
-TEMP_DIR="dist-temp"
-LIVE_DIR="dist"
+DIR_GENERATE=".output/public"
+DIR_ONLINE=".output/online"
 
 echo "GIT PULL"
 git pull
 
-echo "Genero la build in $TEMP_DIR..."
-npm run build && npm run generate --output-dir $TEMP_DIR
+echo "Genero la build in $DIR_GENERATE..."
+npm run build && npm run generate
 
 echo "aggiunto .htaccess"
-cp .htaccess $TEMP_DIR/
+cp .htaccess $DIR_GENERATE/
 
 echo "faccio lo switch del deploy"
-mv $LIVE_DIR ${LIVE_DIR}-backup && mv $TEMP_DIR $LIVE_DIR && rm -rf ${LIVE_DIR}-backup
-
+rm $DIR_ONLINE
+cp -r $DIR_GENERATE $DIR_ONLINE
 echo "Deploy completato"

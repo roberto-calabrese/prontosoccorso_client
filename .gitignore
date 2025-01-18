@@ -24,4 +24,3 @@ logs
 !.env.example
 
 sw.*
-dist-temp/

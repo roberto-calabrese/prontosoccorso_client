@@ -75,12 +75,6 @@ export default defineNuxtConfig({
 
   ssr: false,
 
-  nitro: {
-    output: {
-      publicDir: 'compile-public-assets',
-    },
-  },
-
   vite: {
     // css: {
     //   preprocessorOptions: {
