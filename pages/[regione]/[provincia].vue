@@ -91,7 +91,7 @@
               </template>
 
               <template v-slot:item.data.data.extra.indice_sovraffollamento.value="{ item }">
-                <v-tooltip v-if="item.data.data.extra.indice_sovraffollamento.value === minOvercrowdingIndex">
+                <v-tooltip open-on-click v-if="item.data.data.extra.indice_sovraffollamento.value === minOvercrowdingIndex">
                   <template v-slot:activator="{ props }">
                     <v-chip
                         rounded
@@ -116,7 +116,7 @@
               </template>
 
               <template v-slot:item.distanza="{ item }">
-                <v-tooltip v-if="item.distanza === minDistance">
+                <v-tooltip open-on-click v-if="item.distanza === minDistance">
                   <template v-slot:activator="{ props }">
                     <v-chip
                         rounded
