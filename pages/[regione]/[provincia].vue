@@ -91,16 +91,51 @@
               </template>
 
               <template v-slot:item.data.data.extra.indice_sovraffollamento.value="{ item }">
-                <v-chip rounded variant="flat">
+                <v-tooltip v-if="item.data.data.extra.indice_sovraffollamento.value === minOvercrowdingIndex">
+                  <template v-slot:activator="{ props }">
+                    <v-chip
+                        rounded
+                        variant="flat"
+                        :color="item.data.data.extra.indice_sovraffollamento.value === minOvercrowdingIndex ? 'green' : 'default'"
+                        v-bind="props"
+                    >
+                      {{ item.data.data?.extra?.indice_sovraffollamento.value }}%
+                    </v-chip>
+                  </template>
+                  <span>Il meno affollato</span>
+                </v-tooltip>
+
+                <v-chip
+                    v-else
+                    rounded
+                    variant="flat"
+                    :color="'default'"
+                >
                   {{ item.data.data?.extra?.indice_sovraffollamento.value }}%
                 </v-chip>
               </template>
 
               <template v-slot:item.distanza="{ item }">
-                <v-chip rounded>
+                <v-tooltip v-if="item.distanza === minDistance">
+                  <template v-slot:activator="{ props }">
+                    <v-chip
+                        rounded
+                        :color="item.distanza === minDistance ? 'green' : 'default'"
+                        v-bind="props"
+                    >
+                      {{ item.distanza.toFixed(2) }} Km
+                    </v-chip>
+                  </template>
+                  <span>Il più vicino</span>
+                </v-tooltip>
+
+                <v-chip
+                    v-else
+                    rounded
+                    :color="'default'"
+                >
                   {{ item.distanza.toFixed(2) }} Km
                 </v-chip>
-
               </template>
 
               <template v-for="codice in ['totali', 'rosso', 'arancione', 'giallo', 'verde', 'azzurro', 'bianco']"
@@ -274,7 +309,7 @@ const embedded = route.query.embedded === 'true' ?? false
 const isModalOpen = ref(false);
 const selectedItem = ref(null);
 
-const openModal = async (item) => {
+const openModal = async (item:any) => {
   selectedItem.value = item;
   await nextTick();
   isModalOpen.value = true;
@@ -311,24 +346,37 @@ onMounted(async () => {
 
   await checkAndOpenModalFromURL();
 
+  const previousSortBy = ref<any[]>([]); // Variabile per memorizzare l'ordinamento precedente
+
   watch(
       () => geolocationStore.geolocation.init,
       async (newInit) => {
         if (newInit) {
+          // Salvo l'ordinamento attuale
+          previousSortBy.value = [...sortBy.value];
+
           addDistanceHospital();
-          // sortBy.value = 'distanza';
           if (!headers.value.some(header => header.key === 'distanza')) {
             headers.value.splice(1, 0, {
               title: 'Distanza',
               align: 'end',
               key: 'distanza',
             });
-
+            sortBy.value = [{
+              key: 'distanza',
+              order: 'asc',
+            }];
           }
         } else {
+          // Rimuovo il campo "Distanza" dall'intestazione
           const index = headers.value.findIndex(header => header.key === 'distanza');
           if (index !== -1) {
             headers.value.splice(index, 1);
+          }
+
+          // Ripristino l'ordinamento precedente
+          if (previousSortBy.value.length) {
+            sortBy.value = [...previousSortBy.value];
           }
         }
       },
@@ -484,4 +532,22 @@ const datiMappa = computed(() => {
 
   return result;
 });
+
+
+const minOvercrowdingIndex = computed(() => {
+  return Math.min(
+      ...ospedali.value
+          .flatMap(categoria => categoria.data)
+          .map(ospedale => ospedale.data?.data?.extra?.indice_sovraffollamento?.value || Infinity)
+  );
+});
+
+const minDistance = computed(() => {
+  return Math.min(
+      ...ospedali.value
+          .flatMap(categoria => categoria.data)
+          .map(ospedale => ospedale.distanza || Infinity)
+  );
+});
+
 </script>
