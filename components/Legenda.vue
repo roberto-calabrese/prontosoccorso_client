@@ -9,7 +9,7 @@
           size="large"
           text="Legenda"
           v-bind="activatorProps"
-          class="ml-4"
+          class="ml-4 my-4"
       ></v-btn>
     </template>
 
