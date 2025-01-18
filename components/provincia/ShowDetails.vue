@@ -122,7 +122,6 @@
                     <p><strong>Distanza:</strong> {{ calculateDistance.toFixed(2) }} Km</p>
                   </v-card-subtitle>
                   <v-card-text>
-                    {{embedded}}
                     <provincia-map-hospital :ospedali="formattedHospitalData" :embedded="embedded" />
                   </v-card-text>
                 </v-card>
