@@ -1,7 +1,7 @@
-const uppercaseFirstLetter = (value: string): string => {
+export const uppercaseFirstLetter = (value: string): string => {
     return value.charAt(0).toUpperCase() + value.slice(1);
 }
-const createSlug = (str: string): string  => {
+export const createSlug = (str: string): string  => {
     return str
         .toLowerCase()
         .trim()
@@ -10,15 +10,16 @@ const createSlug = (str: string): string  => {
         .replace(/-+/g, '-');
 }
 
-const slugToTitle = (input:string) => {
+export const slugToTitle = (input:string) => {
     return input
         .split('-')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 }
 
-export {
-    uppercaseFirstLetter,
-    createSlug,
-    slugToTitle
+export const truncateText = (text:string, maxLength:number) => {
+    if (text.length > maxLength) {
+        return text.substring(0, maxLength) + "...";
+    }
+    return text;
 }

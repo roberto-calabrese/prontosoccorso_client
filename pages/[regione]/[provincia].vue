@@ -86,7 +86,7 @@
                   <template #prepend>
                     <v-icon icon="mdi-information"/>
                   </template>
-                  <span class="text-white">{{ item.nome }}</span>
+                  <span class="text-white">{{ truncateText(item.nome, 30) }}</span>
                 </v-chip>
               </template>
 
@@ -215,7 +215,7 @@
 import { ref, onMounted, onBeforeUnmount, watch, shallowRef, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useGeolocationStore } from '~/store/geolocation';
-import { uppercaseFirstLetter, createSlug } from '~/utils/string-utils';
+import { uppercaseFirstLetter, createSlug, truncateText } from '~/utils/string-utils';
 import MapHospital from '@/components/provincia/MapHospital.vue'
 import Legenda from "~/components/Legenda.vue";
 import ButtonGeolocation from "~/components/core/ButtonGeolocation.vue";
@@ -316,12 +316,14 @@ onMounted(async () => {
       async (newInit) => {
         if (newInit) {
           addDistanceHospital();
+          // sortBy.value = 'distanza';
           if (!headers.value.some(header => header.key === 'distanza')) {
             headers.value.splice(1, 0, {
               title: 'Distanza',
               align: 'end',
               key: 'distanza',
             });
+
           }
         } else {
           const index = headers.value.findIndex(header => header.key === 'distanza');
