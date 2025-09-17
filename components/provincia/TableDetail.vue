@@ -32,7 +32,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { uppercaseFirstLetter } from '~/utils/string-utils';
-const colorOrder = ['rosso', 'giallo', 'arancione', 'verde', 'azzurro', 'bianco', 'totali'];
+const colorOrder = ['rosso', 'giallo', 'arancione', 'azzurro', 'verde', 'bianco', 'totali'];
 
 export default defineComponent({
   name: 'TableDetail',
