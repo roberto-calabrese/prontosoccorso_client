@@ -39,6 +39,7 @@
             <!-- STATO CODICI -->
             <v-col cols="12">
               <v-card color="1" variant="outlined" class="mb-4">
+                <v-progress-linear v-if="isUpdating" indeterminate color="yellow-darken-2" height="3"></v-progress-linear>
                 <v-card-title>Stato Attuale</v-card-title>
                 <v-card-text class="pa-0">
                   <!-- Skeleton loader per il caricamento -->
@@ -63,6 +64,7 @@
               <!-- INFO EXTRA -->
               <v-col cols="12">
                 <v-card color="1" variant="outlined" class="mb-4">
+                  <v-progress-linear v-if="isUpdating" indeterminate color="yellow-darken-2" height="3"></v-progress-linear>
                   <v-card-title>Informazioni Extra</v-card-title>
                   <v-card-text class="pa-0">
                     <v-skeleton-loader
@@ -165,6 +167,10 @@ export default defineComponent({
       required: true,
     },
     embedded: {
+      type: Boolean,
+      default: false,
+    },
+    isUpdating: {
       type: Boolean,
       default: false,
     }

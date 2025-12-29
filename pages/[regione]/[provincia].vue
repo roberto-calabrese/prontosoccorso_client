@@ -241,7 +241,7 @@
           <span class="text-1">{{ selectedItem.nome }}</span>
         </v-toolbar-title>
       </v-toolbar>
-      <provincia-show-details v-if="selectedItem" :item="selectedItem" :embedded="embedded"/>
+      <provincia-show-details v-if="selectedItem" :item="selectedItem" :embedded="embedded" :is-updating="isUpdating"/>
     </v-dialog>
   </v-container>
 </template>
@@ -307,13 +307,20 @@ const router = useRouter();
 const embedded = route.query.embedded === 'true' ?? false
 
 const isModalOpen = ref(false);
-const selectedItem = ref(null);
+const isUpdating = ref(false);
+const selectedItemSlug = ref<string | null>(null);
+
+const selectedItem = computed(() => {
+  if (!selectedItemSlug.value) return null;
+  const allItems = ospedali.value.flatMap(categoria => categoria.data);
+  return allItems.find(item => createSlug(item.nome) === selectedItemSlug.value) || null;
+});
 
 const openModal = async (item:any) => {
-  selectedItem.value = item;
+  selectedItemSlug.value = createSlug(item.nome);
   await nextTick();
   isModalOpen.value = true;
-  if(!embedded) router.push({ query: { ps: createSlug(item.nome) } });
+  if(!embedded) router.push({ query: { ps: selectedItemSlug.value } });
   useHead({
     title: `Pronto Soccorso Live - ${item.nome}`,
     meta: [
@@ -324,7 +331,7 @@ const openModal = async (item:any) => {
 
 const closeModal = () => {
   isModalOpen.value = false;
-  selectedItem.value = null;
+  selectedItemSlug.value = null;
   if(!embedded) router.push({ query: {} });
   useHead(metaPage);
 };
@@ -415,6 +422,9 @@ async function fetchData() {
 }
 
 async function updatePresidi() {
+  isUpdating.value = true;
+  const minDurationPromise = new Promise(resolve => setTimeout(resolve, 1000));
+  
   const presidiData = await fetchData();
   if (presidiData && !headers.value.length && presidiData.tableSettings) {
     headers.value = presidiData.tableSettings.headers;
@@ -452,6 +462,8 @@ async function updatePresidi() {
     addDistanceHospital();
   }
 
+  await minDurationPromise;
+  isUpdating.value = false;
   return presidiData;
 }
 
