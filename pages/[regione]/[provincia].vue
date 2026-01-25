@@ -409,7 +409,7 @@ onBeforeUnmount(() => {
   }
   if (channel) {
     channel.unbind(event);
-    pusher.unsubscribe(channel);
+    pusher.unsubscribe(channel.name);
   }
 });
 
