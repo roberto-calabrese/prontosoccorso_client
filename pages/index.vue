@@ -40,9 +40,12 @@
 
 
     </v-row>
+    <FeedbackModal />
   </v-container>
 </template>
 <script setup lang="ts">
+import FeedbackModal from "~/components/FeedbackModal.vue";
+
 const regioni = ref();
 const ospedaliTotali = ref();
 
