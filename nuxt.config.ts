@@ -69,6 +69,9 @@ export default defineNuxtConfig({
         schema: process.env.PUSHER_SCHEME,
         appCluster: process.env.PUSHER_APP_CLUSTER
       },
+      turnstile: {
+        siteKey: process.env.TURNSTILE_SITE_KEY
+      },
       ga_measurement_id: process.env.GA_MEASUREMENT_ID
     }
   },

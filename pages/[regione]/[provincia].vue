@@ -243,6 +243,7 @@
       </v-toolbar>
       <provincia-show-details v-if="selectedItem" :item="selectedItem" :embedded="embedded" :is-updating="isUpdating"/>
     </v-dialog>
+    <FeedbackModal />
   </v-container>
 </template>
 
@@ -254,6 +255,7 @@ import { uppercaseFirstLetter, createSlug, truncateText } from '~/utils/string-u
 import MapHospital from '@/components/provincia/MapHospital.vue'
 import Legenda from "~/components/Legenda.vue";
 import ButtonGeolocation from "~/components/core/ButtonGeolocation.vue";
+import FeedbackModal from '~/components/FeedbackModal.vue';
 
 const geolocationStore = useGeolocationStore();
 const { regione, provincia } = useRoute().params as RouteParams;

@@ -37,6 +37,7 @@
       </template>
     </v-row>
     <core-navigation-button v-if="province" destination="/" />
+    <FeedbackModal />
   </v-container>
 
 </template>
@@ -44,6 +45,7 @@
 <script setup lang="ts">
 import type {RouteParams} from "vue-router";
 import {uppercaseFirstLetter} from "~/utils/string-utils";
+import FeedbackModal from "~/components/FeedbackModal.vue";
 const {regione}: RouteParams = useRoute().params
 useHead({
   title: `Pronto Soccorso Live - ${uppercaseFirstLetter(regione)}`,
