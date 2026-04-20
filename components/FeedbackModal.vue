@@ -35,6 +35,19 @@
               class="mb-2"
             ></v-text-field>
 
+            <v-text-field
+              v-model="formData.email"
+              :rules="[
+                v => !!v || 'L\'email è obbligatoria',
+                v => /.+@.+\..+/.test(v) || 'Inserisci un indirizzo email valido'
+              ]"
+              label="La tua email"
+              type="email"
+              required
+              variant="outlined"
+              class="mb-2"
+            ></v-text-field>
+
             <v-textarea
               v-model="formData.message"
               :rules="[v => !!v || 'Il messaggio è obbligatorio']"
@@ -87,6 +100,7 @@ const errorMessage = ref('');
 
 const formData = reactive({
   name: '',
+  email: '',
   message: ''
 });
 
@@ -106,6 +120,7 @@ const openDialog = async () => {
   successMessage.value = '';
   errorMessage.value = '';
   formData.name = '';
+  formData.email = '';
   formData.message = '';
   turnstileToken.value = '';
   
@@ -163,6 +178,7 @@ const submitFeedback = async () => {
       method: 'POST',
       body: {
         name: formData.name,
+        email: formData.email,
         message: formData.message,
         'cf-turnstile-response': turnstileToken.value
       }
@@ -171,6 +187,7 @@ const submitFeedback = async () => {
     if (response && response.success) {
       successMessage.value = 'Feedback inviato con successo! Grazie per il tuo contributo.';
       formData.name = '';
+      formData.email = '';
       formData.message = '';
       resetTurnstile();
       
