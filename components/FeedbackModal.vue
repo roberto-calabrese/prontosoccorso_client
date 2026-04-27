@@ -174,12 +174,15 @@ const submitFeedback = async () => {
   successMessage.value = '';
 
   try {
+    const currentPageUrl = typeof window !== 'undefined' ? window.location.href : '';
+
     const response = await $fetch(`${config.public.apiBaseUrl}/feedback`, {
       method: 'POST',
       body: {
         name: formData.name,
         email: formData.email,
         message: formData.message,
+        url: currentPageUrl,
         'cf-turnstile-response': turnstileToken.value
       }
     });
