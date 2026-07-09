@@ -1,42 +1,37 @@
 <template>
-  <v-container class="pa-4 text-center" fluid>
-    <h2 class="text-uppercase">Dati nelle <span class="text-green-accent-4">province</span> disponibili</h2>
-    <h3 v-if="ospedaliTotali" class="mb-8 text-uppercase"><span class="text-green-accent-4">{{ ospedaliTotali }}</span> Ospedali</h3>
-    <v-row
-        align="center"
-        class="fill-height"
-        justify="center"
+  <v-container class="pa-4" fluid>
+    <core-page-hero
+        eyebrow="Province disponibili"
+        :subtitle="`Seleziona una provincia della regione ${uppercaseFirstLetter(regione)} per vedere lo stato dei pronto soccorso.`"
+        :count="ospedaliTotali"
+        count-label="Ospedali in regione"
     >
-      <template v-for="(item, i) in province" :key="i">
-        <v-col
-            cols="6"
-            md="3"
-        >
-          <v-hover v-slot="{ isHovering, props }">
-            <v-card
-                :class="{ 'on-hover': isHovering }"
-                :elevation="isHovering ? 12 : 2"
-                class="card"
-                v-bind="props"
-                :to="currentRegione+'/'+item.meta.slug"
-            >
-              <v-card-title class="text-uppercase text-h5 text-white d-flex flex-column">
-                <p class="mt-2 text-1">
-                  {{ item.meta.Titolo }}
-                </p>
+      <span class="hl">{{ uppercaseFirstLetter(regione) }}</span>
+    </core-page-hero>
 
-                <div>
-                  <p class="text-uppercase text-caption font-weight-medium text-string">
-                    numero ospedali: <strong class="text-1 text-sm-h6">{{ item.numero_ospedali }}</strong>
-                  </p>
-                </div>
-              </v-card-title>
-            </v-card>
-          </v-hover>
-        </v-col>
-      </template>
+    <v-row
+        align="stretch"
+        justify="center"
+        class="mt-2"
+    >
+      <v-col
+          v-for="(item, i) in province"
+          :key="i"
+          cols="6"
+          md="3"
+      >
+        <grid-card
+            :to="currentRegione + '/' + item.meta.slug"
+            :title="item.meta.Titolo"
+            :count="item.numero_ospedali"
+            icon="mdi-city-variant-outline"
+        />
+      </v-col>
     </v-row>
-    <core-navigation-button v-if="province" destination="/" />
+
+    <div class="text-center mt-6">
+      <core-navigation-button v-if="province" destination="/" />
+    </div>
     <FeedbackModal />
   </v-container>
 

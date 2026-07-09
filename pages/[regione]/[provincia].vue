@@ -1,10 +1,16 @@
 <template>
   <v-container fluid>
     <RotateAlert />
-    <h2 class="text-uppercase text-center">Presidi Medici di Emergenza nella provincia di <span class="text-1">{{ provincia.replace('-', ' ') }}</span></h2>
-    <h3 v-if="ospedaliTotali" class="mb-8 text-uppercase text-center"><span class="text-green-accent-4">{{ ospedaliTotali }}</span> Ospedali</h3>
+    <core-page-hero
+        eyebrow="Presidi medici di emergenza"
+        :subtitle="`Situazione dei pronto soccorso nella provincia di ${uppercaseFirstLetter(provincia.replace('-', ' '))}, aggiornata in tempo reale.`"
+        :count="ospedaliTotali"
+        count-label="Ospedali in provincia"
+    >
+      Provincia di <span class="hl">{{ uppercaseFirstLetter(provincia.replace('-', ' ')) }}</span>
+    </core-page-hero>
 
-    <div class="text-center my-4" v-if="headers.length">
+    <div class="text-center my-4 prov-actions" v-if="headers.length">
       <!-- Mappa -->
       <v-dialog
             v-model="showMap"
@@ -13,8 +19,12 @@
         >
           <template v-slot:activator="{ props: activatorProps }">
             <v-btn
-                prepend-icon="mdi-map"
+                prepend-icon="mdi-map-search"
                 size="large"
+                color="primary"
+                variant="flat"
+                rounded="lg"
+                class="px-6 mb-2"
                 text="Mostra mappa"
                 v-bind="activatorProps"
             ></v-btn>
@@ -43,9 +53,11 @@
 
     <template v-for="categoria in ospedali">
       <div v-if="categoria.data.length">
-        <v-card elevation="10" v-if="categoria.data">
-          <v-card-title class="d-flex align-center pe-2">
-            <v-icon :icon="categoria.icon"></v-icon> &nbsp;
+        <v-card elevation="0" class="prov-card" v-if="categoria.data">
+          <v-card-title class="d-flex align-center pe-2 prov-card-title">
+            <span class="prov-cat-icon">
+              <v-icon :icon="categoria.icon" size="20"></v-icon>
+            </span>
             Pronto Soccorso &nbsp; <span class="text-1"> {{ categoria.titolo }}</span>
             <v-spacer></v-spacer>
             <v-text-field
@@ -565,3 +577,43 @@ const minDistance = computed(() => {
 });
 
 </script>
+
+<style scoped lang="scss">
+.prov-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.prov-card {
+  border-radius: 18px !important;
+  overflow: hidden;
+  border: 1px solid rgba(var(--v-theme-primary), 0.18);
+  background: linear-gradient(160deg,
+      rgba(var(--v-theme-surface), 1),
+      rgba(var(--v-theme-navbar1), 0.94)) !important;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.22) !important;
+}
+
+.prov-card-title {
+  font-weight: 700;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.prov-cat-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+  border-radius: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(var(--v-theme-primary));
+  background: radial-gradient(circle at 40% 30%,
+      rgba(var(--v-theme-primary), 0.3),
+      rgba(var(--v-theme-primary), 0.08) 75%);
+  border: 1px solid rgba(var(--v-theme-primary), 0.35);
+}
+</style>

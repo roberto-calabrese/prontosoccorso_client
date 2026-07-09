@@ -1,50 +1,42 @@
 <template>
-  <v-container class="pa-4 text-center" fluid>
-    <h1 class="mt-8 text-uppercase">Pronto soccorso in <span class="text-green-accent-4">tempo reale</span></h1>
-    <h3 v-if="ospedaliTotali" class="mb-8 text-uppercase"><span class="text-green-accent-4">{{ ospedaliTotali }}</span> Ospedali</h3>
-    <v-row
-        align="center"
-        class="fill-height"
-        justify="center"
+  <v-container class="pa-4" fluid>
+    <core-page-hero
+        eyebrow="Pronto Soccorso Italia"
+        subtitle="Monitora in tempo reale l'affluenza dei pronto soccorso italiani. Scegli la tua regione per iniziare."
+        :count="ospedaliTotali"
+        count-label="Ospedali monitorati"
     >
+      Pronto soccorso in <span class="hl">tempo reale</span>
+    </core-page-hero>
 
-      <template v-for="(item, i) in regioni" :key="i">
-          <v-col
-              cols="6"
-              md="3"
-          >
-            <v-hover v-slot="{ isHovering, props }">
-              <v-card
-                  :class="{ 'on-hover': isHovering }"
-                  class="card"
-                  :elevation="isHovering ? 12 : 2"
-                  v-bind="props"
-                  :to="item.nome"
-              >
-                <v-card-title class="text-uppercase text-h5 text-white d-flex flex-column">
-                  <p class="mt-2 text-1">
-                    {{ item.nome }}
-                  </p>
-
-                  <div>
-                    <p class="text-uppercase text-caption font-weight-medium text-string">
-                      numero ospedali: <strong class="text-1 text-sm-h6">{{ item.numero_ospedali }}</strong>
-                    </p>
-                  </div>
-                </v-card-title>
-              </v-card>
-            </v-hover>
-          </v-col>
-        </template>
-
-
-
+    <v-row
+        align="stretch"
+        justify="center"
+        class="mt-2"
+    >
+      <v-col
+          v-for="(item, i) in regioni"
+          :key="i"
+          cols="6"
+          md="3"
+      >
+        <grid-card
+            :to="item.nome"
+            :title="item.nome"
+            :count="item.numero_ospedali"
+            icon="mdi-map-marker-radius"
+        />
+      </v-col>
     </v-row>
+
+    <Sponsor mini />
+
     <FeedbackModal />
   </v-container>
 </template>
 <script setup lang="ts">
 import FeedbackModal from "~/components/FeedbackModal.vue";
+import Sponsor from "~/components/Sponsor.vue";
 
 const regioni = ref();
 const ospedaliTotali = ref();

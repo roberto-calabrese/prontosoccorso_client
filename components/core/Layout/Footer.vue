@@ -14,6 +14,10 @@
         </a>
       </strong> —
       <span class="font-weight-thin font-italic"> v.{{ appVersion }}</span>
+      <span class="sponsor-credit">
+        · powered by
+        <a class="text-string text-decoration-none font-weight-bold" href="https://openhubmed.it" target="_blank" rel="noopener">Open Hub Med</a>
+      </span>
       <div class="privacy" :class="{'privacy-mdAndUp': mdAndUp}">
         <v-btn to="/privacy-policy" title="Privacy Policy" size="small" color="info" density="compact">Privacy Policy</v-btn>
         <v-btn to="/cookie-policy" title="Cookie Policy" size="small" color="info" density="compact">Cookie Policy</v-btn>
@@ -54,5 +58,13 @@ const footerHeight = computed(() => {
   color: #a8a7a7;
   margin-left: 10px;
   text-underline: none;
+}
+
+.sponsor-credit {
+  opacity: 0.85;
+}
+
+.sponsor-credit a:hover {
+  text-decoration: underline !important;
 }
 </style>
