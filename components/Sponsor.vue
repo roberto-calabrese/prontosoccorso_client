@@ -2,21 +2,21 @@
   <!-- Variante compatta per la Home -->
   <section v-if="mini" class="sponsor-mini">
     <a
-        href="https://openhubmed.it"
+        href="https://8route.it/"
         target="_blank"
         rel="noopener"
         class="sponsor-mini-card"
-        title="Infrastruttura e connettività - Open Hub Med / Mediterra Data Centers"
+        title="Hosting e connettività fornite da 8route (Giulio Lo Presti)"
     >
       <span class="sponsor-mini-label text-overline">Powered by</span>
       <img
-          src="/images/sponsor-mediterra-logo.png"
-          alt="Mediterra Data Centers · Open Hub Med"
+          src="/images/sponsor-8route-logo.png"
+          alt="8route"
           class="sponsor-mini-logo"
           loading="lazy"
       />
       <span class="sponsor-mini-text">
-        Hosting &amp; connettività · <strong>Open Hub Med</strong>
+        Hosting &amp; connettività · <strong>Giulio Lo Presti</strong>
       </span>
     </a>
   </section>
@@ -36,25 +36,25 @@
 
     <v-card class="sponsor-card mx-auto" elevation="0">
       <v-row no-gutters>
-        <!-- Colonna visiva: logo + datacenter -->
+        <!-- Colonna visiva: logo 8route + luogo di hosting -->
         <v-col cols="12" md="5" class="sponsor-media">
           <div class="sponsor-media-inner">
             <a
-                href="https://mediterradatacenters.com/it/pmo-01/"
+                href="https://8route.it/"
                 target="_blank"
                 rel="noopener"
-                title="Mediterra Data Centers - PMO01"
+                title="8route - born by expertise"
             >
               <img
-                  src="/images/sponsor-mediterra-logo.png"
-                  alt="Mediterra Data Centers"
+                  src="/images/sponsor-8route-logo.png"
+                  alt="8route"
                   class="sponsor-logo"
                   loading="lazy"
               />
             </a>
             <div class="sponsor-media-caption">
               <v-icon icon="mdi-map-marker" size="small"></v-icon>
-              PMO01 · Palermo · Gateway del Mediterraneo
+              Ospitato presso Mediterra Data Centers · PMO01 · Palermo
             </div>
           </div>
         </v-col>
@@ -63,11 +63,12 @@
         <v-col cols="12" md="7" class="pa-6">
           <p class="sponsor-lead">
             L'infrastruttura di <strong>hosting</strong> e i servizi di
-            <strong>connettività</strong> di Pronto Soccorso Live sono forniti tramite
-            <strong>Open Hub Med</strong> e
-            <a href="https://mediterradatacenters.com/it/pmo-01/" target="_blank" rel="noopener" class="sponsor-link">
-              Mediterra Data Centers</a>,
-            data center carrier-neutral e mission-critical 24/7 con sede a Palermo.
+            <strong>connettività</strong> di Pronto Soccorso Live sono forniti da
+            <a href="https://8route.it/" target="_blank" rel="noopener" class="sponsor-link">8route</a>,
+            azienda di networking e infrastrutture digitali <em>«born by expertise»</em>,
+            grazie a <strong>Giulio Lo Presti</strong>. I server sono ospitati nel data center
+            <a href="https://mediterradatacenters.com/it/pmo-01/" target="_blank" rel="noopener" class="sponsor-link">Mediterra Data Centers</a>
+            (PMO01), a Palermo.
           </p>
 
           <div class="sponsor-person">
@@ -77,7 +78,7 @@
             <div>
               <div class="sponsor-person-name">Giulio Lo Presti</div>
               <div class="sponsor-person-role">
-                ha fornito infrastruttura di hosting e connettività
+                8route · ha fornito hosting e connettività
               </div>
               <a
                   href="https://www.linkedin.com/in/glpr/"
@@ -92,17 +93,20 @@
           </div>
 
           <div class="sponsor-chips">
-            <v-chip size="small" variant="tonal" color="primary" prepend-icon="mdi-server-network">
-              Carrier-neutral
+            <v-chip size="small" variant="tonal" color="primary" prepend-icon="mdi-transit-connection-variant">
+              IP Transit
             </v-chip>
-            <v-chip size="small" variant="tonal" color="primary" prepend-icon="mdi-lightning-bolt">
-              2 MW · 1.700 m²
+            <v-chip size="small" variant="tonal" color="primary" prepend-icon="mdi-lan-connect">
+              Remote Peering
             </v-chip>
             <v-chip size="small" variant="tonal" color="primary" prepend-icon="mdi-shield-check">
-              ISO 27001 · 14001
+              Network Protection
             </v-chip>
-            <v-chip size="small" variant="tonal" color="primary" prepend-icon="mdi-transit-connection-variant">
-              Cavi sottomarini
+            <v-chip size="small" variant="tonal" color="primary" prepend-icon="mdi-router-network">
+              AS34428
+            </v-chip>
+            <v-chip size="small" variant="tonal" color="primary" prepend-icon="mdi-map-marker">
+              Mediterra · Palermo
             </v-chip>
           </div>
 
@@ -110,12 +114,12 @@
               class="mt-5"
               color="primary"
               variant="flat"
-              href="https://mediterradatacenters.com/it/pmo-01/"
+              href="https://8route.it/"
               target="_blank"
               rel="noopener"
               append-icon="mdi-arrow-top-right"
           >
-            Scopri Mediterra Data Centers
+            Scopri 8route
           </v-btn>
         </v-col>
       </v-row>

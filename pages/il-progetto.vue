@@ -104,7 +104,7 @@ const features = [
     id: '',
     icon: 'mdi-server-network',
     title: 'Tecnologie & costi',
-    text: `L'infrastruttura di hosting e connettività è fornita tramite <strong>Open Hub Med</strong> e <a href="https://mediterradatacenters.com/it/pmo-01/" target="_blank" rel="noopener">Mediterra Data Centers</a>, grazie al supporto di <strong>Giulio Lo Presti</strong>. Restano comunque dei costi (dominio, risorse cloud) da sostenere.`,
+    text: `L'infrastruttura di hosting e connettività è fornita da <a href="https://8route.it/" target="_blank" rel="noopener">8route</a>, grazie a <strong>Giulio Lo Presti</strong>. I server sono ospitati nel data center <a href="https://mediterradatacenters.com/it/pmo-01/" target="_blank" rel="noopener">Mediterra Data Centers</a> (PMO01) a Palermo. Restano comunque dei costi (dominio, risorse cloud) da sostenere.`,
   },
 ]
 </script>

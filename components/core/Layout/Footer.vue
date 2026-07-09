@@ -16,7 +16,7 @@
       <span class="font-weight-thin font-italic"> v.{{ appVersion }}</span>
       <span class="sponsor-credit">
         · powered by
-        <a class="text-string text-decoration-none font-weight-bold" href="https://openhubmed.it" target="_blank" rel="noopener">Open Hub Med</a>
+        <a class="text-string text-decoration-none font-weight-bold" href="https://8route.it/" target="_blank" rel="noopener">8route</a>
       </span>
       <div class="privacy" :class="{'privacy-mdAndUp': mdAndUp}">
         <v-btn to="/privacy-policy" title="Privacy Policy" size="small" color="info" density="compact">Privacy Policy</v-btn>
