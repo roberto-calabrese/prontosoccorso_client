@@ -31,6 +31,7 @@
       </template>
 
       <template v-slot:append>
+        <search-trigger />
         <button-geolocation />
         <change-theme />
       </template>
@@ -105,6 +106,9 @@
         </div>
       </template>
     </v-navigation-drawer>
+
+    <!-- Palette di ricerca: montata una volta sola, richiamabile da tutta l'app -->
+    <search-command />
   </div>
 </template>
 
@@ -113,6 +117,8 @@ import ButtonGeolocation from "~/components/core/ButtonGeolocation.vue";
 import {useApiStore} from "~/store/api";
 import {useCoreStore} from "~/store/core";
 import ChangeTheme from "~/components/core/ChangeTheme.vue";
+import SearchTrigger from "~/components/core/SearchTrigger.vue";
+import SearchCommand from "~/components/core/SearchCommand.vue";
 
 const coreStore = useCoreStore();
 const apiStore = useApiStore();

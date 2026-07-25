@@ -7,6 +7,10 @@
         count-label="Ospedali monitorati"
     >
       Pronto soccorso in <span class="hl">tempo reale</span>
+
+      <template #azioni>
+        <core-search-trigger variant="hero" />
+      </template>
     </core-page-hero>
 
     <v-row

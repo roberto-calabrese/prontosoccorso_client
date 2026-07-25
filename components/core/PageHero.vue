@@ -20,6 +20,8 @@
         <span class="hero-stat-num">{{ display }}</span>
         <span class="hero-stat-label">{{ countLabel }}</span>
       </div>
+
+      <slot name="azioni" />
     </div>
   </header>
 </template>
