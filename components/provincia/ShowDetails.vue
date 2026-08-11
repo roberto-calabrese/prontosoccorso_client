@@ -203,6 +203,7 @@ export default defineComponent({
           google_maps: props.item?.google_maps,
           lat: props.item.coords.lat,
           lng: props.item.coords.lng,
+          data: props.item.data?.data,
         }]
     });
 
