@@ -242,7 +242,7 @@ const props = withDefaults(defineProps<{
 })
 
 const router = useRouter()
-const { mobile } = useDisplay()
+const { mobile, width } = useDisplay()
 const geolocationStore = useGeolocationStore()
 
 const mapEl = ref<HTMLElement | null>(null)
@@ -273,6 +273,41 @@ const posizioneUtente = computed(() =>
     geolocationStore.geolocation.init ? geolocationStore.userPosition : null,
 )
 
+/**
+ * Il GPS in ascolto continuo emette una posizione nuova ogni pochi decimi di
+ * secondo, anche da fermi. Ricalcolare distanze e marker a ogni battito faceva
+ * sfarfallare il popup aperto: qui la posizione viene "congelata" finché non ci
+ * si sposta davvero. Il puntino sulla mappa continua invece a seguire il GPS.
+ */
+const SPOSTAMENTO_MINIMO_KM = 0.03
+
+const posizioneStabile = ref<{ latitude: number; longitude: number } | null>(null)
+
+watch(
+    posizioneUtente,
+    (nuova) => {
+        if (!nuova) {
+            posizioneStabile.value = null
+            return
+        }
+
+        const precedente = posizioneStabile.value
+        const spostamento = precedente
+            ? geolocationStore.calculateDistance(
+                  precedente.latitude,
+                  precedente.longitude,
+                  nuova.latitude,
+                  nuova.longitude,
+              )
+            : Number.POSITIVE_INFINITY
+
+        if (spostamento >= SPOSTAMENTO_MINIMO_KM) {
+            posizioneStabile.value = { latitude: nuova.latitude, longitude: nuova.longitude }
+        }
+    },
+    { immediate: true },
+)
+
 /** Con un solo presidio (scheda ospedale) la mappa resta essenziale. */
 const mostraStrumenti = computed(() => props.ospedali.length > 1)
 
@@ -284,7 +319,7 @@ const ospedaliCalcolati = computed<OspedaleCalcolato[]>(() =>
             if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null
 
             const carico = calcolaCarico(ospedale.data)
-            const posizione = posizioneUtente.value
+            const posizione = posizioneStabile.value
             const distanza = posizione
                 ? geolocationStore.calculateDistance(posizione.latitude, posizione.longitude, lat, lng)
                 : null
@@ -305,6 +340,9 @@ const ospedaliCalcolati = computed<OspedaleCalcolato[]>(() =>
         .filter((o): o is OspedaleCalcolato => o !== null),
 )
 
+/** Oltre questa distanza il suggerimento non ha più senso pratico. */
+const DISTANZA_UTILE_KM = 60
+
 const piuVicino = computed(() => {
     const conDistanza = ospedaliCalcolati.value.filter((o) => o.distanza !== null)
     if (!conDistanza.length) return null
@@ -324,6 +362,10 @@ const consigliato = computed(() => {
 
     const migliore = candidati.reduce((a, b) => (a.costo! <= b.costo! ? a : b))
     if (migliore.carico.livello === 'sconosciuto') return null
+
+    // se il presidio è lontanissimo l'utente sta guardando una provincia in cui
+    // non si trova: consigliargli un pronto soccorso a ore di strada è inutile
+    if (migliore.distanza !== null && migliore.distanza > DISTANZA_UTILE_KM) return null
 
     return migliore
 })
@@ -497,6 +539,46 @@ function creaIcona(ospedale: OspedaleCalcolato): L.DivIcon {
     })
 }
 
+/**
+ * Ridisegnare icona e popup costa un ricambio di DOM: Leaflet ne approfitta per
+ * riposizionare (e far "saltare") il popup aperto. Queste firme dicono se
+ * qualcosa di visibile è davvero cambiato, così si tocca solo il necessario.
+ */
+const firmeIcona = new Map<string, string>()
+const firmePopup = new Map<string, string>()
+
+function firmaIcona(ospedale: OspedaleCalcolato): string {
+    return [
+        ospedale.carico.livello,
+        ospedale.carico.inAttesa,
+        ospedale.adulti,
+        ospedale.key === selezionato.value,
+        ospedale.key === consigliato.value?.key,
+    ].join('|')
+}
+
+function firmaPopup(ospedale: OspedaleCalcolato): string {
+    const codici = codiciColore(ospedale.origine.data)
+        .map((codice) => `${codice.codice}:${codice.valore}`)
+        .join(',')
+
+    return [
+        ospedale.carico.livello,
+        ospedale.carico.inAttesa,
+        ospedale.carico.indice,
+        codici,
+        ospedale.distanza === null ? '-' : ospedale.distanza.toFixed(1),
+    ].join('|')
+}
+
+function applicaIcona(istanza: L.Marker, ospedale: OspedaleCalcolato) {
+    const firma = firmaIcona(ospedale)
+    if (firmeIcona.get(ospedale.key) === firma) return
+
+    firmeIcona.set(ospedale.key, firma)
+    istanza.setIcon(creaIcona(ospedale))
+}
+
 /** Crea o aggiorna i marker senza ricostruire il layer a ogni refresh dei dati. */
 function sincronizzaMarker() {
     if (!gruppoMarker.value) return
@@ -508,12 +590,23 @@ function sincronizzaMarker() {
         const esistente = marker.get(ospedale.key)
 
         if (esistente) {
-            esistente.setLatLng([ospedale.lat, ospedale.lng])
-            esistente.setIcon(creaIcona(ospedale))
+            // spostare un marker trascina con sé il popup: si tocca solo se serve
+            const attuale = esistente.getLatLng()
+            if (attuale.lat !== ospedale.lat || attuale.lng !== ospedale.lng) {
+                esistente.setLatLng([ospedale.lat, ospedale.lng])
+            }
+
+            applicaIcona(esistente, ospedale)
             ;(esistente.options as any).livelloCarico = ospedale.carico.livello
 
-            // il popup aperto deve seguire i dati live
-            if (esistente.isPopupOpen()) esistente.setPopupContent(creaPopup(ospedale))
+            // il popup aperto segue i dati live, ma solo quando cambiano
+            if (esistente.isPopupOpen()) {
+                const firma = firmaPopup(ospedale)
+                if (firmePopup.get(ospedale.key) !== firma) {
+                    firmePopup.set(ospedale.key, firma)
+                    esistente.setPopupContent(creaPopup(ospedale))
+                }
+            }
             continue
         }
 
@@ -525,14 +618,15 @@ function sincronizzaMarker() {
 
         nuovo.bindPopup(() => creaPopup(trovaOspedale(ospedale.key) ?? ospedale), {
             className: 'psm-popup',
-            maxWidth: 320,
-            minWidth: 268,
             closeButton: true,
+            ...dimensioniPopup(),
             ...spaziaturaPopup(),
         })
 
         nuovo.on('popupopen', () => {
             selezionato.value = ospedale.key
+            const corrente = trovaOspedale(ospedale.key)
+            if (corrente) firmePopup.set(ospedale.key, firmaPopup(corrente))
             aggiornaIcone()
             disegnaPercorso()
         })
@@ -546,13 +640,31 @@ function sincronizzaMarker() {
         if (presenti.has(key)) continue
         gruppoMarker.value.removeLayer(istanza)
         marker.delete(key)
+        firmeIcona.delete(key)
+        firmePopup.delete(key)
     }
 }
 
 function aggiornaIcone() {
     for (const ospedale of ospedaliCalcolati.value) {
-        marker.get(ospedale.key)?.setIcon(creaIcona(ospedale))
+        const istanza = marker.get(ospedale.key)
+        if (istanza) applicaIcona(istanza, ospedale)
     }
+}
+
+/**
+ * Su schermi ampi la scheda può respirare: stretta com'era, i codici colore
+ * finivano incolonnati due per riga e il popup diventava una striscia verticale.
+ * Su mobile si adatta invece alla larghezza disponibile.
+ */
+function dimensioniPopup() {
+    const schermo = width.value
+
+    if (schermo >= 1280) return { maxWidth: 460, minWidth: 380 }
+    if (schermo >= 960) return { maxWidth: 410, minWidth: 340 }
+    if (schermo >= 600) return { maxWidth: 360, minWidth: 300 }
+
+    return { maxWidth: Math.max(230, Math.min(330, schermo - 56)), minWidth: 0 }
 }
 
 /**
@@ -566,13 +678,15 @@ function spaziaturaPopup() {
     }
 }
 
-function aggiornaSpaziaturaPopup() {
-    const spaziatura = spaziaturaPopup()
+function aggiornaOpzioniPopup() {
+    const opzioni = { ...spaziaturaPopup(), ...dimensioniPopup() }
 
     for (const istanza of marker.values()) {
         const popup = istanza.getPopup()
         if (!popup) continue
-        Object.assign(popup.options, spaziatura)
+
+        Object.assign(popup.options, opzioni)
+        if (istanza.isPopupOpen()) popup.update()
     }
 }
 
@@ -928,7 +1042,7 @@ watch(posizioneUtente, () => {
 
 watch(raggiVisibili, disegnaRaggi)
 
-watch(pannelloAperto, aggiornaSpaziaturaPopup)
+watch([pannelloAperto, width], aggiornaOpzioniPopup)
 
 // con la posizione nota la domanda diventa "quale ho più vicino"
 watch(posizioneUtente, (posizione) => {
@@ -1554,8 +1668,8 @@ watch(consigliato, aggiornaIcone)
 }
 
 .psm-popup .leaflet-popup-content {
+  /* la larghezza la decide Leaflet dalle opzioni min/max: qui si toglie solo il margine */
   margin: 0;
-  width: auto !important;
 }
 
 .psm-popup .leaflet-popup-tip {
@@ -1605,8 +1719,9 @@ watch(consigliato, aggiornaIcone)
 
 .psm-card-distanza {
   display: flex;
-  align-items: center;
-  gap: 7px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 7px;
   padding: 8px 14px;
   background: rgba(var(--v-theme-primary), 0.08);
   border-bottom: 1px solid rgba(var(--v-theme-string), 0.08);
@@ -1626,10 +1741,11 @@ watch(consigliato, aggiornaIcone)
   padding: 11px 14px 4px;
 }
 
+/* a griglia i codici restano su una o due righe invece di incolonnarsi */
 .psm-card-codici {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(52px, 1fr));
+  gap: 5px;
   margin-bottom: 10px;
 }
 
@@ -1637,8 +1753,8 @@ watch(consigliato, aggiornaIcone)
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 44px;
-  padding: 5px 6px;
+  min-width: 0;
+  padding: 5px 3px;
   border-radius: 10px;
   background: color-mix(in srgb, var(--psm-k) 16%, transparent);
   border: 1px solid color-mix(in srgb, var(--psm-k) 45%, transparent);
@@ -1651,11 +1767,15 @@ watch(consigliato, aggiornaIcone)
 }
 
 .psm-codice small {
+  max-width: 100%;
+  overflow: hidden;
   color: rgba(var(--v-theme-string), 0.55);
-  font-size: 0.58rem;
+  font-size: 0.5rem;
   font-weight: 700;
-  letter-spacing: 0.4px;
+  letter-spacing: -0.1px;
   text-transform: uppercase;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .psm-card-riga {
