@@ -104,7 +104,7 @@ export default defineNuxtConfig({
           drop_console: true, // Rimuovi i console.log in produzione
           drop_debugger: true, // Rimuovi i debugger in produzione
         },
-        output: {
+        format: {
           comments: false, // Rimuovi i commenti
         },
       },
