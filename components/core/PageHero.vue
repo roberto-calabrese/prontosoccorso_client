@@ -1,5 +1,6 @@
 <template>
-  <header class="hero">
+  <header class="hero" :class="{ 'hero--con-mappa': haMappa }">
+    <core-hero-map v-if="haMappa" :points="mapPoints" />
     <div class="hero-glow"></div>
     <div class="hero-grid"></div>
     <div class="hero-inner">
@@ -21,22 +22,29 @@
         <span class="hero-stat-label">{{ countLabel }}</span>
       </div>
 
-      <slot name="azioni" />
+      <div class="hero-azioni">
+        <slot name="azioni" />
+      </div>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = withDefaults(defineProps<{
   eyebrow?: string
   subtitle?: string
   count?: number | null
   countLabel?: string
+  /** presidi da usare come sfondo cartografico dell'hero */
+  mapPoints?: { lat: number; lng: number }[]
 }>(), {
   countLabel: 'Ospedali',
+  mapPoints: () => [],
 })
+
+const haMappa = computed(() => props.mapPoints.length > 0)
 
 /* Conteggio animato */
 const display = ref(0)
@@ -67,6 +75,64 @@ watch(() => props.count, (v) => {
   text-align: center;
   padding: 44px 20px 30px;
   overflow: hidden;
+}
+
+/*
+ * Con la cartina dietro l'hero diventa una scena: si prende tutta l'altezza
+ * disponibile fino alle tabelle, così la mappa ha spazio per raccontare la
+ * provincia invece di comparire come una striscia.
+ */
+.hero--con-mappa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(420px, 62vh, 720px);
+  padding: 40px 20px 34px;
+}
+
+/* con la cartina dietro, alone e reticolo devono farsi da parte */
+.hero--con-mappa .hero-glow {
+  opacity: 0.55;
+}
+
+.hero--con-mappa .hero-grid {
+  opacity: 0.4;
+}
+
+.hero--con-mappa .hero-title,
+.hero--con-mappa .hero-sub {
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+}
+
+.hero--con-mappa .hero-badge,
+.hero--con-mappa .hero-stat {
+  backdrop-filter: blur(6px);
+}
+
+.hero--con-mappa .hero-azioni {
+  margin-top: 26px;
+}
+
+/*
+ * Da qui in su l'hero si sdoppia: il testo occupa la colonna di sinistra e la
+ * mappa resta libera a destra, dove HeroMap sposta l'inquadratura dei presidi.
+ * Sotto questa soglia si torna alla colonna centrata, con i presidi più in basso.
+ */
+@media (min-width: 960px) {
+  .hero--con-mappa {
+    justify-content: flex-start;
+    text-align: left;
+    padding-left: clamp(24px, 6vw, 96px);
+  }
+
+  .hero--con-mappa .hero-inner {
+    margin: 0;
+    max-width: 600px;
+  }
+
+  .hero--con-mappa .hero-sub {
+    margin: 0;
+  }
 }
 
 .hero-inner {
@@ -193,6 +259,11 @@ watch(() => props.count, (v) => {
   background-image:
       linear-gradient(rgba(20, 26, 33, 0.05) 1px, transparent 1px),
       linear-gradient(90deg, rgba(20, 26, 33, 0.05) 1px, transparent 1px);
+}
+
+.v-theme--customLightTheme .hero--con-mappa .hero-title,
+.v-theme--customLightTheme .hero--con-mappa .hero-sub {
+  text-shadow: 0 2px 16px rgba(255, 255, 255, 0.6);
 }
 
 .v-theme--customLightTheme .hero-stat {

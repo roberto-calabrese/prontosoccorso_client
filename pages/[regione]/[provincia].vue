@@ -5,49 +5,52 @@
         eyebrow="Presidi medici di emergenza"
         :subtitle="`Situazione dei pronto soccorso nella provincia di ${uppercaseFirstLetter(provincia.replace('-', ' '))}, aggiornata in tempo reale.`"
         :count="ospedaliTotali"
-        count-label="Ospedali in provincia"
+        :count-label="ospedaliTotali === 1 ? 'Ospedale in provincia' : 'Ospedali in provincia'"
+        :map-points="puntiHero"
     >
       Provincia di <span class="hl">{{ uppercaseFirstLetter(provincia.replace('-', ' ')) }}</span>
-    </core-page-hero>
 
-    <div class="text-center my-4 prov-actions" v-if="headers.length">
-      <!-- Mappa -->
-      <v-dialog
-            v-model="showMap"
-            transition="dialog-bottom-transition"
-            fullscreen
-        >
-          <template v-slot:activator="{ props: activatorProps }">
-            <v-btn
-                prepend-icon="mdi-map-search"
-                size="large"
-                color="primary"
-                variant="flat"
-                rounded="lg"
-                class="px-6 mb-2"
-                text="Mostra mappa"
-                v-bind="activatorProps"
-            ></v-btn>
-          </template>
-
-          <v-card>
-            <v-toolbar>
+      <template #azioni>
+        <div class="text-center my-4 prov-actions" v-if="headers.length">
+          <!-- Mappa -->
+        <v-dialog
+              v-model="showMap"
+              transition="dialog-bottom-transition"
+              fullscreen
+          >
+            <template v-slot:activator="{ props: activatorProps }">
               <v-btn
-                  icon="mdi-close"
-                  @click="showMap = false"
+                  prepend-icon="mdi-map-search"
+                  size="large"
+                  color="primary"
+                  variant="flat"
+                  rounded="lg"
+                  class="px-6 mb-2"
+                  text="Mostra mappa"
+                  v-bind="activatorProps"
               ></v-btn>
-              <v-toolbar-title>Mappa Ospedali</v-toolbar-title>
-              <v-spacer></v-spacer>
+            </template>
 
-              <button-geolocation></button-geolocation>
-            </v-toolbar>
-            <MapHospital :ospedali="datiMappa" height="100%" :embedded="embedded" />
-          </v-card>
-        </v-dialog>
+            <v-card>
+              <v-toolbar>
+                <v-btn
+                    icon="mdi-close"
+                    @click="showMap = false"
+                ></v-btn>
+                <v-toolbar-title>Mappa Ospedali</v-toolbar-title>
+                <v-spacer></v-spacer>
 
-      <!-- Info Codici -->
-      <Legenda/>
-    </div>
+                <button-geolocation></button-geolocation>
+              </v-toolbar>
+              <MapHospital :ospedali="datiMappa" height="100%" :embedded="embedded" />
+            </v-card>
+          </v-dialog>
+
+          <!-- Info Codici -->
+          <Legenda/>
+        </div>
+      </template>
+    </core-page-hero>
 
     <v-skeleton-loader class="mt-md-16 mt-sm-12" v-show="!ospedali[1]?.data.length" type="table"></v-skeleton-loader>
 
@@ -560,6 +563,15 @@ const datiMappa = computed(() => {
 });
 
 
+/* Coordinate dei presidi: disegnano la cartina di sfondo dell'hero */
+const puntiHero = computed(() =>
+    ospedali.value
+        .flatMap(categoria => categoria.data)
+        .filter((ospedale: any) => ospedale?.coords?.lat && ospedale?.coords?.lng)
+        .map((ospedale: any) => ({ lat: ospedale.coords.lat, lng: ospedale.coords.lng })),
+);
+
+
 const minOvercrowdingIndex = computed(() => {
   return Math.min(
       ...ospedali.value
@@ -584,6 +596,13 @@ const minDistance = computed(() => {
   flex-direction: column;
   align-items: center;
   gap: 6px;
+}
+
+/* alla stessa soglia in cui l'hero passa su due colonne, i pulsanti seguono il testo */
+@media (min-width: 960px) {
+  .prov-actions {
+    align-items: flex-start;
+  }
 }
 
 .prov-card {
