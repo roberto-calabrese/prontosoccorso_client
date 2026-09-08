@@ -5,6 +5,8 @@
         :subtitle="`Seleziona una provincia della regione ${uppercaseFirstLetter(regione)} per vedere lo stato dei pronto soccorso.`"
         :count="ospedaliTotali"
         count-label="Ospedali in regione"
+        :map-points="puntiHero"
+        :map-max-zoom="9"
     >
       <span class="hl">{{ uppercaseFirstLetter(regione) }}</span>
     </core-page-hero>
@@ -52,6 +54,18 @@ useHead({
 const province = ref();
 const currentRegione = ref();
 const ospedaliTotali = ref();
+
+/*
+ * Baricentro dei presidi di ogni provincia: un punto per scheda, così la
+ * cartina di sfondo inquadra la regione e mostra dove sono i pronto soccorso.
+ * Le province senza coordinate vengono saltate: la mappa si adatta a quelle
+ * che ci sono.
+ */
+const puntiHero = computed(() =>
+    Object.values(province.value ?? {})
+        .map((provincia: any) => provincia?.coords)
+        .filter((coords: any) => coords?.lat && coords?.lng),
+);
 
 onMounted(async () => {
 

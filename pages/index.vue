@@ -5,6 +5,8 @@
         subtitle="Monitora in tempo reale l'affluenza dei pronto soccorso italiani. Scegli la tua regione per iniziare."
         :count="ospedaliTotali"
         count-label="Ospedali monitorati"
+        :map-points="puntiHero"
+        :map-max-zoom="7"
     >
       Pronto soccorso in <span class="hl">tempo reale</span>
 
@@ -44,6 +46,18 @@ import Sponsor from "~/components/Sponsor.vue";
 
 const regioni = ref();
 const ospedaliTotali = ref();
+
+/*
+ * Baricentro dei presidi di ogni regione monitorata: uno per regione, quindi
+ * la cartina di sfondo si inquadra sull'Italia e ogni punto corrisponde a una
+ * delle schede qui sotto. Le regioni senza coordinate vengono semplicemente
+ * saltate: la mappa si adatta a quelle che ci sono.
+ */
+const puntiHero = computed(() =>
+    (regioni.value ?? [])
+        .map((regione: any) => regione?.coords)
+        .filter((coords: any) => coords?.lat && coords?.lng),
+);
 
 onMounted(async () => {
   try {

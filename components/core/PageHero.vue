@@ -1,6 +1,6 @@
 <template>
   <header class="hero" :class="{ 'hero--con-mappa': haMappa }">
-    <core-hero-map v-if="haMappa" :points="mapPoints" />
+    <core-hero-map v-if="haMappa" :points="mapPoints" :max-zoom="mapMaxZoom" />
     <div class="hero-glow"></div>
     <div class="hero-grid"></div>
     <div class="hero-inner">
@@ -39,9 +39,16 @@ const props = withDefaults(defineProps<{
   countLabel?: string
   /** presidi da usare come sfondo cartografico dell'hero */
   mapPoints?: { lat: number; lng: number }[]
+  /**
+   * Zoom massimo della cartina: più la pagina è "larga" (Italia, regione,
+   * provincia) più va tenuto basso, altrimenti un solo punto porterebbe
+   * l'inquadratura a livello di strada e il territorio non si riconoscerebbe.
+   */
+  mapMaxZoom?: number
 }>(), {
   countLabel: 'Ospedali',
   mapPoints: () => [],
+  mapMaxZoom: 12,
 })
 
 const haMappa = computed(() => props.mapPoints.length > 0)
